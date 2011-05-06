@@ -44,6 +44,7 @@
 
     <modules>
         <module>tomcat-embedded-6</module>
+        <module>tomcat-remote-6</module>
     </modules>
 
     <build>
