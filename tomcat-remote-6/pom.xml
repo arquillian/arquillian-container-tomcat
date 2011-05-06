@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <parent>
+      <groupId>org.jboss.arquillian</groupId>
+      <artifactId>arquillian-build</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <relativePath>../../build/pom.xml</relativePath>
+   </parent>
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>org.jboss.arquillian.container</groupId>
+   <artifactId>arquillian-tomcat-remote-6</artifactId>
+   <name>Arquillian Container Tomcat Remote 6.x</name>
+   <description>Tomcat 6.x Remote container integration for the Arquillian Project</description>
+
+   <properties>
+      <version.org.apache.tomcat>6.0.29</version.org.apache.tomcat>
+      <version.cdi-api>1.0</version.cdi-api>
+      <jersey.version>1.5</jersey.version>
+   </properties>
+
+   <dependencies>
+
+      <!-- HTTPClient -->
+      <!--
+      <dependency>
+         <groupId>org.apache.httpcomponents</groupId>
+         <artifactId>httpclient</artifactId>
+         <version>4.0.3</version>
+         <type>jar</type>
+      </dependency>
+      <dependency>
+         <groupId>commons-httpclient</groupId>
+         <artifactId>commons-httpclient</artifactId>
+         <version>3.1</version>
+         <type>jar</type>
+      </dependency>
+      -->
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-bundle</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <!--
+      <dependency>
+         <groupId>com.sun.jersey.contribs</groupId>
+         <artifactId>jersey-multipart</artifactId>
+         <version>${jersey.version}</version>
+      </dependency>
+      -->
+      
+      <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+         <version>2.5</version>
+         <type>jar</type>
+      </dependency>
+
+
+      <dependency>
+         <groupId>org.jboss.arquillian</groupId>
+         <artifactId>arquillian-spi</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-extension-tomcat-6</artifactId>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.arquillian.protocol</groupId>
+        <artifactId>arquillian-protocol-servlet</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- TODO We likely need a servlet packager to restrict use of EAR -->
+
+      <dependency>
+         <groupId>org.jboss.arquillian.testenricher</groupId>
+         <artifactId>arquillian-testenricher-cdi</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.testenricher</groupId>
+         <artifactId>arquillian-testenricher-resource</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+    
+      
+
+      <dependency>
+         <groupId>org.apache.tomcat</groupId>
+         <artifactId>catalina</artifactId>
+         <version>${version.org.apache.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.tomcat</groupId>
+         <artifactId>coyote</artifactId>
+         <version>${version.org.apache.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.apache.tomcat</groupId>
+         <artifactId>jasper</artifactId>
+         <version>${version.org.apache.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-junit</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+      	<groupId>javax.enterprise</groupId>
+      	<artifactId>cdi-api</artifactId>
+      	<version>${version.cdi-api}</version>
+      	<scope>test</scope>
+      </dependency>
+      
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      </dependency>
+      
+      
+      <!-- javax.enterprise.inject.spi.BeanManager -->
+      <!-- http://community.jboss.org/message/531881
+      <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-web-api</artifactId>
+         <version>6.0</version>
+      </dependency>
+      -->
+      <!-- Test will determine versions from this pom.
+      <dependency>
+        <groupId>javax.enterprise</groupId>
+        <artifactId>cdi-api</artifactId>
+        <version>1.0</version>
+        <scope>test</scope>
+      </dependency>
+      -->
+
+      <!-- Or instead of that, 
+      <dependency>
+         <groupId>org.jboss.spec</groupId>
+         <artifactId>jboss-javaee-6.0</artifactId>
+         <version>1.0.0.Final</version>
+         <type>pom</type>
+         <scope>test</scope>
+      </dependency>
+      
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+            <version>1.0.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <version>1.0.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+      -->
+
+
+      
+      <!-- org.jboss.weld.resources.ManagerObjectFactory -->
+      <!--
+      -->
+      <dependency>
+         <groupId>org.jboss.weld.servlet</groupId>
+         <artifactId>weld-servlet</artifactId>
+         <version>1.1.0.Final</version>
+         <type>jar</type>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+   
+   <dependencyManagement>
+       <dependencies>
+          <dependency>
+             <groupId>org.jboss.weld.servlet</groupId>
+             <artifactId>weld-servlet</artifactId>
+             <version>1.1.0.Final</version>
+          </dependency>
+       </dependencies>
+   </dependencyManagement>
+
+</project>
