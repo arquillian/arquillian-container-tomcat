@@ -17,12 +17,17 @@
 package org.jboss.arquillian.container.tomcat.remote_6;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.plexus.util.IOUtil;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -47,27 +52,33 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteInContainerTestCase
 {
-    private static final String HELLO_WORLD_URL = "http://localhost:8080/test2/Test";
-
-    // -------------------------------------------------------------------------------------||
-    // Class Members -----------------------------------------------------------------------||
-    // -------------------------------------------------------------------------------------||
-
-    /**
-     * Logger
-     */
     private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
+    
+    
+    //private static final String HELLO_WORLD_URL = "http://localhost:8080/test2/Test";
+    private static final String PORT;
+    static {
+        String port = "8080";
+        foo: try {
+            // Ugly way to get port.
+            InputStream is = TomcatRemoteClientTestCase.class.getResourceAsStream("arquillian.xml");
+            if( null == is )
+                break foo;
+            String file = IOUtils.toString( is );
+            port = StringUtils.substringBetween(file, "<port>", "</port>");
+        } catch (IOException ex) {
+        }
+        PORT = port;
+    }
 
-    // -------------------------------------------------------------------------------------||
-    // Instance Members --------------------------------------------------------------------||
-    // -------------------------------------------------------------------------------------||
 
     /**
      * Define the deployment
      */
     @Deployment
     public static WebArchive createTestArchive()
-   {
+    {
+       
         // Take the version from the package on classpath (it's MANIFEST.MF)
         //String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getImplementationVersion(); // 20110114-1644
         String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getSpecificationVersion();
@@ -128,6 +139,7 @@ public class TomcatRemoteInContainerTestCase
         // Define the input and expected outcome
         final String expected = "hello";
 
+        String HELLO_WORLD_URL = "http://localhost:"+PORT+"/test2/Test";
         URL url = new URL(HELLO_WORLD_URL);
         InputStream in = url.openConnection().getInputStream();
 
