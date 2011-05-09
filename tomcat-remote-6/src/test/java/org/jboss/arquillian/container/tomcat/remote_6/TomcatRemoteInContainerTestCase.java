@@ -72,31 +72,33 @@ public class TomcatRemoteInContainerTestCase
         //String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getImplementationVersion(); // 20110114-1644
         String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getSpecificationVersion();
         if( WELD_VERSION == null )
-            WELD_VERSION = "1.1.0.Final";
+            WELD_VERSION = "1.1.1.Final";
         log.fine("  Using weld-servlet version: " + WELD_VERSION);
         
         final String JAVAEE_VERSION = "1.0.0.Final";
+        final String CDI_API_VERSION = "1.0-SP4";
+
         
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war")
                                 .addClasses(TestServlet.class, TestBean.class)
                                    .addAsLibraries(
-                                         DependencyResolvers.use(MavenDependencyResolver.class).loadDependenciesFromPom("pom.xml") //loadReposFromPom
+                                         DependencyResolvers.use(MavenDependencyResolver.class).loadReposFromPom("pom.xml") //loadDependenciesFromPom("pom.xml") //loadReposFromPom
                                                 // TODO: Make the version being taken from package.
                                                .artifact("org.jboss.weld.servlet:weld-servlet:" + WELD_VERSION)
                 
                                                 //javax.enterprise.inject.spi.BeanManager,
                                                 //org.jboss.weld.resources.ManagerObjectFactory
                                                 //.artifact("org.jboss.spec:jboss-javaee-6.0") //:" + JAVAEE_VERSION)
-                                                .artifact("javax.enterprise:cdi-api:1.0")
-            
-                
+                                                .artifact("javax.enterprise:cdi-api:" + CDI_API_VERSION)
+                            
                                                .resolveAs(GenericArchive.class))
 
-                                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                                .addAsWebInfResource("beans.xml") // EmptyAsset.INSTANCE
                                 .addAsManifestResource("in-container-context.xml", "context.xml")
+                                //.addAsResource("log4j.properties")
                                 .setWebXML("in-container-web.xml");
         /// DEBUG - see what's 
-        war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
+        //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
         return war;
     }
 
@@ -104,16 +106,16 @@ public class TomcatRemoteInContainerTestCase
     // Tests -------------------------------------------------------------------------------||
     // -------------------------------------------------------------------------------------||
 
-   @Resource(name = "resourceInjectionTestName") private String resourceInjectionTestValue;
+    @Resource(name = "resourceInjectionTestName") private String resourceInjectionTestValue;
 
-   @Inject TestBean testBean;
+    @Inject TestBean testBean;
 
     /**
      * Ensures the {@link HelloWorldServlet} returns the expected response
      */
     @Test
     public void shouldBeAbleToInjectMembersIntoTestClass()
-   {
+    {
       log.info("Name: " + this.resourceInjectionTestValue);
       Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
       Assert.assertNotNull(testBean);

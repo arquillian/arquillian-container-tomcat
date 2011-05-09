@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  */
 public class TestBean
 {
-   @Resource(name = "resourceInjectionTestName")
+   @Resource(name = "name")
    private String name;
 
    public String getName()
