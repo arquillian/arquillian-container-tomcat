@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
@@ -64,11 +64,11 @@ public class TomcatEmbeddedClientTestCase
 	public static WebArchive createDeployment()
 	{
 		return ShrinkWrap.create(WebArchive.class, "test.war")
-         .addClass(TestServlet.class)
+         .addClass(MyServlet.class)
          .setWebXML(new StringAsset(
                Descriptors.create(WebAppDescriptor.class)
                   .version("2.5")
-                  .servlet(TestServlet.class, "/Test")
+                  .servlet(MyServlet.class, "/Test")
                   .exportAsString()
          ));
 	}

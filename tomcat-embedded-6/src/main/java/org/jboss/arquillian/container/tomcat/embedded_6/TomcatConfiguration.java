@@ -16,8 +16,8 @@
  */
 package org.jboss.arquillian.container.tomcat.embedded_6;
 
-import org.jboss.arquillian.spi.ConfigurationException;
-import org.jboss.arquillian.spi.client.container.ContainerConfiguration;
+import org.jboss.arquillian.container.spi.ConfigurationException;
+import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
 
 /**
  * Arquillian Tomcat Container Configuration
@@ -42,9 +42,6 @@ public class TomcatConfiguration implements ContainerConfiguration
    
    private boolean unpackArchive = false;
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.spi.client.container.ContainerConfiguration#validate()
-    */
    @Override
    public void validate() throws ConfigurationException
    {

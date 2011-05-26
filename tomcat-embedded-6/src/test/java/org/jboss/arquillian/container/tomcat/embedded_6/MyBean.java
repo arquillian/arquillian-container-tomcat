@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 /**
  * @author Dan Allen
  */
-public class TestBean
+public class MyBean
 {
    @Resource(name = "name")
    private String name;

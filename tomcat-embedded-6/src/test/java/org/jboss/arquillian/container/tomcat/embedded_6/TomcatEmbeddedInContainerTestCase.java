@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -67,7 +67,7 @@ public class TomcatEmbeddedInContainerTestCase
     public static WebArchive createTestArchive()
    {
         return ShrinkWrap.create(WebArchive.class, "test2.war")
-         .addClasses(TestServlet.class, TestBean.class)
+         .addClasses(MyServlet.class, MyBean.class)
             .addAsLibraries(
                   DependencyResolvers.use(MavenDependencyResolver.class)
                         .artifact("org.jboss.weld.servlet:weld-servlet:1.0.1-Final").resolveAs(GenericArchive.class))
@@ -82,7 +82,7 @@ public class TomcatEmbeddedInContainerTestCase
 
    @Resource(name = "name") String name;
 
-   @Inject TestBean testBean;
+   @Inject MyBean testBean;
 
     /**
      * Ensures the {@link HelloWorldServlet} returns the expected response

@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public class TestServlet extends HttpServlet
+public class MyServlet extends HttpServlet
 {
    private static final long serialVersionUID = 1L;
 
