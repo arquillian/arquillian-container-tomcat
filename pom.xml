@@ -26,7 +26,7 @@
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.Beta1</version.arquillian_core>
+        <version.arquillian_core>1.0.0.CR1-SNAPSHOT</version.arquillian_core>
 
     </properties>
 
