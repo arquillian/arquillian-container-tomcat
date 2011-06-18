@@ -18,9 +18,9 @@ package org.jboss.arquillian.container.tomcat.remote_6;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import org.jboss.arquillian.spi.ConfigurationException;
-import org.jboss.arquillian.spi.client.container.ContainerConfiguration;
+
+import org.jboss.arquillian.container.spi.ConfigurationException;
+import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
 
 /**
  * Arquillian Tomcat Container Configuration
@@ -31,100 +31,92 @@ import org.jboss.arquillian.spi.client.container.ContainerConfiguration;
 public class TomcatRemoteConfiguration implements ContainerConfiguration
 {
    private static final int MAX_PORT = 65535;
-   private static final String JMX_PROTOCOL = "service:jmx:rmi:";
-    
+
    private String host = "localhost";
 
    private int httpPort = 8080;
-   
+
    private String user;
-   
+
    private String pass;
-      
+
    private int jmxPort = 8089;
-   
+
    private URI jmxUrl;
 
    private String serverName = "arquillian-tomcat-remote-6";
-   
+
    private boolean unpackArchive = false;
-   
-   
-    /* (non-Javadoc)
-     * @see org.jboss.arquillian.spi.client.container.ContainerConfiguration#validate()
-     */
-    @Override
-    public void validate() throws ConfigurationException {
-        if(this.jmxPort > MAX_PORT)
-            throw new ConfigurationException("JMX port larger than "+MAX_PORT+": "+this.jmxPort);
-        
-        try {
-            this.jmxUrl = new URI("service:jmx:rmi:///jndi/rmi://"+this.host+":"+this.jmxPort+"/jmxrmi");
-        } catch (URISyntaxException ex) {
-            throw new ConfigurationException( ex.getMessage(), ex );
-        }
-    }
 
-    
-    
-    
-    public String getPass() {
-        return pass;
-    }
+   /* (non-Javadoc)
+    * @see org.jboss.arquillian.spi.client.container.ContainerConfiguration#validate()
+    */
+   @Override
+   public void validate() throws ConfigurationException
+   {
+      if (this.jmxPort > MAX_PORT)
+         throw new ConfigurationException("JMX port larger than " + MAX_PORT + ": " + this.jmxPort);
 
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
+      try
+      {
+         this.jmxUrl = new URI("service:jmx:rmi:///jndi/rmi://" + this.host + ":" + this.jmxPort + "/jmxrmi");
+      }
+      catch (URISyntaxException ex)
+      {
+         throw new ConfigurationException(ex.getMessage(), ex);
+      }
+   }
 
-    public String getUser() {
-        return user;
-    }
+   public String getPass()
+   {
+      return pass;
+   }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+   public void setPass(String pass)
+   {
+      this.pass = pass;
+   }
 
-   
+   public String getUser()
+   {
+      return user;
+   }
 
-    public String getHost() {
-        return host;
-    }
+   public void setUser(String user)
+   {
+      this.user = user;
+   }
 
-    public void setHttpPort(int httpPort) {
-        this.httpPort = httpPort;
-    }
+   public String getHost()
+   {
+      return host;
+   }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
+   public void setHttpPort(int httpPort)
+   {
+      this.httpPort = httpPort;
+   }
 
-    
-    public int getJmxPort() {
-        return jmxPort;
-    }
+   public void setHost(String host)
+   {
+      this.host = host;
+   }
 
-    public void setJmxPort(int jmxPort) {
-        this.jmxPort = jmxPort;
-    }
+   public int getJmxPort()
+   {
+      return jmxPort;
+   }
 
-    public URI getJmxUrl() {
-        return jmxUrl;
-    }
+   public void setJmxPort(int jmxPort)
+   {
+      this.jmxPort = jmxPort;
+   }
 
-    /*public void setJmxUrl(URL jmxUrl) {
-      if( ! JMX_PROTOCOL.equals(jmxUrl.getProtocol() ) )
-         throw new ConfigurationException( "URL's protocol is not '"+JMX_PROTOCOL+"': "+jmxUrl.toString() );
-      this.jmxUrl = jmxUrl;
-      this.host = jmxUrl.getHost();
-      this.jmxPort = jmxUrl.getPort();
-    }*/
+   public URI getJmxUrl()
+   {
+      return jmxUrl;
+   }
 
-
-   
-   
-   
-   
-   
    public int getHttpPort()
    {
       return httpPort;

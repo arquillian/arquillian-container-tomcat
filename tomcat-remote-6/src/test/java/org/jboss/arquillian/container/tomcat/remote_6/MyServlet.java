@@ -16,18 +16,30 @@
  */
 package org.jboss.arquillian.container.tomcat.remote_6;
 
-import javax.annotation.Resource;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Dan Allen
+ * TestServlet
+ *
+ * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
+ * @version $Revision: $
  */
-public class TestBean
+public class MyServlet extends HttpServlet
 {
-   @Resource(name = "name")
-   private String name;
+   private static final long serialVersionUID = 1L;
 
-   public String getName()
+   public static final String URL_PATTERN = "/Test";
+
+   public static final String MESSAGE = "hello";
+
+   @Override
+   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
    {
-      return name;
+      response.getWriter().append(MESSAGE);
    }
 }

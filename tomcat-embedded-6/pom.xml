@@ -17,7 +17,7 @@
 
     <properties>
         <version.org.apache.tomcat>6.0.29</version.org.apache.tomcat>
-        <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
+        
         <version.cdi-api>1.0</version.cdi-api>
     </properties>
 
@@ -52,7 +52,6 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap.container</groupId>
             <artifactId>shrinkwrap-container-tomcat-60</artifactId>
-            <version>${version.shrinkwrap_tomcat}</version>
         </dependency>
 
         <!-- org.apache.tomcat -->

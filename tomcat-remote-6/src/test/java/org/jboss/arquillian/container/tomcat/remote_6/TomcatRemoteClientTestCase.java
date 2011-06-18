@@ -20,8 +20,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -39,66 +40,63 @@ import org.junit.runner.RunWith;
  * @author Dan Allen
  * @version $Revision: $
  * 
- * TODO: Externalize port?
  */
 @RunWith(Arquillian.class)
 public class TomcatRemoteClientTestCase
 {
-	private static final String HELLO_WORLD_URL = "http://localhost:8080/test/Test";
+   // -------------------------------------------------------------------------------------||
+   // Class Members -----------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-	// -------------------------------------------------------------------------------------||
-	// Class Members -----------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
+   /**
+    * Logger
+    */
+   private static final Logger log = Logger.getLogger(TomcatRemoteClientTestCase.class.getName());
 
-	/**
-	 * Logger
-	 */
-	private static final Logger log = Logger.getLogger(TomcatRemoteClientTestCase.class.getName());
+   // -------------------------------------------------------------------------------------||
+   // Instance Members --------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-	// -------------------------------------------------------------------------------------||
-	// Instance Members --------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
-
-	/**
-	 * Define the deployment
-	 */
-	@Deployment(testable = false)
-	public static WebArchive createDeployment()
-	{
-		return ShrinkWrap.create(WebArchive.class, "test.war")
-         .addClass(TestServlet.class)
-         .setWebXML(new StringAsset(
-               Descriptors.create(WebAppDescriptor.class)
-                  .version("2.5")
-                  .servlet(TestServlet.class, "/Test")
-                  .exportAsString()
-         ));
-	}
-
-	// -------------------------------------------------------------------------------------||
-	// Tests -------------------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
-
-	/**
-	 * Ensures the {@link HelloWorldServlet} returns the expected response
-	 */
-	@Test
-	public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   /**
+    * Define the deployment
+    */
+   @Deployment(testable = false)
+   public static WebArchive createDeployment()
    {
-		// Define the input and expected outcome
-		final String expected = "hello";
+      return ShrinkWrap
+            .create(WebArchive.class, "test.war")
+            .addClass(MyServlet.class)
+            .setWebXML(
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class)
+                        .version("2.5")
+                        .servlet(MyServlet.class, "/Test")
+                        .exportAsString()));
+   }
 
-		URL url = new URL(HELLO_WORLD_URL);
-		InputStream in = url.openConnection().getInputStream();
+   // -------------------------------------------------------------------------------------||
+   // Tests -------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-		byte[] buffer = new byte[10000];
-		int len = in.read(buffer);
-		String httpResponse = "";
-		for (int q = 0; q < len; q++)
-			httpResponse += (char) buffer[q];
+   /**
+    * Ensures the {@link HelloWorldServlet} returns the expected response
+    */
+   @Test
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
+   {
+      // Define the input and expected outcome
+      final String expected = "hello";
 
-		// Test
-		Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-		log.info("Got expected result from Http Servlet: " + httpResponse);
-	}
+      URL url = new URL(contextRoot, "Test");
+      InputStream in = url.openConnection().getInputStream();
+
+      byte[] buffer = new byte[10000];
+      int len = in.read(buffer);
+      String httpResponse = "";
+      for (int q = 0; q < len; q++)
+         httpResponse += (char) buffer[q];
+
+      // Test
+      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+      log.info("Got expected result from Http Servlet: " + httpResponse);
+   }
 }

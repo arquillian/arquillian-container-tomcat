@@ -16,25 +16,19 @@
  */
 package org.jboss.arquillian.container.tomcat.remote_6;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.plexus.util.IOUtil;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
@@ -53,24 +47,6 @@ import org.junit.runner.RunWith;
 public class TomcatRemoteInContainerTestCase
 {
     private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
-    
-    
-    //private static final String HELLO_WORLD_URL = "http://localhost:8080/test2/Test";
-    private static final String PORT;
-    static {
-        String port = "8080";
-        foo: try {
-            // Ugly way to get port.
-            InputStream is = TomcatRemoteClientTestCase.class.getResourceAsStream("arquillian.xml");
-            if( null == is )
-                break foo;
-            String file = IOUtils.toString( is );
-            port = StringUtils.substringBetween(file, "<port>", "</port>");
-        } catch (IOException ex) {
-        }
-        PORT = port;
-    }
-
 
     /**
      * Define the deployment
@@ -78,33 +54,26 @@ public class TomcatRemoteInContainerTestCase
     @Deployment
     public static WebArchive createTestArchive()
     {
-       
         // Take the version from the package on classpath (it's MANIFEST.MF)
         //String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getImplementationVersion(); // 20110114-1644
         String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getSpecificationVersion();
         if( WELD_VERSION == null )
-            WELD_VERSION = "1.1.1.Final";
+            WELD_VERSION = "1.1.0.Final";
         log.fine("  Using weld-servlet version: " + WELD_VERSION);
         
-        final String JAVAEE_VERSION = "1.0.0.Final";
         final String CDI_API_VERSION = "1.0-SP4";
-
         
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war")
-                                .addClasses(TestServlet.class, TestBean.class)
+                                .addClasses(MyServlet.class, MyBean.class)
                                    .addAsLibraries(
-                                         DependencyResolvers.use(MavenDependencyResolver.class).loadReposFromPom("pom.xml") //loadDependenciesFromPom("pom.xml") //loadReposFromPom
+                                         DependencyResolvers.use(MavenDependencyResolver.class)
+                                               .loadReposFromPom("pom.xml") //loadDependenciesFromPom("pom.xml") //loadReposFromPom
                                                 // TODO: Make the version being taken from package.
                                                .artifact("org.jboss.weld.servlet:weld-servlet:" + WELD_VERSION)
-                
-                                                //javax.enterprise.inject.spi.BeanManager,
-                                                //org.jboss.weld.resources.ManagerObjectFactory
-                                                //.artifact("org.jboss.spec:jboss-javaee-6.0") //:" + JAVAEE_VERSION)
-                                                .artifact("javax.enterprise:cdi-api:" + CDI_API_VERSION)
-                            
+                                               .artifact("javax.enterprise:cdi-api:" + CDI_API_VERSION)
                                                .resolveAs(GenericArchive.class))
 
-                                .addAsWebInfResource("beans.xml") // EmptyAsset.INSTANCE
+                                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                                 .addAsManifestResource("in-container-context.xml", "context.xml")
                                 //.addAsResource("log4j.properties")
                                 .setWebXML("in-container-web.xml");
@@ -119,13 +88,11 @@ public class TomcatRemoteInContainerTestCase
 
     @Resource(name = "resourceInjectionTestName") private String resourceInjectionTestValue;
 
-    @Inject TestBean testBean;
-
     /**
      * Ensures the {@link HelloWorldServlet} returns the expected response
      */
     @Test
-    public void shouldBeAbleToInjectMembersIntoTestClass()
+    public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
     {
       log.info("Name: " + this.resourceInjectionTestValue);
       Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
@@ -133,14 +100,13 @@ public class TomcatRemoteInContainerTestCase
       Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
     }
 
-   @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   @Test @RunAsClient
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
    {
         // Define the input and expected outcome
         final String expected = "hello";
 
-        String HELLO_WORLD_URL = "http://localhost:"+PORT+"/test2/Test";
-        URL url = new URL(HELLO_WORLD_URL);
+        URL url = new URL(contextRoot, "Test");
         InputStream in = url.openConnection().getInputStream();
 
         byte[] buffer = new byte[10000];
