@@ -21,13 +21,23 @@
     <name>Arquillian Container Parent Tomcat</name>
     <description>Tomcat Container integrations for the Arquillian Project</description>
 
+    <scm>
+        <connection>scm:git:git://git@github.com:arquillian/arquillian-container-tomcat.git</connection>
+        <developerConnection>scm:git:ssh://github.com/arquillian/arquillian-container-tomcat.git</developerConnection>
+        <url>git://github.com/arquillian/arquillian-container-tomcat.git</url>
+    </scm>
 
     <!-- Properties -->
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.CR1-SNAPSHOT</version.arquillian_core>
+        <version.arquillian_core>1.0.0.CR1</version.arquillian_core>
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
+
+        <!-- override from parent -->
+        <version.release.plugin>2.1</version.release.plugin>
+        <maven.compiler.target>1.5</maven.compiler.target>
+        <maven.compiler.source>1.5</maven.compiler.source>
 
     </properties>
 
@@ -41,6 +51,13 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-build</artifactId>
+                <version>${version.arquillian_core}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.jboss.shrinkwrap.container</groupId>
                 <artifactId>shrinkwrap-container-tomcat-60</artifactId>
                 <version>${version.shrinkwrap_tomcat}</version>
@@ -48,28 +65,22 @@
         </dependencies>
     </dependencyManagement>
 
-    <modules>
-        <module>tomcat-embedded-6</module>
-        <module>tomcat-remote-6</module>
-    </modules>
-
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <inherited>true</inherited>
+                <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <showDeprecation>false</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <optimize>true</optimize>
-                    <compilerVersion>1.6</compilerVersion>
-                    <fork>true</fork>
-                    <argLine>-Xmx512M</argLine>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <modules>
+        <module>tomcat-embedded-6</module>
+        <module>tomcat-remote-6</module>
+    </modules>
 </project>
 
