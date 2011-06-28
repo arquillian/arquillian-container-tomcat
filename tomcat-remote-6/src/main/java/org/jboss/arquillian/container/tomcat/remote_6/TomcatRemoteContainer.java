@@ -19,8 +19,6 @@ package org.jboss.arquillian.container.tomcat.remote_6;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -74,8 +72,6 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    private TomcatRemoteConfiguration conf;
 
    private String adminBaseUrl;
-
-   private final List<String> failedUndeployments = new ArrayList<String>();
 
    public Class<TomcatRemoteConfiguration> getConfigurationClass()
    {

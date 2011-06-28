@@ -44,10 +44,6 @@ public class TomcatRemoteConfiguration implements ContainerConfiguration
 
    private URI jmxUrl;
 
-   private String serverName = "arquillian-tomcat-remote-6";
-
-   private boolean unpackArchive = false;
-
    /* (non-Javadoc)
     * @see org.jboss.arquillian.spi.client.container.ContainerConfiguration#validate()
     */
@@ -120,52 +116,5 @@ public class TomcatRemoteConfiguration implements ContainerConfiguration
    public int getHttpPort()
    {
       return httpPort;
-   }
-
-   /**
-    * Set the HTTP port.
-    *
-    * @param httpPort
-    *            HTTP port
-    */
-   public void setBindHttpPort(int httpPort)
-   {
-      this.httpPort = httpPort;
-   }
-
-   /**
-    * @param serverName the serverName to set
-    */
-   public void setServerName(String serverName)
-   {
-      this.serverName = serverName;
-   }
-
-   /**
-    * @return the serverName
-    */
-   public String getServerName()
-   {
-      return serverName;
-   }
-
-   /**
-    * @return a switch indicating whether the WAR should be unpacked
-    */
-   public boolean isUnpackArchive()
-   {
-      return unpackArchive;
-   }
-
-   /**
-    * Sets the WAR to be unpacked into the java.io.tmpdir when deployed.
-    * Unpacking is required if you are using Weld to provide CDI support
-    * in a servlet environment.
-    *
-    * @param a switch indicating whether the WAR should be unpacked
-    */
-   public void setUnpackArchive(boolean unpack)
-   {
-      this.unpackArchive = unpack;
    }
 }
