@@ -15,7 +15,7 @@
     <!-- Artifact Configuration -->
     <groupId>org.jboss.arquillian.container</groupId>
     <artifactId>arquillian-parent-tomcat</artifactId>
-    <version>1.0.0.CR1</version>
+    <version>1.0.0.Final-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Arquillian Container Parent Tomcat</name>
     <description>Tomcat Container integrations for the Arquillian Project</description>
