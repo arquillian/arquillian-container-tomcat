@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <!-- Parent -->
     <parent>
@@ -33,6 +34,9 @@
         <version.arquillian_core>1.0.0.CR1</version.arquillian_core>
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
+        <version.jboss_spec>1.0.0.Final</version.jboss_spec>
+        <version.weld_servlet>1.1.1.Final</version.weld_servlet>
+
         <!-- override from parent -->
         <version.release.plugin>2.1</version.release.plugin>
         <maven.compiler.target>1.5</maven.compiler.target>
@@ -60,6 +64,18 @@
                 <groupId>org.jboss.shrinkwrap.container</groupId>
                 <artifactId>shrinkwrap-container-tomcat-60</artifactId>
                 <version>${version.shrinkwrap_tomcat}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.weld.servlet</groupId>
+                <artifactId>weld-servlet</artifactId>
+                <version>${version.weld_servlet}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.servlet</groupId>
+                <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                <version>${version.jboss_spec}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
