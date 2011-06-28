@@ -58,7 +58,7 @@ public class TomcatRemoteInContainerTestCase
         //String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getImplementationVersion(); // 20110114-1644
         String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getSpecificationVersion();
         if( WELD_VERSION == null )
-            WELD_VERSION = "1.1.0.Final";
+            WELD_VERSION = "1.1.1.Final";
         log.fine("  Using weld-servlet version: " + WELD_VERSION);
         
         final String CDI_API_VERSION = "1.0-SP4";

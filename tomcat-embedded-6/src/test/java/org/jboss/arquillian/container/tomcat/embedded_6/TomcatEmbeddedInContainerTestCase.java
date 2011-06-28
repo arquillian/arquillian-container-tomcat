@@ -70,7 +70,7 @@ public class TomcatEmbeddedInContainerTestCase
          .addClasses(MyServlet.class, MyBean.class)
             .addAsLibraries(
                   DependencyResolvers.use(MavenDependencyResolver.class)
-                        .artifact("org.jboss.weld.servlet:weld-servlet:1.0.1-Final").resolveAs(GenericArchive.class))
+                        .artifact("org.jboss.weld.servlet:weld-servlet:1.1.1.Final").resolveAs(GenericArchive.class))
          .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
          .addAsManifestResource("in-container-context.xml", "context.xml")
          .setWebXML("in-container-web.xml");
