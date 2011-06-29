@@ -90,6 +90,14 @@
                     <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <org.apache.maven.global-settings>${settings}</org.apache.maven.global-settings>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
