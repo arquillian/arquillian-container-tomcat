@@ -58,7 +58,7 @@ import org.jboss.shrinkwrap.tomcat_6.api.ShrinkWrapStandardContext;
  * will behave inconsistently. Though it goes without saying, the host
  * name (bindAddress) cannot have a trailing slash for the same
  * reason.</p>
- * 
+ *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @version $Revision: $
@@ -101,9 +101,10 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    private final List<String> failedUndeployments = new ArrayList<String>();
 
-   @Inject @DeploymentScoped 
+   @Inject
+   @DeploymentScoped
    private InstanceProducer<StandardContext> standardContextProducer;
-   
+
    public Class<TomcatConfiguration> getConfigurationClass()
    {
       return TomcatConfiguration.class;
@@ -113,7 +114,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    {
       return new ProtocolDescription("Servlet 2.5");
    }
-   
+
    public void setup(TomcatConfiguration configuration)
    {
       this.configuration = configuration;
@@ -130,7 +131,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
       catch (Exception e)
       {
-         throw new LifecycleException("Bad shit happened", e);
+         throw new LifecycleException("Failed to start embedded Tomcat", e);
       }
    }
 
@@ -162,15 +163,15 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
     */
    public void deploy(Descriptor descriptor) throws DeploymentException
    {
-      throw new UnsupportedOperationException("Not implemented");      
+      throw new UnsupportedOperationException("Not implemented");
    }
-   
+
    /* (non-Javadoc)
     * @see org.jboss.arquillian.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
    public void undeploy(Descriptor descriptor) throws DeploymentException
    {
-      throw new UnsupportedOperationException("Not implemented");      
+      throw new UnsupportedOperationException("Not implemented");
    }
 
    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
@@ -181,8 +182,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          standardContext.addLifecycleListener(new EmbeddedContextConfig());
          standardContext.setUnpackWAR(configuration.isUnpackArchive());
          standardContext.setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
-         
-         // Need to tell TomCat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL 
+
+         // Need to tell TomCat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL
          standardContext.setParentClassLoader(Thread.currentThread().getContextClassLoader());
 
          if (standardContext.getUnpackWAR())
@@ -197,20 +198,18 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          standardContext.setLoader(webappLoader);
 
          standardHost.addChild(standardContext);
-         
+
          standardContextProducer.set(standardContext);
 
          String contextPath = standardContext.getPath();
          HTTPContext httpContext = new HTTPContext(bindAddress, bindPort);
-         
-         for(String mapping : standardContext.findServletMappings())
+
+         for (String mapping : standardContext.findServletMappings())
          {
-            httpContext.add(new Servlet(
-                  standardContext.findServletMapping(mapping), contextPath));
+            httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextPath));
          }
-         
-         return new ProtocolMetaData()
-            .addContext(httpContext);
+
+         return new ProtocolMetaData().addContext(httpContext);
       }
       catch (Exception e)
       {
@@ -297,7 +296,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       tomcatHomeFile.mkdirs();
       embedded.setCatalinaBase(tomcatHomeFile.getAbsolutePath());
       embedded.setCatalinaHome(tomcatHomeFile.getAbsolutePath());
-     
+
       // creates the engine, i.e., <engine> element in server.xml
       engine = embedded.createEngine();
       engine.setName(serverName);
@@ -305,7 +304,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       engine.setService(embedded);
       embedded.setContainer(engine);
       embedded.addEngine(engine);
-      
+
       // creates the host, i.e., <host> element in server.xml
       File appBaseFile = new File(tomcatHomeFile, configuration.getAppBase());
       appBaseFile.mkdirs();
@@ -316,12 +315,12 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
       ((StandardHost) standardHost).setUnpackWARs(configuration.isUnpackArchive());
       engine.addChild(standardHost);
-      
+
       // creates an http connector, i.e., <connector> element in server.xml
       Connector connector = embedded.createConnector(InetAddress.getByName(bindAddress), bindPort, false);
       embedded.addConnector(connector);
       connector.setContainer(engine);
-      
+
       // starts embedded tomcat
       embedded.init();
       embedded.start();

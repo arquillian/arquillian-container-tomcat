@@ -34,7 +34,7 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- * 
+ *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @version $Revision: $
@@ -42,61 +42,59 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-	private static final String HELLO_WORLD_URL = "http://localhost:8888/test/Test";
+   private static final String HELLO_WORLD_URL = "http://localhost:8888/test/Test";
 
-	// -------------------------------------------------------------------------------------||
-	// Class Members -----------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
+   // Class Members -----------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-	/**
-	 * Logger
-	 */
-	private static final Logger log = Logger.getLogger(TomcatEmbeddedClientTestCase.class.getName());
+   /**
+    * Logger
+    */
+   private static final Logger log = Logger.getLogger(TomcatEmbeddedClientTestCase.class.getName());
 
-	// -------------------------------------------------------------------------------------||
-	// Instance Members --------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
+   // Instance Members --------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-	/**
-	 * Define the deployment
-	 */
-	@Deployment(testable = false)
-	public static WebArchive createDeployment()
-	{
-		return ShrinkWrap.create(WebArchive.class, "test.war")
-         .addClass(MyServlet.class)
-         .setWebXML(new StringAsset(
-               Descriptors.create(WebAppDescriptor.class)
-                  .version("2.5")
-                  .servlet(MyServlet.class, "/Test")
-                  .exportAsString()
-         ));
-	}
-
-	// -------------------------------------------------------------------------------------||
-	// Tests -------------------------------------------------------------------------------||
-	// -------------------------------------------------------------------------------------||
-
-	/**
-	 * Ensures the {@link HelloWorldServlet} returns the expected response
-	 */
-	@Test
-	public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   /**
+    * Define the deployment
+    */
+   @Deployment(testable = false)
+   public static WebArchive createDeployment()
    {
-		// Define the input and expected outcome
-		final String expected = "hello";
+      return ShrinkWrap
+            .create(WebArchive.class, "test.war")
+            .addClass(MyServlet.class)
+            .setWebXML(
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5")
+                        .servlet(MyServlet.class, "/Test").exportAsString()));
+   }
 
-		URL url = new URL(HELLO_WORLD_URL);
-		InputStream in = url.openConnection().getInputStream();
+   // -------------------------------------------------------------------------------------||
+   // Tests -------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-		byte[] buffer = new byte[10000];
-		int len = in.read(buffer);
-		String httpResponse = "";
-		for (int q = 0; q < len; q++)
-			httpResponse += (char) buffer[q];
+   /**
+    * Ensures the {@link HelloWorldServlet} returns the expected response
+    */
+   @Test
+   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   {
+      // Define the input and expected outcome
+      final String expected = "hello";
 
-		// Test
-		Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-		log.info("Got expected result from Http Servlet: " + httpResponse);
-	}
+      URL url = new URL(HELLO_WORLD_URL);
+      InputStream in = url.openConnection().getInputStream();
+
+      byte[] buffer = new byte[10000];
+      int len = in.read(buffer);
+      String httpResponse = "";
+      for (int q = 0; q < len; q++)
+         httpResponse += (char) buffer[q];
+
+      // Test
+      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+      log.info("Got expected result from Http Servlet: " + httpResponse);
+   }
 }

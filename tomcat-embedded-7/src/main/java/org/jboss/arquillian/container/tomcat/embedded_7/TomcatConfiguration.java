@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_6;
+package org.jboss.arquillian.container.tomcat.embedded_7;
 
 import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
@@ -38,7 +38,7 @@ public class TomcatConfiguration implements ContainerConfiguration
 
    private String workDir = null;
 
-   private String serverName = "arquillian-tomcat-embedded-6";
+   private String serverName = "arquillian-tomcat-embedded-7";
 
    private boolean unpackArchive = false;
 

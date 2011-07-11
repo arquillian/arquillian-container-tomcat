@@ -31,7 +31,7 @@
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.CR1</version.arquillian_core>
+        <version.arquillian_core>1.0.0.CR2</version.arquillian_core>
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
         <version.jboss_spec>1.0.0.Final</version.jboss_spec>
@@ -90,20 +90,13 @@
                     <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemProperties>
-                        <org.apache.maven.global-settings>${settings}</org.apache.maven.global-settings>
-                    </systemProperties>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
     <modules>
         <module>tomcat-embedded-6</module>
         <module>tomcat-remote-6</module>
+        <module>tomcat-embedded-7</module>
     </modules>
 </project>
 
