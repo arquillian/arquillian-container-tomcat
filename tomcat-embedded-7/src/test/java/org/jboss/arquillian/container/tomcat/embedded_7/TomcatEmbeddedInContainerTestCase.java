@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_6;
+package org.jboss.arquillian.container.tomcat.embedded_7;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -31,6 +32,8 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
+import org.jboss.weld.environment.Container;
+import org.jboss.weld.environment.tomcat7.Tomcat7Container;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,6 +77,8 @@ public class TomcatEmbeddedInContainerTestCase
                         .artifact("org.jboss.weld.servlet:weld-servlet:1.1.1.Final").resolveAs(GenericArchive.class))
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsManifestResource("in-container-context.xml", "context.xml")
+            .addAsServiceProvider(Container.class, Tomcat7Container.class)
+            .addAsServiceProvider(LoadableExtension.class, TomcatExtension.class)
             .setWebXML("in-container-web.xml");
    }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_6;
+package org.jboss.arquillian.container.tomcat.embedded_7;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +101,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    private final List<String> failedUndeployments = new ArrayList<String>();
 
-   @Inject @DeploymentScoped
+   @Inject
+   @DeploymentScoped
    private InstanceProducer<StandardContext> standardContextProducer;
 
    public Class<TomcatConfiguration> getConfigurationClass()
@@ -182,7 +183,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          standardContext.setUnpackWAR(configuration.isUnpackArchive());
          standardContext.setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
 
-         // Need to tell TomCat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL
+         // Need to tell Tomcat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL
          standardContext.setParentClassLoader(Thread.currentThread().getContextClassLoader());
 
          if (standardContext.getUnpackWAR())
@@ -203,14 +204,12 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          String contextPath = standardContext.getPath();
          HTTPContext httpContext = new HTTPContext(bindAddress, bindPort);
 
-         for(String mapping : standardContext.findServletMappings())
+         for (String mapping : standardContext.findServletMappings())
          {
-            httpContext.add(new Servlet(
-                  standardContext.findServletMapping(mapping), contextPath));
+            httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextPath));
          }
 
-         return new ProtocolMetaData()
-            .addContext(httpContext);
+         return new ProtocolMetaData().addContext(httpContext);
       }
       catch (Exception e)
       {
@@ -291,7 +290,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
       if (tomcatHomeFile == null)
       {
-         tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-6");
+         tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-7");
       }
 
       tomcatHomeFile.mkdirs();
@@ -320,7 +319,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       // creates an http connector, i.e., <connector> element in server.xml
       Connector connector = embedded.createConnector(InetAddress.getByName(bindAddress), bindPort, false);
       embedded.addConnector(connector);
-      connector.setContainer(engine);
+      //connector.setContainer(engine);
 
       // starts embedded tomcat
       embedded.init();

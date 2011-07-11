@@ -14,15 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_6;
+package org.jboss.arquillian.container.tomcat.embedded_7;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.servlet.ServletContext;
+
 import org.apache.catalina.startup.Constants;
 import org.apache.catalina.startup.ContextConfig;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -38,14 +42,16 @@ import org.xml.sax.InputSource;
  */
 public class EmbeddedContextConfig extends ContextConfig
 {
+   private static final Log log = LogFactory.getLog(EmbeddedContextConfig.class);
+
    /**
     * Override as a hook to process the application context configuration.
     */
-   @Override
+   //@Override
    protected void defaultWebConfig()
    {
       applicationContextConfig();
-      super.defaultWebConfig();
+      super.webConfig();
    }
 
    /**
