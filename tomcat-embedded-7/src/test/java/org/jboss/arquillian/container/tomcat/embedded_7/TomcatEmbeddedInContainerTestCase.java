@@ -24,7 +24,6 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -78,7 +77,6 @@ public class TomcatEmbeddedInContainerTestCase
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsManifestResource("in-container-context.xml", "context.xml")
             .addAsServiceProvider(Container.class, Tomcat7Container.class)
-            .addAsServiceProvider(LoadableExtension.class, TomcatExtension.class)
             .setWebXML("in-container-web.xml");
    }
 
