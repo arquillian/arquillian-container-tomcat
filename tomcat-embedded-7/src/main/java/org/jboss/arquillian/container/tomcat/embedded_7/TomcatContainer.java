@@ -46,7 +46,6 @@ import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
-import org.jboss.shrinkwrap.tomcat_6.api.ShrinkWrapStandardContext;
 
 /**
  * <p>Arquillian {@link DeployableContainer} implementation for an
@@ -178,6 +177,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    {
       try
       {
+
          StandardContext standardContext = archive.as(ShrinkWrapStandardContext.class);
          standardContext.addLifecycleListener(new EmbeddedContextConfig());
          standardContext.setUnpackWAR(configuration.isUnpackArchive());
@@ -267,32 +267,9 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       // creating the tomcat embedded == service tag in server.xml
       embedded = new Embedded();
       embedded.setName(serverName);
-      // TODO this needs to be a lot more robust
-      String tomcatHome = configuration.getTomcatHome();
-      File tomcatHomeFile = null;
-      if (tomcatHome != null)
-      {
-         if (tomcatHome.startsWith(ENV_VAR))
-         {
-            String sysVar = tomcatHome.substring(ENV_VAR.length(), tomcatHome.length() - 1);
-            tomcatHome = System.getProperty(sysVar);
-            if (tomcatHome != null && tomcatHome.length() > 0 && new File(tomcatHome).isAbsolute())
-            {
-               tomcatHomeFile = new File(tomcatHome);
-               log.info("Using tomcat home from environment variable: " + tomcatHome);
-            }
-         }
-         else
-         {
-            tomcatHomeFile = new File(tomcatHome);
-         }
-      }
+      embedded.setUseNaming(true);
 
-      if (tomcatHomeFile == null)
-      {
-         tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-7");
-      }
-
+      File tomcatHomeFile = getTomcatHomeFile();
       tomcatHomeFile.mkdirs();
       embedded.setCatalinaBase(tomcatHomeFile.getAbsolutePath());
       embedded.setCatalinaHome(tomcatHomeFile.getAbsolutePath());
@@ -325,6 +302,36 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       embedded.init();
       embedded.start();
       wasStarted = true;
+   }
+
+   private File getTomcatHomeFile()
+   {
+      // TODO this needs to be a lot more robust
+      String tomcatHome = configuration.getTomcatHome();
+      File tomcatHomeFile = null;
+      if (tomcatHome != null)
+      {
+         if (tomcatHome.startsWith(ENV_VAR))
+         {
+            String sysVar = tomcatHome.substring(ENV_VAR.length(), tomcatHome.length() - 1);
+            tomcatHome = System.getProperty(sysVar);
+            if (tomcatHome != null && tomcatHome.length() > 0 && new File(tomcatHome).isAbsolute())
+            {
+               tomcatHomeFile = new File(tomcatHome);
+               log.info("Using tomcat home from environment variable: " + tomcatHome);
+            }
+         }
+         else
+         {
+            tomcatHomeFile = new File(tomcatHome);
+         }
+      }
+
+      if (tomcatHomeFile == null)
+      {
+         tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-7");
+      }
+      return tomcatHomeFile;
    }
 
    protected void stopTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException

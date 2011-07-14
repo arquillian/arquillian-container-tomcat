@@ -47,8 +47,8 @@ public class EmbeddedContextConfig extends ContextConfig
    /**
     * Override as a hook to process the application context configuration.
     */
-   //@Override
-   protected void defaultWebConfig()
+   @Override
+   protected void webConfig()
    {
       applicationContextConfig();
       super.webConfig();
