@@ -31,8 +31,6 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
-import org.jboss.weld.environment.Container;
-import org.jboss.weld.environment.tomcat7.Tomcat7Container;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +74,6 @@ public class TomcatEmbeddedInContainerTestCase
                         .artifact("org.jboss.weld.servlet:weld-servlet:1.1.1.Final").resolveAs(GenericArchive.class))
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsManifestResource("in-container-context.xml", "context.xml")
-            .addAsServiceProvider(Container.class, Tomcat7Container.class)
             .setWebXML("in-container-web.xml");
    }
 

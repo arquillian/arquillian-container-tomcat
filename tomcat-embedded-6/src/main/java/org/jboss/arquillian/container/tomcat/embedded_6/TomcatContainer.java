@@ -101,7 +101,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    private final List<String> failedUndeployments = new ArrayList<String>();
 
-   @Inject @DeploymentScoped
+   @Inject
+   @DeploymentScoped
    private InstanceProducer<StandardContext> standardContextProducer;
 
    public Class<TomcatConfiguration> getConfigurationClass()
@@ -203,14 +204,12 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          String contextPath = standardContext.getPath();
          HTTPContext httpContext = new HTTPContext(bindAddress, bindPort);
 
-         for(String mapping : standardContext.findServletMappings())
+         for (String mapping : standardContext.findServletMappings())
          {
-            httpContext.add(new Servlet(
-                  standardContext.findServletMapping(mapping), contextPath));
+            httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextPath));
          }
 
-         return new ProtocolMetaData()
-            .addContext(httpContext);
+         return new ProtocolMetaData().addContext(httpContext);
       }
       catch (Exception e)
       {

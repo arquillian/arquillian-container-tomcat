@@ -18,22 +18,21 @@ package org.jboss.arquillian.container.tomcat.embedded_7;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.apache.catalina.Container;
-import org.apache.catalina.Engine;
+import org.apache.catalina.Context;
 import org.apache.catalina.Host;
-import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.core.StandardHost;
-import org.apache.catalina.loader.WebappLoader;
-import org.apache.catalina.startup.Embedded;
+import org.apache.catalina.startup.CatalinaProperties;
+import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.ExpandWar;
+import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.startup.Tomcat.DefaultWebXmlListener;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
@@ -45,6 +44,7 @@ import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
@@ -60,41 +60,29 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
+ *
+ * @see <a href='http://svn.apache.org/repos/asf/tomcat/trunk/test/org/apache/catalina/startup/TomcatBaseTest.java'>org.apache.catalina.startup.TomcatBaseTest</a>
+ *
  * @version $Revision: $
  */
 public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 {
    private static final Logger log = Logger.getLogger(TomcatContainer.class.getName());
 
-   private static final String ENV_VAR = "${env.";
-
-   private static final String TMPDIR_SYS_PROP = "java.io.tmpdir";
-
-   /**
-    * Tomcat embedded
-    */
-   private Embedded embedded;
-
-   /**
-    * Engine contained within Tomcat embedded
-    */
-   private Engine engine;
-
-   /**
-    * Host contained in the tomcat engine
-    */
-   private Host standardHost;
-
    /**
     * Tomcat container configuration
     */
    private TomcatConfiguration configuration;
 
-   private String serverName;
+   /**
+    * Tomcat embedded
+    */
+   private Tomcat tomcat;
 
-   private String bindAddress;
+   private Host host;
 
-   private int bindPort;
+   private File appBase;
 
    private boolean wasStarted;
 
@@ -103,6 +91,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    @Inject
    @DeploymentScoped
    private InstanceProducer<StandardContext> standardContextProducer;
+
+   private final SystemPropertiesUtil systemPropertiesUtil = new SystemPropertiesUtil();
 
    public Class<TomcatConfiguration> getConfigurationClass()
    {
@@ -117,16 +107,54 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    public void setup(TomcatConfiguration configuration)
    {
       this.configuration = configuration;
-      bindAddress = this.configuration.getBindAddress();
-      bindPort = this.configuration.getBindHttpPort();
-      serverName = this.configuration.getServerName();
    }
 
    public void start() throws LifecycleException
    {
+      /*
+       * Derived from setUp() in
+       * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/test/org/apache/catalina/startup/TomcatBaseTest.java.
+       */
+
       try
       {
-         startTomcatEmbedded();
+         final File tempDir = getTomcatHomeFile();
+
+         System.setProperty("catalina.base", tempDir.getAbsolutePath());
+         // Trigger loading of catalina.properties
+         CatalinaProperties.getProperty("foo");
+
+         appBase = new File(tempDir, "webapps");
+         if (!appBase.exists() && !appBase.mkdirs())
+         {
+            throw new LifecycleException("Unable to create appBase " + appBase.getAbsolutePath() + " for Tomcat");
+         }
+
+         tomcat = new Tomcat();
+         tomcat.getService().setName(configuration.getServerName());
+         tomcat.setHostname(configuration.getBindAddress());
+         tomcat.setPort(configuration.getBindHttpPort());
+         tomcat.setBaseDir(tempDir.getAbsolutePath());
+         // Enable JNDI - it is disabled by default
+         tomcat.enableNaming();
+
+         tomcat.getEngine().setName(configuration.getServerName());
+
+         host = tomcat.getHost();
+         host.setAppBase(appBase.getAbsolutePath());
+
+         /*
+         if (configuration.isAccessLogEnabled())
+         {
+            AccessLogValve alv = new AccessLogValve();
+            alv.setDirectory(tempDir.getAbsolutePath() + "/logs");
+            alv.setPattern("%h %l %u %t \"%r\" %s %b %I %D");
+            tomcat.getHost().getPipeline().addValve(alv);
+         }
+         */
+
+         tomcat.start();
+         wasStarted = true;
       }
       catch (Exception e)
       {
@@ -144,65 +172,39 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       {
          throw new LifecycleException("Could not clean up", e);
       }
+
       if (wasStarted)
       {
          try
          {
-            stopTomcatEmbedded();
+            tomcat.stop();
          }
          catch (org.apache.catalina.LifecycleException e)
          {
-            throw new LifecycleException("An unexpected error occurred", e);
+            throw new LifecycleException("Failed to stop Tomcat", e);
          }
       }
-   }
-
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
-    */
-   public void deploy(Descriptor descriptor) throws DeploymentException
-   {
-      throw new UnsupportedOperationException("Not implemented");
-   }
-
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
-    */
-   public void undeploy(Descriptor descriptor) throws DeploymentException
-   {
-      throw new UnsupportedOperationException("Not implemented");
    }
 
    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
    {
       try
       {
+         final File archiveFile = new File(appBase, archive.getName());
 
-         StandardContext standardContext = archive.as(ShrinkWrapStandardContext.class);
-         standardContext.addLifecycleListener(new EmbeddedContextConfig());
-         standardContext.setUnpackWAR(configuration.isUnpackArchive());
-         standardContext.setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
+         archive.as(ZipExporter.class).exportTo(archiveFile, true);
 
-         // Need to tell Tomcat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL
-         standardContext.setParentClassLoader(Thread.currentThread().getContextClassLoader());
+         final String baseDir = getArchiveNameWithoutExtension(archive);
+         final String contextPath = "/" + baseDir;
 
-         if (standardContext.getUnpackWAR())
-         {
-            deleteUnpackedWAR(standardContext);
-         }
-
-         // Override the default Tomcat WebappClassLoader, it delegates to System first. Half our testable app is on System classpath.
-         WebappLoader webappLoader = new WebappLoader(standardContext.getParentClassLoader());
-         webappLoader.setDelegate(standardContext.getDelegate());
-         webappLoader.setLoaderClass(EmbeddedWebappClassLoader.class.getName());
-         standardContext.setLoader(webappLoader);
-
-         standardHost.addChild(standardContext);
+         final StandardContext standardContext =
+         // (StandardContext) tomcat.addWebapp(null, contextPath, baseDir);
+         (StandardContext) workAroundTomcat51526(contextPath, baseDir);
 
          standardContextProducer.set(standardContext);
 
-         String contextPath = standardContext.getPath();
-         HTTPContext httpContext = new HTTPContext(bindAddress, bindPort);
+         final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(),
+               configuration.getBindHttpPort());
 
          for (String mapping : standardContext.findServletMappings())
          {
@@ -217,12 +219,63 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
    }
 
+   /**
+    * Used to work around <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=51526">Tomcat Bug 51526</a>.
+    *
+    * @param url the context path.
+    * @param path the base dir.
+    * @return the deployed context.
+    * @throws MalformedURLException
+    */
+   private Context workAroundTomcat51526(final String url, final String path) throws MalformedURLException
+   {
+      /*
+       * Derived from #addWebApp(Host, String, String, String) in
+       * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/java/org/apache/catalina/startup/Tomcat.java.
+       */
+
+      Context ctx = new StandardContext();
+      ctx.setName(url);
+      ctx.setPath(url);
+      ctx.setDocBase(path);
+
+      /*
+       * Tomcat 7.0.19 will allow these Arquillian additions to be done via subclassing per
+       * https://issues.apache.org/bugzilla/show_bug.cgi?id=51418.
+       */
+      ((StandardContext) ctx).setUnpackWAR(configuration.isUnpackArchive());
+      ((StandardContext) ctx).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
+
+      /*
+      if (defaultRealm == null) {
+          initSimpleAuth();
+      }
+      standardContext.setRealm(defaultRealm);
+       */
+
+      ctx.addLifecycleListener(new DefaultWebXmlListener());
+
+      ContextConfig ctxCfg = new EmbeddedContextConfig(); // Arquillian hook to add META-INF/context.xml processing
+      ctx.addLifecycleListener(ctxCfg);
+
+      // prevent it from looking ( if it finds one - it'll have dup error )
+      ctxCfg.setDefaultWebXml("org/apache/catalin/startup/NO_DEFAULT_XML");
+
+      // Let HostConfig listener do the deployment...
+      tomcat.getHost().addChild(ctx);
+
+      return ctx;
+   }
+
+   /* (non-Javadoc)
+    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.api.Archive)
+    */
    public void undeploy(final Archive<?> archive) throws DeploymentException
    {
       StandardContext standardContext = standardContextProducer.get();
       if (standardContext != null)
       {
-         standardHost.removeChild(standardContext);
+         host.removeChild(standardContext);
          if (standardContext.getUnpackWAR())
          {
             deleteUnpackedWAR(standardContext);
@@ -232,10 +285,10 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    private void undeploy(String name) throws DeploymentException
    {
-      Container child = standardHost.findChild(name);
+      Container child = host.findChild(name);
       if (child != null)
       {
-         standardHost.removeChild(child);
+         host.removeChild(child);
       }
    }
 
@@ -262,90 +315,78 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       failedUndeployments.clear();
    }
 
-   protected void startTomcatEmbedded() throws UnknownHostException, org.apache.catalina.LifecycleException
+   /* (non-Javadoc)
+    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
+    */
+   public void deploy(Descriptor descriptor) throws DeploymentException
    {
-      // creating the tomcat embedded == service tag in server.xml
-      embedded = new Embedded();
-      embedded.setName(serverName);
-      embedded.setUseNaming(true);
-
-      File tomcatHomeFile = getTomcatHomeFile();
-      tomcatHomeFile.mkdirs();
-      embedded.setCatalinaBase(tomcatHomeFile.getAbsolutePath());
-      embedded.setCatalinaHome(tomcatHomeFile.getAbsolutePath());
-
-      // creates the engine, i.e., <engine> element in server.xml
-      engine = embedded.createEngine();
-      engine.setName(serverName);
-      engine.setDefaultHost(bindAddress);
-      engine.setService(embedded);
-      embedded.setContainer(engine);
-      embedded.addEngine(engine);
-
-      // creates the host, i.e., <host> element in server.xml
-      File appBaseFile = new File(tomcatHomeFile, configuration.getAppBase());
-      appBaseFile.mkdirs();
-      standardHost = embedded.createHost(bindAddress, appBaseFile.getAbsolutePath());
-      if (configuration.getTomcatWorkDir() != null)
-      {
-         ((StandardHost) standardHost).setWorkDir(configuration.getTomcatWorkDir());
-      }
-      ((StandardHost) standardHost).setUnpackWARs(configuration.isUnpackArchive());
-      engine.addChild(standardHost);
-
-      // creates an http connector, i.e., <connector> element in server.xml
-      Connector connector = embedded.createConnector(InetAddress.getByName(bindAddress), bindPort, false);
-      embedded.addConnector(connector);
-      //connector.setContainer(engine);
-
-      // starts embedded tomcat
-      embedded.init();
-      embedded.start();
-      wasStarted = true;
+      throw new UnsupportedOperationException("Not implemented");
    }
 
-   private File getTomcatHomeFile()
+   /* (non-Javadoc)
+    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
+    */
+   public void undeploy(Descriptor descriptor) throws DeploymentException
+   {
+      throw new UnsupportedOperationException("Not implemented");
+   }
+
+   private File getTomcatHomeFile() throws LifecycleException
    {
       // TODO this needs to be a lot more robust
       String tomcatHome = configuration.getTomcatHome();
-      File tomcatHomeFile = null;
+      File tomcatHomeFile;
+
       if (tomcatHome != null)
       {
-         if (tomcatHome.startsWith(ENV_VAR))
-         {
-            String sysVar = tomcatHome.substring(ENV_VAR.length(), tomcatHome.length() - 1);
-            tomcatHome = System.getProperty(sysVar);
-            if (tomcatHome != null && tomcatHome.length() > 0 && new File(tomcatHome).isAbsolute())
-            {
-               tomcatHomeFile = new File(tomcatHome);
-               log.info("Using tomcat home from environment variable: " + tomcatHome);
-            }
-         }
-         else
-         {
-            tomcatHomeFile = new File(tomcatHome);
-         }
-      }
+         tomcatHomeFile = new File(systemPropertiesUtil.substituteEvironmentVariable(tomcatHome));
 
-      if (tomcatHomeFile == null)
-      {
-         tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-7");
+         if (!tomcatHomeFile.exists() && !tomcatHomeFile.mkdirs())
+         {
+            throw new LifecycleException("Unable to create home directory for Tomcat");
+         }
+
+         tomcatHomeFile.deleteOnExit();
+         return tomcatHomeFile;
       }
-      return tomcatHomeFile;
+      else
+      {
+         try
+         {
+            tomcatHomeFile = File.createTempFile("tomcat-embedded-7", null);
+            if (!tomcatHomeFile.delete() || !tomcatHomeFile.mkdirs())
+            {
+               throw new LifecycleException("Unable to create temporary home directory "
+                     + tomcatHomeFile.getAbsolutePath() + " for Tomcat");
+            }
+            tomcatHomeFile.deleteOnExit();
+            return tomcatHomeFile;
+         }
+         catch (IOException e)
+         {
+            throw new LifecycleException("Unable to create temporary home directory for Tomcat", e);
+         }
+      }
    }
 
-   protected void stopTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException
+   private String getArchiveNameWithoutExtension(final Archive<?> archive)
    {
-      embedded.stop();
+      final String archiveName = archive.getName();
+      final int extensionOffset = archiveName.lastIndexOf('.');
+      final String archiveNameWithoutExtension = extensionOffset >= 0
+            ? archiveName.substring(0, extensionOffset)
+            : archiveName;
+
+      return archiveNameWithoutExtension;
    }
 
    /**
     * Make sure an the unpacked WAR is not left behind
     * you would think Tomcat would cleanup an unpacked WAR, but it doesn't
     */
-   protected void deleteUnpackedWAR(StandardContext standardContext)
+   private void deleteUnpackedWAR(Context context)
    {
-      File unpackDir = new File(standardHost.getAppBase(), standardContext.getPath().substring(1));
+      File unpackDir = new File(host.getAppBase(), context.getPath().substring(1));
       if (unpackDir.exists())
       {
          ExpandWar.deleteDir(unpackDir);

@@ -58,22 +58,19 @@
 
       <!-- org.apache.tomcat -->
       <dependency>
-         <groupId>org.apache.tomcat</groupId>
-         <artifactId>tomcat-catalina</artifactId>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-core</artifactId>
          <version>${version.org.apache.tomcat}</version>
-         <scope>provided</scope>
       </dependency>
       <dependency>
-         <groupId>org.apache.tomcat</groupId>
-         <artifactId>tomcat-coyote</artifactId>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-jasper</artifactId>
          <version>${version.org.apache.tomcat}</version>
-         <scope>provided</scope>
       </dependency>
       <dependency>
-         <groupId>org.apache.tomcat</groupId>
-         <artifactId>tomcat-jsp-api</artifactId>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-logging-juli</artifactId>
          <version>${version.org.apache.tomcat}</version>
-         <scope>provided</scope>
       </dependency>
 
       <!-- testing -->
