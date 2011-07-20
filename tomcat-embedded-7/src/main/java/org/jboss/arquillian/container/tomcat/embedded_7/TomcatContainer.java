@@ -101,7 +101,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    public ProtocolDescription getDefaultProtocol()
    {
-      return new ProtocolDescription("Servlet 2.5");
+      return new ProtocolDescription("Servlet 3.0");
    }
 
    public void setup(TomcatConfiguration configuration)
