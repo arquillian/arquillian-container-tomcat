@@ -261,7 +261,6 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       // prevent it from looking ( if it finds one - it'll have dup error )
       ctxCfg.setDefaultWebXml("org/apache/catalin/startup/NO_DEFAULT_XML");
 
-      // Let HostConfig listener do the deployment...
       tomcat.getHost().addChild(ctx);
 
       return ctx;
