@@ -31,11 +31,11 @@
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.CR1</version.arquillian_core>
+        <version.arquillian_core>1.0.0.Final-SNAPSHOT</version.arquillian_core>
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
         <version.jboss_spec>1.0.0.Final</version.jboss_spec>
-        <version.weld_servlet>1.1.1.Final</version.weld_servlet>
+        <version.weld_servlet>1.1.1.FINAL</version.weld_servlet>
 
         <!-- override from parent -->
         <version.release.plugin>2.1</version.release.plugin>
@@ -104,6 +104,7 @@
     <modules>
         <module>tomcat-embedded-6</module>
         <module>tomcat-remote-6</module>
+        <module>tomcat-embedded-7</module>
     </modules>
 </project>
 
