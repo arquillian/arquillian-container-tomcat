@@ -31,7 +31,8 @@
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.CR2</version.arquillian_core>
+        <version.arquillian_core>1.0.0.Final-SNAPSHOT</version.arquillian_core>
+
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
         <version.jboss_spec>1.0.0.Final</version.jboss_spec>

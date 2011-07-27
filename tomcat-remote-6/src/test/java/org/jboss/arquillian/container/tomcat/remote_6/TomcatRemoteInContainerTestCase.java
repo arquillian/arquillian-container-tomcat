@@ -54,28 +54,17 @@ public class TomcatRemoteInContainerTestCase
     @Deployment
     public static WebArchive createTestArchive()
     {
-        // Take the version from the package on classpath (it's MANIFEST.MF)
-        //String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getImplementationVersion(); // 20110114-1644
-        String WELD_VERSION = org.jboss.weld.servlet.WeldListener.class.getPackage().getSpecificationVersion();
-        if( WELD_VERSION == null )
-            WELD_VERSION = "1.1.1.Final";
-        log.fine("  Using weld-servlet version: " + WELD_VERSION);
-        
-        final String CDI_API_VERSION = "1.0-SP4";
-        
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war")
                                 .addClasses(MyServlet.class, MyBean.class)
                                    .addAsLibraries(
                                          DependencyResolvers.use(MavenDependencyResolver.class)
-                                               .loadReposFromPom("pom.xml") //loadDependenciesFromPom("pom.xml") //loadReposFromPom
-                                                // TODO: Make the version being taken from package.
-                                               .artifact("org.jboss.weld.servlet:weld-servlet:" + WELD_VERSION)
-                                               .artifact("javax.enterprise:cdi-api:" + CDI_API_VERSION)
+                                               .loadMetadataFromPom("pom.xml")
+                                               .goOffline()
+                                               .artifact("org.jboss.weld.servlet:weld-servlet")
                                                .resolveAs(GenericArchive.class))
 
                                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                                 .addAsManifestResource("in-container-context.xml", "context.xml")
-                                //.addAsResource("log4j.properties")
                                 .setWebXML("in-container-web.xml");
         /// DEBUG - see what's 
         //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
