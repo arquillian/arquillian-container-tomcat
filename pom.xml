@@ -94,6 +94,27 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>build-server</id>
+            <build>
+                <plugins>
+                    <!-- 
+                        surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the MavenResovler used in
+                        the test cases can read from the same lcoal repo. 
+                     -->
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <maven.repo.local>${maven.repo.local}</maven.repo.local>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <modules>
         <module>tomcat-embedded-6</module>
         <module>tomcat-remote-6</module>
