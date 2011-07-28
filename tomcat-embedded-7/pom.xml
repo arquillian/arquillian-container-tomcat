@@ -80,6 +80,11 @@
          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
          <scope>test</scope>
       </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+            <artifactId>shrinkwrap-descriptors-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
 
       <dependency>
          <groupId>junit</groupId>
