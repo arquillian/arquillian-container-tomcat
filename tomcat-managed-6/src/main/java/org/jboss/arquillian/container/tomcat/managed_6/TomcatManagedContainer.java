@@ -39,6 +39,7 @@ import javax.management.remote.JMXServiceURL;
 import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.codehaus.plexus.util.FileUtils;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
@@ -123,6 +124,12 @@ public class TomcatManagedContainer implements
 			final String ADDITIONAL_JAVA_OPTS = configuration
 					.getJavaVmArguments();
 
+			//setup the server config file
+			File serverConfSource = new File(configuration.getServerConfig());
+			File serverConfDest = new File(CATALINA_HOME + "/conf/" + "server.xml");
+			FileUtils.copyFile(serverConfSource, serverConfDest);
+			
+			//construct a command to execute
 			List<String> cmd = new ArrayList<String>();
 			
 			cmd.add("java");
@@ -143,7 +150,10 @@ public class TomcatManagedContainer implements
 			cmd.add("-Djava.io.tmpdir=" + absolutePath + "/temp");
 			cmd.add("org.apache.catalina.startup.Bootstrap");
 			cmd.add("start");
-
+			//cmd.add("-config");
+			//cmd.add(configuration.getServerConfig())
+			
+			//execute command
 			ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
 			startupProcessBuilder.redirectErrorStream(true);
 			startupProcessBuilder.directory(new File(configuration
@@ -152,6 +162,8 @@ public class TomcatManagedContainer implements
 			startupProcess = startupProcessBuilder.start();
 			new Thread(new ConsoleConsumer()).start();
 			final Process proc = startupProcess;
+			
+			
 			shutdownThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
