@@ -50,7 +50,7 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
  * <p>Arquillian {@link DeployableContainer} implementation for an
  * Remote Tomcat server; responsible for both deployment operations.</p>
  *
- * 
+ *
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
@@ -58,13 +58,9 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
 {
    private static final Logger log = Logger.getLogger(TomcatRemoteContainer.class.getName());
 
-   private static final String TMPDIR_SYS_PROP = "java.io.tmpdir";
-
    private static final String URL_PATH_DEPLOY = "/deploy";
 
    private static final String URL_PATH_UNDEPLOY = "/undeploy";
-
-   private static final String URL_PATH_LIST = "/list";
 
    /**
     * Tomcat container configuration
@@ -88,10 +84,10 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    {
       this.conf = configuration;
 
-      this.adminBaseUrl = String.format("http://%s:%s@%s:%d/manager", 
-            this.conf.getUser(), 
+      this.adminBaseUrl = String.format("http://%s:%s@%s:%d/manager",
+            this.conf.getUser(),
             this.conf.getPass(),
-            this.conf.getHost(), 
+            this.conf.getHost(),
             this.conf.getHttpPort());
 
    }
@@ -130,7 +126,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
     * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
     * @param archive
     * @return
-    * @throws DeploymentException 
+    * @throws DeploymentException
     */
    @Override
    public ProtocolMetaData deploy(Archive<?> archive) throws DeploymentException
@@ -146,7 +142,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
       {
          // Export to a file so we can send it over the wire
          URL archiveURL = ShrinkWrapUtil.toURL(archive);
-         
+
          // Split the suffix to get deployment.
          final String name = archiveName.substring(0, archiveName.lastIndexOf("."));
 
@@ -161,7 +157,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
          {
             throw new DeploymentException("Deploy failed, Tomcat says: " + reply);
          }
-            
+
          return this.retrieveContextServletInfo(name);
       }
       catch (Exception ex)
@@ -205,7 +201,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    {
       // HTTP Client
       final Client client = Client.create();
-      
+
       // Auth
       client.addFilter(new HTTPBasicAuthFilter(this.conf.getUser(), this.conf.getPass()));
       WebResource resource = client.resource(this.adminBaseUrl + additionalResourceUrl);
@@ -232,23 +228,23 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
 
    /**
     * Retrieves given context's servlets information through JMX.
-    * 
+    *
     * How it works:
     *   1)  Get the WebModule, identified as //{host}/{contextPath}
     *   2)  Get it's path attrib
     *   3)  Get it's servlets attrib, which is String[] which actually represents ObjectName[]
     *   4)  Get each of these Servlets and their mappings
     *   5)  For each of {mapping},  do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
-    * 
-       // WebModule -> ... -> Attributes 
+    *
+       // WebModule -> ... -> Attributes
        //     -> path == /manager
        //     -> servlets == String[]
        //           -> Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication=none,J2EEServer=none
-    * 
-    * 
+    *
+    *
     * @param context
     * @return
-    * @throws DeploymentException 
+    * @throws DeploymentException
     */
    protected ProtocolMetaData retrieveContextServletInfo(String context) throws DeploymentException
    {
@@ -260,7 +256,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
 
          // Create an RMI connector client and connect it to the RMI connector server
          // "service:jmx:rmi:///jndi/rmi://localhost:9999/server"
-         String urlStr = String.format("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi", 
+         String urlStr = String.format("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi",
                this.conf.getHost(),
                this.conf.getJmxPort());
 
@@ -276,8 +272,8 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
          {
             throw new IOException("Can't connect to '" + urlStr + "'."
                   + "\n   Make sure JMX props are set up for Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
-                  + "\n   Example (with no authentication):" 
-                  + "\n     -Dcom.sun.management.jmxremote.port=" + this.conf.getJmxPort() 
+                  + "\n   Example (with no authentication):"
+                  + "\n     -Dcom.sun.management.jmxremote.port=" + this.conf.getJmxPort()
                   + "\n     -Dcom.sun.management.jmxremote.ssl=false"
                   + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
          }
@@ -322,7 +318,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
                jmxc.close();
             }
             catch (IOException ex)
-            { 
+            {
                log.severe(ex.getMessage());
             }
          }
