@@ -9,10 +9,11 @@
             <property name="catalinaHome">target/apache-tomcat-6.0.29/apache-tomcat-6.0.29</property>
             <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
             <property name="javaHome">/home/jhuska/apps/jdk1.6.0_22</property>
-            <property name="jmxPort">9876</property>
+            <property name="jmxPort">8089</property>
             <property name="bindHttpPort">8080</property>
             <property name="user">tomcat</property>
             <property name="pass">tomcat</property>
+            <property name="serverConfig">server.xml</property>
         </configuration>
     </container>
 </arquillian>

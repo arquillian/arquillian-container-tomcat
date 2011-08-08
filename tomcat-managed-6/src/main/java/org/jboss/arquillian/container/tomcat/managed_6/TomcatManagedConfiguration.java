@@ -16,6 +16,7 @@
  */
 package org.jboss.arquillian.container.tomcat.managed_6;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -62,6 +63,8 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
 	private String workDir = null;
 	
 	private String serverName = "arquillian-tomcat-managed-6";
+	
+	private String serverConfig = "server.xml";
 
 	@Override
 	public void validate() throws ConfigurationException {
@@ -76,7 +79,7 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
 		} catch (URISyntaxException ex) {
 			throw new ConfigurationException(ex.getMessage(), ex);
 		}
-
+		
 		Validate.configurationDirectoryExists(
 				catalinaHome,
 				"Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
@@ -85,6 +88,11 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
 				javaHome,
 				"Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
 						+ javaHome + " is not valid directory!");
+		
+		File confFile = new File(catalinaHome + "/conf/" + serverConfig);
+		if(!confFile.exists()) {
+			throw new ConfigurationException("The server configuration file denoted by serverConfig property has to exist! This file: " + confFile.getAbsolutePath() + " does not!");
+		}
 	}
 
 	public String getBindAddress() {
@@ -239,6 +247,14 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
 
 	public void setServerName(String serverName) {
 		this.serverName = serverName;
+	}
+
+	public String getServerConfig() {
+		return serverConfig;
+	}
+
+	public void setServerConfig(String serverConfig) {
+		this.serverConfig = serverConfig;
 	}
 
 }
