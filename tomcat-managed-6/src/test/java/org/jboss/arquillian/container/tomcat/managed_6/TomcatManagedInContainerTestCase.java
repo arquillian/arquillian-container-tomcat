@@ -39,14 +39,14 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- * 
+ *
  * @author Dan Allen
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class TomcatRemoteInContainerTestCase
+public class TomcatManagedInContainerTestCase
 {
-    private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
+    private static final Logger log = Logger.getLogger(TomcatManagedInContainerTestCase.class.getName());
 
     /**
      * Define the deployment
@@ -66,7 +66,7 @@ public class TomcatRemoteInContainerTestCase
                                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                                 .addAsManifestResource("in-container-context.xml", "context.xml")
                                 .setWebXML("in-container-web.xml");
-        /// DEBUG - see what's 
+        /// DEBUG - see what's
         //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
         return war;
     }

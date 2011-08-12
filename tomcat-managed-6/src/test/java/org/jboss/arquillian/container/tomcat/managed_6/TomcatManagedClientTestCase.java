@@ -42,7 +42,7 @@ import org.junit.runner.RunWith;
  * 
  */
 @RunWith(Arquillian.class)
-public class TomcatRemoteClientTestCase
+public class TomcatManagedClientTestCase
 {
    // -------------------------------------------------------------------------------------||
    // Class Members -----------------------------------------------------------------------||
@@ -51,7 +51,7 @@ public class TomcatRemoteClientTestCase
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(TomcatRemoteClientTestCase.class.getName());
+   private static final Logger log = Logger.getLogger(TomcatManagedClientTestCase.class.getName());
 
    // -------------------------------------------------------------------------------------||
    // Instance Members --------------------------------------------------------------------||
