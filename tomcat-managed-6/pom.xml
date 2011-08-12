@@ -11,18 +11,19 @@
     <artifactId>arquillian-tomcat-managed-6</artifactId>
     <name>tomcat-managed-6</name>
     <url>http://maven.apache.org</url>
+
     <properties>
-        <version.jersey>1.5</version.jersey>
-        <version.org.apache.tomcat>6.0.29</version.org.apache.tomcat>
+        <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
+        <tomcat.home>${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}/apache-tomcat-${version.org.apache.tomcat}</tomcat.home>
     </properties>
 
     <dependencies>
 
-        <!-- HTTPClient -->
+        <!-- Base64 -->
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-bundle</artifactId>
-            <version>${version.jersey}</version>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.5</version>
         </dependency>
 
         <!-- org.jboss.arquillian -->
@@ -111,6 +112,7 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.1.2</version>
                 <executions>
                     <execution>
                         <id>install-tomcat</id>
@@ -124,7 +126,7 @@
                                 <containerId>tomcat6x</containerId>
                                 <!-- download zip url -->
                                 <zipUrlInstaller>
-                                    <url>http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.29/bin/apache-tomcat-6.0.29.zip</url>
+                                    <url>http://archive.apache.org/dist/tomcat/tomcat-6/v${version.org.apache.tomcat}/bin/apache-tomcat-${version.org.apache.tomcat}.zip</url>
                                     <downloadDir>${project.build.directory}/downloads</downloadDir>
                                     <extractDir>${project.build.directory}/</extractDir>
                                 </zipUrlInstaller>
@@ -144,7 +146,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/apache-tomcat-6.0.29/apache-tomcat-6.0.29/conf</outputDirectory>
+                            <outputDirectory>${tomcat.home}/conf</outputDirectory>
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
@@ -154,6 +156,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
+                    </environmentVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>

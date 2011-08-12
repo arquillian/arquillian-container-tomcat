@@ -16,245 +16,278 @@
  */
 package org.jboss.arquillian.container.tomcat.managed_6;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
-import org.jboss.arquillian.container.spi.client.deployment.Validate;
+import org.jboss.arquillian.container.tomcat.managed_6.util.Validate;
+
+//import org.jboss.arquillian.container.spi.client.deployment.Validate;
 
 /**
  * Arquillian Tomcat Container Configuration
- * 
+ *
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @version $Revision: $
  */
 public class TomcatManagedConfiguration implements ContainerConfiguration {
 
-	private static final int MAX_PORT = 65535;
+    private static final int MAX_PORT = 65535;
 
-	private String bindAddress = "localhost";
+    private String bindAddress = "localhost";
 
-	private int bindHttpPort = 8080;
+    private int bindHttpPort = 8080;
 
-	private String user;
+    private String user;
 
-	private String pass;
+    private String pass;
 
-	private int jmxPort = 8089;
+    private int jmxPort = 8089;
 
-	private URI jmxUrl;
+    private URI jmxUrl;
 
-	private String catalinaHome = System.getenv("CATALINA_HOME");
+    private String urlCharset = "ISO-8859-1";
 
-	private String javaHome = System.getenv("JAVA_HOME");
+    private boolean writeOutputToConsole = true;
 
-	private String javaVmArguments = "-Xmx512m -XX:MaxPermSize=128m";
+    private String catalinaHome = System.getenv("CATALINA_HOME");
 
-	private int startupTimeoutInSeconds = 120;
+    private String javaHome = System.getenv("JAVA_HOME");
 
-	private int shutdownTimeoutInSeconds = 45;
+    private String javaVmArguments = "-Xmx512m -XX:MaxPermSize=128m";
 
-	private String appBase = "webapps";
+    private int startupTimeoutInSeconds = 120;
 
-	private boolean unpackArchive = false;
+    private int shutdownTimeoutInSeconds = 45;
 
-	private String workDir = null;
-	
-	private String serverName = "arquillian-tomcat-managed-6";
-	
-	private String serverConfig = "server.xml";
+    private String appBase = "webapps";
 
-	@Override
-	public void validate() throws ConfigurationException {
+    private boolean unpackArchive = false;
 
-		if (this.jmxPort > MAX_PORT)
-			throw new ConfigurationException("JMX port larger than " + MAX_PORT
-					+ ": " + this.jmxPort);
+    private String workDir = null;
 
-		try {
-			this.jmxUrl = new URI("service:jmx:rmi:///jndi/rmi://"
-					+ this.bindAddress + ":" + this.jmxPort + "/jmxrmi");
-		} catch (URISyntaxException ex) {
-			throw new ConfigurationException(ex.getMessage(), ex);
-		}
-		
-		Validate.configurationDirectoryExists(
-				catalinaHome,
-				"Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
-						+ catalinaHome + " is not valid directory!");
-		Validate.configurationDirectoryExists(
-				javaHome,
-				"Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
-						+ javaHome + " is not valid directory!");
-		
-		File confFile = new File(catalinaHome + "/conf/" + serverConfig);
-		if(!confFile.exists()) {
-			throw new ConfigurationException("The server configuration file denoted by serverConfig property has to exist! This file: " + confFile.getAbsolutePath() + " does not!");
-		}
-	}
+    private String serverName = "arquillian-tomcat-managed-6";
 
-	public String getBindAddress() {
-		return bindAddress;
-	}
+    private String serverConfig = "server.xml";
 
-	public void setBindAddress(String bindAddress) {
-		this.bindAddress = bindAddress;
-	}
+    @Override
+    public void validate() throws ConfigurationException {
 
-	public int getBindHttpPort() {
-		return bindHttpPort;
-	}
+        if (this.jmxPort > MAX_PORT)
+            throw new ConfigurationException("JMX port larger than " + MAX_PORT + ": " + this.jmxPort);
 
-	/**
-	 * Set the HTTP bind port.
-	 * 
-	 * @param httpBindPort
-	 *            HTTP bind port
-	 */
-	public void setBindHttpPort(int bindHttpPort) {
-		this.bindHttpPort = bindHttpPort;
-	}
+        try {
+            this.jmxUrl = new URI("service:jmx:rmi:///jndi/rmi://" + this.bindAddress + ":" + this.jmxPort + "/jmxrmi");
+        } catch (URISyntaxException ex) {
+            throw new ConfigurationException(ex.getMessage(), ex);
+        }
 
-	public String getUser() {
-		return user;
-	}
+        Validate.configurationDirectoryExists(
+                catalinaHome,
+                "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
+                        + catalinaHome + " is not valid directory!");
+        Validate.configurationDirectoryExists(
+                javaHome,
+                "Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
+                        + javaHome + " is not valid directory!");
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+        Validate.isValidFile(catalinaHome + "/conf/" + serverConfig,
+                "The server configuration file denoted by serverConfig property has to exist! This file: " + catalinaHome
+                        + "/conf/" + serverConfig + " does not!");
 
-	public String getPass() {
-		return pass;
-	}
+        // set write output to console
+        this.writeOutputToConsole = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+            @Override
+            public Boolean run() {
+                // By default, redirect to stdout unless disabled by this property
+                String val = System.getProperty("org.apache.tomcat.writeconsole");
+                return val == null || !"false".equals(val);
+            }
+        });
+    }
 
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
+    public String getBindAddress() {
+        return bindAddress;
+    }
 
-	public int getJmxPort() {
-		return jmxPort;
-	}
+    public void setBindAddress(String bindAddress) {
+        this.bindAddress = bindAddress;
+    }
 
-	public void setJmxPort(int jmxPort) {
-		this.jmxPort = jmxPort;
-	}
+    public int getBindHttpPort() {
+        return bindHttpPort;
+    }
 
-	public URI getJmxUrl() {
-		return jmxUrl;
-	}
+    /**
+     * Set the HTTP bind port.
+     *
+     * @param httpBindPort HTTP bind port
+     */
+    public void setBindHttpPort(int bindHttpPort) {
+        this.bindHttpPort = bindHttpPort;
+    }
 
-	public void setJmxUrl(URI jmxUrl) {
-		this.jmxUrl = jmxUrl;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public String getCatalinaHome() {
-		return catalinaHome;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-	public void setCatalinaHome(String catalinaHome) {
-		this.catalinaHome = catalinaHome;
-	}
+    public String getPass() {
+        return pass;
+    }
 
-	public String getJavaHome() {
-		return javaHome;
-	}
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
 
-	public void setJavaHome(String javaHome) {
-		this.javaHome = javaHome;
-	}
+    public int getJmxPort() {
+        return jmxPort;
+    }
 
-	public String getJavaVmArguments() {
-		return javaVmArguments;
-	}
+    public void setJmxPort(int jmxPort) {
+        this.jmxPort = jmxPort;
+    }
 
-	/**
-	 * This will override the default ("-Xmx512m -XX:MaxPermSize=128m") startup
-	 * JVM arguments.
-	 * 
-	 * @param javaVmArguments
-	 *            use as start up arguments
-	 */
-	public void setJavaVmArguments(String javaVmArguments) {
-		this.javaVmArguments = javaVmArguments;
-	}
+    public URI getJmxUrl() {
+        return jmxUrl;
+    }
 
-	public int getStartupTimeoutInSeconds() {
-		return startupTimeoutInSeconds;
-	}
+    public void setJmxUrl(URI jmxUrl) {
+        this.jmxUrl = jmxUrl;
+    }
 
-	public void setStartupTimeoutInSeconds(int startupTimeoutInSeconds) {
-		this.startupTimeoutInSeconds = startupTimeoutInSeconds;
-	}
+    public String getCatalinaHome() {
+        return catalinaHome;
+    }
 
-	public int getShutdownTimeoutInSeconds() {
-		return shutdownTimeoutInSeconds;
-	}
+    public void setCatalinaHome(String catalinaHome) {
+        this.catalinaHome = catalinaHome;
+    }
 
-	public void setShutdownTimeoutInSeconds(int shutdownTimeoutInSeconds) {
-		this.shutdownTimeoutInSeconds = shutdownTimeoutInSeconds;
-	}
+    public String getJavaHome() {
+        return javaHome;
+    }
 
-	public String getAppBase() {
-		return appBase;
-	}
+    public void setJavaHome(String javaHome) {
+        this.javaHome = javaHome;
+    }
 
-	/**
-	 * @param appBase
-	 *            the directory where the deployed webapps are stored within the
-	 *            Tomcat installation
-	 */
-	public void setAppBase(String appBase) {
-		this.appBase = appBase;
-	}
+    public String getJavaVmArguments() {
+        return javaVmArguments;
+    }
 
-	/**
-	 * @return a switch indicating whether the WAR should be unpacked
-	 */
-	public boolean isUnpackArchive() {
-		return unpackArchive;
-	}
+    /**
+     * This will override the default ("-Xmx512m -XX:MaxPermSize=128m") startup JVM arguments.
+     *
+     * @param javaVmArguments use as start up arguments
+     */
+    public void setJavaVmArguments(String javaVmArguments) {
+        this.javaVmArguments = javaVmArguments;
+    }
 
-	/**
-	 * Sets the WAR to be unpacked into the java.io.tmpdir when deployed.
-	 * Unpacking is required if you are using Weld to provide CDI support in a
-	 * servlet environment.
-	 * 
-	 * @param a
-	 *            switch indicating whether the WAR should be unpacked
-	 */
-	public void setUnpackArchive(boolean unpackArchive) {
-		this.unpackArchive = unpackArchive;
-	}
+    public int getStartupTimeoutInSeconds() {
+        return startupTimeoutInSeconds;
+    }
 
-	public String getWorkDir() {
-		return workDir;
-	}
+    public void setStartupTimeoutInSeconds(int startupTimeoutInSeconds) {
+        this.startupTimeoutInSeconds = startupTimeoutInSeconds;
+    }
 
-	/**
-	 * @param workDir
-	 *            the directory where the compiled JSP files and session
-	 *            serialization data is stored
-	 */
-	public void setWorkDir(String workDir) {
-		this.workDir = workDir;
-	}
+    public int getShutdownTimeoutInSeconds() {
+        return shutdownTimeoutInSeconds;
+    }
 
-	public String getServerName() {
-		return serverName;
-	}
+    public void setShutdownTimeoutInSeconds(int shutdownTimeoutInSeconds) {
+        this.shutdownTimeoutInSeconds = shutdownTimeoutInSeconds;
+    }
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
+    public String getAppBase() {
+        return appBase;
+    }
 
-	public String getServerConfig() {
-		return serverConfig;
-	}
+    /**
+     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
+     */
+    public void setAppBase(String appBase) {
+        this.appBase = appBase;
+    }
 
-	public void setServerConfig(String serverConfig) {
-		this.serverConfig = serverConfig;
-	}
+    /**
+     * @return a switch indicating whether the WAR should be unpacked
+     */
+    public boolean isUnpackArchive() {
+        return unpackArchive;
+    }
+
+    /**
+     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
+     * CDI support in a servlet environment.
+     *
+     * @param a switch indicating whether the WAR should be unpacked
+     */
+    public void setUnpackArchive(boolean unpackArchive) {
+        this.unpackArchive = unpackArchive;
+    }
+
+    public String getWorkDir() {
+        return workDir;
+    }
+
+    /**
+     * @param workDir the directory where the compiled JSP files and session serialization data is stored
+     */
+    public void setWorkDir(String workDir) {
+        this.workDir = workDir;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public String getServerConfig() {
+        return serverConfig;
+    }
+
+    public void setServerConfig(String serverConfig) {
+        this.serverConfig = serverConfig;
+    }
+
+    /**
+     * @param urlCharset the urlCharset to set
+     */
+    public void setUrlCharset(String urlCharset) {
+        this.urlCharset = urlCharset;
+    }
+
+    /**
+     * @return the urlCharset
+     */
+    public String getUrlCharset() {
+        return urlCharset;
+    }
+
+    /**
+     * @param writeOutputToConsole the writeOutputToConsole to set
+     */
+    public void setWriteOutputToConsole(boolean writeOutputToConsole) {
+        this.writeOutputToConsole = writeOutputToConsole;
+    }
+
+    /**
+     * @return the writeOutputToConsole
+     */
+    public boolean isWriteOutputToConsole() {
+        return writeOutputToConsole;
+    }
 
 }
