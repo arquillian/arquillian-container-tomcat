@@ -120,4 +120,8 @@
         <module>tomcat-embedded-7</module>
     <module>tomcat-managed-6</module>
   </modules>
+<<<<<<< HEAD
 </project>
+=======
+</project>
+>>>>>>> ARQ-261

@@ -11,18 +11,33 @@
     <artifactId>arquillian-tomcat-managed-6</artifactId>
     <name>tomcat-managed-6</name>
     <url>http://maven.apache.org</url>
+<<<<<<< HEAD
     <properties>
         <version.jersey>1.5</version.jersey>
         <version.org.apache.tomcat>6.0.29</version.org.apache.tomcat>
+=======
+
+    <properties>
+        <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
+        <tomcat.home>${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}/apache-tomcat-${version.org.apache.tomcat}</tomcat.home>
+>>>>>>> ARQ-261
     </properties>
 
     <dependencies>
 
+<<<<<<< HEAD
         <!-- HTTPClient -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-bundle</artifactId>
             <version>${version.jersey}</version>
+=======
+        <!-- Base64 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.5</version>
+>>>>>>> ARQ-261
         </dependency>
 
         <!-- org.jboss.arquillian -->
@@ -111,6 +126,10 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
+<<<<<<< HEAD
+=======
+                <version>1.1.2</version>
+>>>>>>> ARQ-261
                 <executions>
                     <execution>
                         <id>install-tomcat</id>
@@ -124,7 +143,11 @@
                                 <containerId>tomcat6x</containerId>
                                 <!-- download zip url -->
                                 <zipUrlInstaller>
+<<<<<<< HEAD
                                     <url>http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.29/bin/apache-tomcat-6.0.29.zip</url>
+=======
+                                    <url>http://archive.apache.org/dist/tomcat/tomcat-6/v${version.org.apache.tomcat}/bin/apache-tomcat-${version.org.apache.tomcat}.zip</url>
+>>>>>>> ARQ-261
                                     <downloadDir>${project.build.directory}/downloads</downloadDir>
                                     <extractDir>${project.build.directory}/</extractDir>
                                 </zipUrlInstaller>
@@ -144,7 +167,11 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
+<<<<<<< HEAD
                             <outputDirectory>${basedir}/target/apache-tomcat-6.0.29/apache-tomcat-6.0.29/conf</outputDirectory>
+=======
+                            <outputDirectory>${tomcat.home}/conf</outputDirectory>
+>>>>>>> ARQ-261
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
@@ -155,6 +182,17 @@
                     </execution>
                 </executions>
             </plugin>
+<<<<<<< HEAD
+=======
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+>>>>>>> ARQ-261
         </plugins>
     </build>
 </project>
