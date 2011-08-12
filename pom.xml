@@ -35,7 +35,7 @@
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
         <version.jboss_spec>1.0.0.Final</version.jboss_spec>
-        <version.weld_servlet>1.1.1.Final</version.weld_servlet>
+        <version.weld_servlet>1.1.2.Final</version.weld_servlet>
 
         <!-- override from parent -->
         <version.release.plugin>2.1</version.release.plugin>
@@ -98,9 +98,9 @@
             <id>build-server</id>
             <build>
                 <plugins>
-                    <!-- 
+                    <!--
                         surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the MavenResovler used in
-                        the test cases can read from the same lcoal repo. 
+                        the test cases can read from the same lcoal repo.
                      -->
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>

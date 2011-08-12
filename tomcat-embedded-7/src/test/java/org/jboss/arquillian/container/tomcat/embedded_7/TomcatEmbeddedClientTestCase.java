@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -42,7 +43,7 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   private static final String HELLO_WORLD_URL = "http://localhost:8888/test/Test";
+   private static final String TEST_SERVLET = "Test";
 
    // -------------------------------------------------------------------------------------||
    // Class Members -----------------------------------------------------------------------||
@@ -67,8 +68,8 @@ public class TomcatEmbeddedClientTestCase
             .create(WebArchive.class, "test.war")
             .addClass(MyServlet.class)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5")
-                        .servlet(MyServlet.class, "/Test").exportAsString()));
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0")
+                        .servlet(MyServlet.class, "/" + TEST_SERVLET).exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||
@@ -79,13 +80,13 @@ public class TomcatEmbeddedClientTestCase
     * Ensures the {@link HelloWorldServlet} returns the expected response
     */
    @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
    {
       // Define the input and expected outcome
       final String expected = "hello";
 
-      URL url = new URL(HELLO_WORLD_URL);
-      InputStream in = url.openConnection().getInputStream();
+      URL servletUrl = new URL(contextURL, TEST_SERVLET);
+      InputStream in = servletUrl.openConnection().getInputStream();
 
       byte[] buffer = new byte[10000];
       int len = in.read(buffer);
