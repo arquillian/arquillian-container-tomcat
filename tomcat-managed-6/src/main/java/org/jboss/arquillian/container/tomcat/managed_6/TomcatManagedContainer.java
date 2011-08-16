@@ -111,7 +111,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
 
             String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
             String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-            CLASS_PATH += absolutePath + "tomcat-juli.jar"; 
+            CLASS_PATH += absolutePath + "/bin/tomcat-juli.jar"; 
             
 
             cmd.add("-classpath");
