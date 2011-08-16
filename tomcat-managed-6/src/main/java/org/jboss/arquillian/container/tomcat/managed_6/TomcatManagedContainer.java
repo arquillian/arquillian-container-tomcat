@@ -110,7 +110,9 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             }
 
             String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
-            String CLASS_PATH = absolutePath + "/bin/*";
+            String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
+            CLASS_PATH += absolutePath + "tomcat-juli.jar"; 
+            
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
@@ -159,7 +161,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             }
             if (!serverAvailable) {
                 destroystartupProcess();
-                throw new TimeoutException(String.format("Managed server was not started within [%d] ms", startupTimeout));
+                throw new TimeoutException(String.format("Managed server was not started within [%d] s", startupTimeout));
             }
 
         } catch (Exception ex) {
