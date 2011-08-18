@@ -141,12 +141,12 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          tomcat.setPort(configuration.getBindHttpPort());
          tomcat.setBaseDir(tempDir.getAbsolutePath());
 
-         // Enable JNDI - it is disabled by default,
+         // Enable JNDI - it is disabled by default.
          tomcat.enableNaming();
 
          tomcat.getEngine().setName(configuration.getServerName());
 
-         // Instead of Tomcat.getHost() we create our own.  Otherwise because getHost() immediately adds the Host to
+         // Instead of Tomcat.getHost() we create our own.  Otherwise getHost() immediately adds the Host to
          // the Engine, which in turn calls Host.start(), and we don't want to start the host before we've had a
          // chance to add our own EmbeddedHostConfig as a LifecycleListener.
          host = new StandardHost();
