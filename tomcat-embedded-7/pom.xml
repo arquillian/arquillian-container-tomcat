@@ -17,7 +17,7 @@
 
    <properties>
 
-      <version.org.apache.tomcat>7.0.19</version.org.apache.tomcat>
+      <version.org.apache.tomcat>7.0.20</version.org.apache.tomcat>
 
    </properties>
 
@@ -68,6 +68,11 @@
          <version>${version.org.apache.tomcat}</version>
          <scope>provided</scope>
       </dependency>
+      <dependency>
+         <groupId>org.eclipse.jdt.core.compiler</groupId>
+         <artifactId>ecj</artifactId>
+         <version>3.7</version>
+      </dependency>
 
       <!-- testing -->
       <dependency>
@@ -80,11 +85,11 @@
          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
          <scope>test</scope>
       </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-            <artifactId>shrinkwrap-descriptors-impl</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-impl</artifactId>
+         <scope>test</scope>
+      </dependency>
 
       <dependency>
          <groupId>junit</groupId>

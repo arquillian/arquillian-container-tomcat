@@ -16,11 +16,13 @@
  */
 package org.jboss.arquillian.container.tomcat.embedded_7;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -43,8 +45,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   private static final String TEST_SERVLET = "Test";
-
    // -------------------------------------------------------------------------------------||
    // Class Members -----------------------------------------------------------------------||
    // -------------------------------------------------------------------------------------||
@@ -54,19 +54,48 @@ public class TomcatEmbeddedClientTestCase
     */
    private static final Logger log = Logger.getLogger(TomcatEmbeddedClientTestCase.class.getName());
 
+   private static final String ROOT_CONTEXT = "ROOT";
+
+   private static final String TEST_CONTEXT = "test";
+
+   private static final String TEST_SERVLET = "Test";
+
+   private static final String TEST_WELCOME_FILE = "index.jsp";
+
+
    // -------------------------------------------------------------------------------------||
    // Instance Members --------------------------------------------------------------------||
    // -------------------------------------------------------------------------------------||
 
    /**
-    * Define the deployment
+    * Define the root context deployment
     */
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
+   @Deployment(name = ROOT_CONTEXT, testable = false)
+   public static WebArchive createRootDeployment()
+   {
+      return createDeployment(getWarName(ROOT_CONTEXT));
+   }
+
+   /**
+    * Define the test context deployment
+    */
+   @Deployment(name = TEST_CONTEXT, testable = false)
+   public static WebArchive createTestDeployment()
+   {
+      return createDeployment(getWarName(TEST_CONTEXT));
+   }
+
+   private static String getWarName(final String contextName)
+   {
+      return contextName + ".war";
+   }
+
+   private static WebArchive createDeployment(final String archiveName)
    {
       return ShrinkWrap
-            .create(WebArchive.class, "test.war")
+            .create(WebArchive.class, archiveName)
             .addClass(MyServlet.class)
+            .addAsWebResource(TEST_WELCOME_FILE)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0")
                         .servlet(MyServlet.class, "/" + TEST_SERVLET).exportAsString()));
@@ -77,15 +106,42 @@ public class TomcatEmbeddedClientTestCase
    // -------------------------------------------------------------------------------------||
 
    /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
+    * Ensures the Test Servlet returns the expected response.
     */
    @Test
+   @OperateOnDeployment(TEST_CONTEXT)
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
    {
       // Define the input and expected outcome
       final String expected = "hello";
 
       URL servletUrl = new URL(contextURL, TEST_SERVLET);
+      String httpResponse = getHttpResponse(servletUrl);
+
+      // Test
+      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+      log.info("Got expected result from Http Servlet: " + httpResponse);
+   }
+
+   /**
+    * Ensures the JSP welcome file returns the expected response.
+    */
+   @Test
+   @OperateOnDeployment(ROOT_CONTEXT)
+   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   {
+      // Define the input and expected outcome
+      final String expected = "welcome";
+
+      String httpResponse = getHttpResponse(contextURL);
+
+      // Test
+      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+      log.info("Got expected result from JSP welcome file: " + httpResponse);
+   }
+
+   private String getHttpResponse(URL servletUrl) throws IOException
+   {
       InputStream in = servletUrl.openConnection().getInputStream();
 
       byte[] buffer = new byte[10000];
@@ -93,9 +149,6 @@ public class TomcatEmbeddedClientTestCase
       String httpResponse = "";
       for (int q = 0; q < len; q++)
          httpResponse += (char) buffer[q];
-
-      // Test
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
+      return httpResponse;
    }
 }
