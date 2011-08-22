@@ -58,8 +58,12 @@ public class EmbeddedHostConfig extends HostConfig
     */
    public void deployWAR(final String warFileName)
    {
+      final String contextName = getContextName(warFileName);
+
       deployWARs(appBase(), new String[]
       {warFileName});
+
+      addServiced(contextName);
    }
 
    /**
@@ -69,7 +73,16 @@ public class EmbeddedHostConfig extends HostConfig
     */
    public void undeployWAR(final String warFileName)
    {
+      final String contextName = getContextName(warFileName);
+
+      unmanageApp(contextName);
+
+      removeServiced(contextName);
+   }
+
+   private String getContextName(final String warFileName)
+   {
       final ContextName contextName = new ContextName(warFileName);
-      unmanageApp(contextName.getBaseName());
+      return contextName.getName();
    }
 }

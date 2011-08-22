@@ -19,7 +19,6 @@ package org.jboss.arquillian.container.tomcat.embedded_7;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -40,6 +39,7 @@ import org.junit.runner.RunWith;
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
@@ -48,11 +48,6 @@ public class TomcatEmbeddedClientTestCase
    // -------------------------------------------------------------------------------------||
    // Class Members -----------------------------------------------------------------------||
    // -------------------------------------------------------------------------------------||
-
-   /**
-    * Logger
-    */
-   private static final Logger log = Logger.getLogger(TomcatEmbeddedClientTestCase.class.getName());
 
    private static final String ROOT_CONTEXT = "ROOT";
 
@@ -112,15 +107,12 @@ public class TomcatEmbeddedClientTestCase
    @OperateOnDeployment(TEST_CONTEXT)
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
       URL servletUrl = new URL(contextURL, TEST_SERVLET);
       String httpResponse = getHttpResponse(servletUrl);
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 
    /**
@@ -130,14 +122,11 @@ public class TomcatEmbeddedClientTestCase
    @OperateOnDeployment(ROOT_CONTEXT)
    public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "welcome";
 
       String httpResponse = getHttpResponse(contextURL);
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from JSP welcome file: " + httpResponse);
    }
 
    private String getHttpResponse(URL servletUrl) throws IOException

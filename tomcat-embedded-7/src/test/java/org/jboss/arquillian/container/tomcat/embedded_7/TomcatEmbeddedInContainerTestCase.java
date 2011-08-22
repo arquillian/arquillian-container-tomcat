@@ -40,12 +40,13 @@ import org.junit.runner.RunWith;
  * Arquillian lifecycle
  *
  * @author Dan Allen
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedInContainerTestCase
 {
-   private static final String HELLO_WORLD_URL = "http://localhost:8888/test2/Test";
+   private static final String HELLO_WORLD_URL = "http://localhost:8888/Test";
 
    // -------------------------------------------------------------------------------------||
    // Class Members -----------------------------------------------------------------------||
@@ -67,7 +68,7 @@ public class TomcatEmbeddedInContainerTestCase
    public static WebArchive createTestArchive()
    {
       return ShrinkWrap
-            .create(WebArchive.class, "test2.war")
+            .create(WebArchive.class, "ROOT.war")
             .addClasses(MyServlet.class, MyBean.class)
             .addAsLibraries(
                   DependencyResolvers.use(MavenDependencyResolver.class)
