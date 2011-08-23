@@ -200,16 +200,16 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    {
       try
       {
-         final File archiveFile = new File(appBase, archive.getName());
+         // Ensure we don't create a corrupted archive by exporting to a file that already exists.
+         deleteWar(archive);
 
+         final File archiveFile = new File(appBase, archive.getName());
          archive.as(ZipExporter.class).exportTo(archiveFile, true);
 
          embeddedHostConfig.deployWAR(archive.getName());
 
          final ContextName contextName = getContextName(archive);
-
          final StandardContext standardContext = (StandardContext) host.findChild(contextName.getName());
-
          standardContextProducer.set(standardContext);
 
          final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(),
@@ -233,13 +233,16 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
     */
    public void undeploy(final Archive<?> archive) throws DeploymentException
    {
-      embeddedHostConfig.undeployWAR(archive.getName());
-
-      if (configuration.isUnpackArchive())
+      try
       {
-         deleteUnpackedWAR(archive);
-      }
+         embeddedHostConfig.undeployWAR(archive.getName());
 
+         deleteWar(archive);
+      }
+      catch (Exception e)
+      {
+         throw new DeploymentException("Failed to undeploy " + archive.getName(), e);
+      }
    }
 
    /* (non-Javadoc)
@@ -318,15 +321,26 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    }
 
    /**
-    * Make sure an the unpacked WAR is not left behind.
+    * Make sure the WAR file and unpacked directory (if applicable) are not left behind.
+    *
+    * @see {@link TomcatConfiguration#isUnpackArchive()}
     */
-   private void deleteUnpackedWAR(final Archive<?> archive)
+   private void deleteWar(final Archive<?> archive)
    {
-      final ContextName contextName = getContextName(archive);
-      File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
-      if (unpackDir.exists())
+      if (configuration.isUnpackArchive())
       {
-         ExpandWar.deleteDir(unpackDir);
+         final ContextName contextName = getContextName(archive);
+         final File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
+         if (unpackDir.exists())
+         {
+            ExpandWar.deleteDir(unpackDir);
+         }
+      }
+
+      final File warFile = new File(host.getAppBase(), archive.getName());
+      if (warFile.exists())
+      {
+         warFile.delete();
       }
    }
 }
