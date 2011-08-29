@@ -1,7 +1,8 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2009, Red Hat Middleware LLC, and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
+ * Copyright 2011 Red Hat Inc. and/or its affiliates and other contributors
+ * as indicated by the @authors tag. All rights reserved.
+ * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -9,7 +10,7 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,  
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -24,8 +25,6 @@ import java.security.PrivilegedAction;
 import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
 import org.jboss.arquillian.container.tomcat.managed_6.util.Validate;
-
-//import org.jboss.arquillian.container.spi.client.deployment.Validate;
 
 /**
  * Arquillian Tomcat Container Configuration
@@ -51,7 +50,7 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
 
     private String urlCharset = "ISO-8859-1";
 
-    private boolean writeOutputToConsole = true;
+    private boolean outputToConsole = true;
 
     private String catalinaHome = System.getenv("CATALINA_HOME");
 
@@ -99,7 +98,7 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
                         + "/conf/" + serverConfig + " does not!");
 
         // set write output to console
-        this.writeOutputToConsole = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+        this.outputToConsole = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
             @Override
             public Boolean run() {
                 // By default, redirect to stdout unless disabled by this property
@@ -280,14 +279,14 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
      * @param writeOutputToConsole the writeOutputToConsole to set
      */
     public void setWriteOutputToConsole(boolean writeOutputToConsole) {
-        this.writeOutputToConsole = writeOutputToConsole;
+        this.outputToConsole = writeOutputToConsole;
     }
 
     /**
      * @return the writeOutputToConsole
      */
     public boolean isWriteOutputToConsole() {
-        return writeOutputToConsole;
+        return outputToConsole;
     }
 
 }
