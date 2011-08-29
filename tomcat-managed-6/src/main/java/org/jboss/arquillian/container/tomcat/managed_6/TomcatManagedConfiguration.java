@@ -276,16 +276,16 @@ public class TomcatManagedConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param writeOutputToConsole the writeOutputToConsole to set
+     * @param outputToConsole the outputToConsole to set
      */
-    public void setWriteOutputToConsole(boolean writeOutputToConsole) {
+    public void setOutputToConsole(boolean writeOutputToConsole) {
         this.outputToConsole = writeOutputToConsole;
     }
 
     /**
-     * @return the writeOutputToConsole
+     * @return the outputToConsole
      */
-    public boolean isWriteOutputToConsole() {
+    public boolean isOutputToConsole() {
         return outputToConsole;
     }
 
