@@ -132,7 +132,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
             log.info("Starting Tomcat with: " + cmd.toString());
             startupProcess = startupProcessBuilder.start();
-            new Thread(new ConsoleConsumer(configuration.isWriteOutputToConsole())).start();
+            new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
             final Process proc = startupProcess;
 
             shutdownThread = new Thread(new Runnable() {
