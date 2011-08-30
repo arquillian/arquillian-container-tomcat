@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>arquillian-tomcat-managed-6</artifactId>
-    <name>tomcat-managed-6</name>
+    <name>Arquillian Container Tomcat Managed 6.x</name>
     <url>http://maven.apache.org</url>
     <properties>
         <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
