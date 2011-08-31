@@ -135,8 +135,6 @@ public class TomcatManager {
      * @throws IOException
      * @throws MalformedURLException
      * @throws DeploymentException
-     * 
-     * @exception BuildException if an error occurs
      */
     private void execute(String command, InputStream istream, String contentType, int contentLength) throws IOException {
 
