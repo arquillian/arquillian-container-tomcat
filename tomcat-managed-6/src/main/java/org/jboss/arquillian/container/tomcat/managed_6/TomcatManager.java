@@ -197,7 +197,6 @@ public class TomcatManager {
         try {
             // Process the response message
             reader = new BufferedReader(new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET));
-            StringBuilder lineBuilder = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
                 if (log.isLoggable(Level.FINE)) {
