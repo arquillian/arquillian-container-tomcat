@@ -195,7 +195,7 @@ public class TomcatManager {
         try {
             // Process the response message
             reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
-            StringBuilder sb = new StringBuilder();
+            StringBuilder lineBuilder = new StringBuilder();
             while (true) {
                 int ch = reader.read();
                 if (ch < 0) {
@@ -204,20 +204,19 @@ public class TomcatManager {
                     // in Win \r\n would cause handleOutput() to be called
                     // twice, the second time with an empty string,
                     // producing blank lines
-                    if (sb.length() > 0) {
-                        String line = sb.toString();
-                        sb.setLength(0);
+                    if (lineBuilder.length() > 0) {
                         if (log.isLoggable(Level.FINE)) {
-                            log.fine(line);
+                            log.fine(lineBuilder.toString());
                         }
+                        lineBuilder.setLength(0);
                     }
                 } else {
-                    sb.append((char) ch);
+                    lineBuilder.append((char) ch);
                 }
             }
-            if (sb.length() > 0) {
+            if (lineBuilder.length() > 0) {
                 if (log.isLoggable(Level.FINE)) {
-                    log.fine(sb.toString());
+                    log.fine(lineBuilder.toString());
                 }
             }
         } finally {
