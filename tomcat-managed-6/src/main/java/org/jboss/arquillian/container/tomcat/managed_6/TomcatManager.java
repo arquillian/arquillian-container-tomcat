@@ -20,6 +20,7 @@ package org.jboss.arquillian.container.tomcat.managed_6;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -191,32 +192,15 @@ public class TomcatManager {
             throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
                     + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
         }
-        InputStreamReader reader = null;
+        BufferedReader reader = null;
         try {
             // Process the response message
-            reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
+            reader = new BufferedReader(new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET));
             StringBuilder lineBuilder = new StringBuilder();
-            while (true) {
-                int ch = reader.read();
-                if (ch < 0) {
-                    break;
-                } else if ((ch == '\r') || (ch == '\n')) {
-                    // in Win \r\n would cause handleOutput() to be called
-                    // twice, the second time with an empty string,
-                    // producing blank lines
-                    if (lineBuilder.length() > 0) {
-                        if (log.isLoggable(Level.FINE)) {
-                            log.fine(lineBuilder.toString());
-                        }
-                        lineBuilder.setLength(0);
-                    }
-                } else {
-                    lineBuilder.append((char) ch);
-                }
-            }
-            if (lineBuilder.length() > 0) {
+            String line = reader.readLine();
+            while (line != null) {
                 if (log.isLoggable(Level.FINE)) {
-                    log.fine(lineBuilder.toString());
+                    log.fine(line);
                 }
             }
         } finally {
