@@ -77,28 +77,28 @@ public class TomcatManager {
         InputStream stream = new BufferedInputStream(conn.getInputStream());
 
         // Building URL
-        StringBuilder sb = new StringBuilder("/deploy?path=");
+        StringBuilder command = new StringBuilder("/deploy?path=");
         try {
-            sb.append(URLEncoder.encode(name, configuration.getUrlCharset()));
+            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
         } catch (UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
-        execute(sb.toString(), stream, contentType, contentLength);
+        execute(command.toString(), stream, contentType, contentLength);
     }
 
     public void undeploy(String name) throws IOException, DeploymentException {
         Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
 
         // Building URL
-        StringBuilder sb = new StringBuilder("/undeploy?path=");
+        StringBuilder command = new StringBuilder("/undeploy?path=");
         try {
-            sb.append(URLEncoder.encode(name, configuration.getUrlCharset()));
+            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
         } catch (UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
-        execute(sb.toString(), null, null, -1);
+        execute(command.toString(), null, null, -1);
     }
 
     public void list() throws IOException {
@@ -181,6 +181,9 @@ public class TomcatManager {
                 ostream.close();
                 istream.close();
             }
+            
+            int responseCode = hconn.getResponseCode();
+            System.out.println("responseCode = " + responseCode);
 
             // Process the response message
             reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
