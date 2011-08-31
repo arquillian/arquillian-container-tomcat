@@ -188,6 +188,7 @@ public class TomcatManager {
 
     private void processResponse(String command, HttpURLConnection hconn) throws IOException {
         int httpResponseCode = hconn.getResponseCode();
+        // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         if (httpResponseCode >= 300) {
             throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
                     + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
