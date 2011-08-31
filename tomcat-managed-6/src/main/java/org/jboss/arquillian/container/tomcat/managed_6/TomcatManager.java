@@ -198,11 +198,18 @@ public class TomcatManager {
             // Process the response message
             reader = new BufferedReader(new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET));
             String line = reader.readLine();
+            String contentError = null;
+            if (line != null && !line.startsWith("OK -")) {
+                contentError = line;
+            }
             while (line != null) {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(line);
                 }
                 line = reader.readLine();
+            }
+            if (contentError != null) {
+                throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError + ").");
             }
         } finally {
             IOUtils.closeQuietly(reader);
