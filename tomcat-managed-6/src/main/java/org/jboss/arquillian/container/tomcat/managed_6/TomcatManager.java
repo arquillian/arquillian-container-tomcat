@@ -181,9 +181,6 @@ public class TomcatManager {
                 ostream.close();
                 istream.close();
             }
-            
-            int responseCode = hconn.getResponseCode();
-            System.out.println("responseCode = " + responseCode);
 
             // Process the response message
             reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
