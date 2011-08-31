@@ -92,7 +92,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>generate-resources</phase>
+                        <phase>generate-test-resources</phase>
                         <configuration>
                             <target>
                                 <mkdir dir="${project.build.directory}/downloads" />
@@ -114,7 +114,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <phase>process-resources</phase>
+                        <phase>process-test-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
