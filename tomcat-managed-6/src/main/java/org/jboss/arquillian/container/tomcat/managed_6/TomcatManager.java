@@ -188,8 +188,8 @@ public class TomcatManager {
     private void processResponse(String command, HttpURLConnection hconn) throws IOException {
         int httpResponseCode = hconn.getResponseCode();
         if (httpResponseCode >= 300) {
-            throw new IllegalStateException("The server command (" + command + ") failed with httpResponseCode ("
-                    + httpResponseCode + ").");
+            throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
+                    + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
         }
         InputStreamReader reader = null;
         try {
