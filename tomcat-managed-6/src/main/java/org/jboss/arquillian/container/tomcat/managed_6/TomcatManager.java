@@ -202,6 +202,7 @@ public class TomcatManager {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(line);
                 }
+                line = reader.readLine();
             }
         } finally {
             IOUtils.closeQuietly(reader);
