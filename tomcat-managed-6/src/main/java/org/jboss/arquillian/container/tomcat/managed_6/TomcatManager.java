@@ -141,7 +141,6 @@ public class TomcatManager {
     private void execute(String command, InputStream istream, String contentType, int contentLength) throws IOException {
 
         URLConnection conn = null;
-        InputStreamReader reader = null;
         try {
             // Create a connection for this command
             conn = (new URL(managerUrl + command)).openConnection();
@@ -182,6 +181,15 @@ public class TomcatManager {
                 istream.close();
             }
 
+            processResponse(command, hconn);
+        } finally {
+            IOUtils.closeQuietly(istream);
+        }
+    }
+
+    private void processResponse(String command, HttpURLConnection hconn) throws IOException {
+        InputStreamReader reader = null;
+        try {
             // Process the response message
             reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
             StringBuilder sb = new StringBuilder();
@@ -222,7 +230,6 @@ public class TomcatManager {
             }
         } finally {
             IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(istream);
         }
     }
 
