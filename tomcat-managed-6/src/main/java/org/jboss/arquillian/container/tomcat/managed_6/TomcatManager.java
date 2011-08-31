@@ -188,13 +188,16 @@ public class TomcatManager {
     }
 
     private void processResponse(String command, HttpURLConnection hconn) throws IOException {
+        int httpResponseCode = hconn.getResponseCode();
+        if (httpResponseCode >= 300) {
+            throw new IllegalStateException("The server command (" + command + ") failed with httpResponseCode ("
+                    + httpResponseCode + ").");
+        }
         InputStreamReader reader = null;
         try {
             // Process the response message
             reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
             StringBuilder sb = new StringBuilder();
-            String error = null;
-            boolean first = true;
             while (true) {
                 int ch = reader.read();
                 if (ch < 0) {
@@ -206,12 +209,6 @@ public class TomcatManager {
                     if (sb.length() > 0) {
                         String line = sb.toString();
                         sb.setLength(0);
-                        if (first) {
-                            if (!line.startsWith("OK -")) {
-                                error = line;
-                            }
-                            first = false;
-                        }
                         if (log.isLoggable(Level.FINE)) {
                             log.fine(line);
                         }
@@ -224,9 +221,6 @@ public class TomcatManager {
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(sb.toString());
                 }
-            }
-            if (error != null) {
-                throw new RuntimeException("Unable to executed command " + command + " on server, received " + error);
             }
         } finally {
             IOUtils.closeQuietly(reader);
