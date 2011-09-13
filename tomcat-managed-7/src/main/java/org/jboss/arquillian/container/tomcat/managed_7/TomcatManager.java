@@ -20,6 +20,7 @@ package org.jboss.arquillian.container.tomcat.managed_7;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,32 +78,28 @@ public class TomcatManager {
         InputStream stream = new BufferedInputStream(conn.getInputStream());
 
         // Building URL
-        StringBuilder sb = new StringBuilder("/text/deploy?path=");
+        StringBuilder command = new StringBuilder("/text/deploy?path=");
         try {
-            sb.append(URLEncoder.encode(name, configuration.getUrlCharset()));
+            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
         } catch (UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
-        execute(sb.toString(), stream, contentType, contentLength);
+        execute(command.toString(), stream, contentType, contentLength);
     }
 
     public void undeploy(String name) throws IOException, DeploymentException {
         Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
 
         // Building URL
-        StringBuilder sb = new StringBuilder("/text/undeploy?path=");
+        StringBuilder command = new StringBuilder("/text/undeploy?path=");
         try {
-            sb.append(URLEncoder.encode(name, configuration.getUrlCharset()));
+            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
         } catch (UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
-        execute(sb.toString(), null, null, -1);
-    }
-
-    public void list() throws IOException {
-        execute("/list", null, null, -1);
+        execute(command.toString(), null, null, -1);
     }
 
     public boolean isRunning() {
@@ -135,13 +132,10 @@ public class TomcatManager {
      * @throws IOException
      * @throws MalformedURLException
      * @throws DeploymentException
-     * 
-     * @exception BuildException if an error occurs
      */
     private void execute(String command, InputStream istream, String contentType, int contentLength) throws IOException {
 
         URLConnection conn = null;
-        InputStreamReader reader = null;
         try {
             // Create a connection for this command
             conn = (new URL(managerUrl + command)).openConnection();
@@ -182,47 +176,39 @@ public class TomcatManager {
                 istream.close();
             }
 
+            processResponse(command, hconn);
+        } finally {
+            IOUtils.closeQuietly(istream);
+        }
+    }
+
+    private void processResponse(String command, HttpURLConnection hconn) throws IOException {
+        int httpResponseCode = hconn.getResponseCode();
+        // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+        if (httpResponseCode >= 300) {
+            throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
+                    + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
+        }
+        BufferedReader reader = null;
+        try {
             // Process the response message
-            reader = new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET);
-            StringBuilder sb = new StringBuilder();
-            String error = null;
-            boolean first = true;
-            while (true) {
-                int ch = reader.read();
-                if (ch < 0) {
-                    break;
-                } else if ((ch == '\r') || (ch == '\n')) {
-                    // in Win \r\n would cause handleOutput() to be called
-                    // twice, the second time with an empty string,
-                    // producing blank lines
-                    if (sb.length() > 0) {
-                        String line = sb.toString();
-                        sb.setLength(0);
-                        if (first) {
-                            if (!line.startsWith("OK -")) {
-                                error = line;
-                            }
-                            first = false;
-                        }
-                        if (log.isLoggable(Level.FINE)) {
-                            log.fine(line);
-                        }
-                    }
-                } else {
-                    sb.append((char) ch);
-                }
+            reader = new BufferedReader(new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET));
+            String line = reader.readLine();
+            String contentError = null;
+            if (line != null && !line.startsWith("OK -")) {
+                contentError = line;
             }
-            if (sb.length() > 0) {
+            while (line != null) {
                 if (log.isLoggable(Level.FINE)) {
-                    log.fine(sb.toString());
+                    log.fine(line);
                 }
+                line = reader.readLine();
             }
-            if (error != null) {
-                throw new RuntimeException("Unable to executed command " + command + " on server, received " + error);
+            if (contentError != null) {
+                throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError + ").");
             }
         } finally {
             IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(istream);
         }
     }
 
