@@ -80,7 +80,7 @@ public class TomcatManagedInContainerTestCase
     /**
      * Ensures the {@link HelloWorldServlet} returns the expected response
      */
-    //@Test BUG Test in containers does not work
+    @Test
     public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
     {
       log.info("Name: " + this.resourceInjectionTestValue);

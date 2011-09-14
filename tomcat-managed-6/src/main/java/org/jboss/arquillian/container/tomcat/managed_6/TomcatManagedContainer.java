@@ -91,6 +91,18 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
     @Override
     public void start() throws LifecycleException {
 
+       if(manager.isRunning())
+       {
+          throw new LifecycleException(
+                "The server is already running! " +
+                        "Managed containers does not support connecting to running server instances due to the " +
+                        "possible harmful effect of connecting to the wrong server. Please stop server before running or " +
+                        "change to another type of container.\n" +
+                        "To disable this check and allow Arquillian to connect to a running server, " +
+                        "set allowConnectingToRunningServer to true in the container configuration"
+                );
+       }
+
         try {
             final String CATALINA_HOME = configuration.getCatalinaHome();
             final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
