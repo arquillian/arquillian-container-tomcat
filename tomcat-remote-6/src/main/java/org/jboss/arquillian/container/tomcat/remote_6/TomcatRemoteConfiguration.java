@@ -16,105 +16,68 @@
  */
 package org.jboss.arquillian.container.tomcat.remote_6;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import org.jboss.arquillian.container.spi.ConfigurationException;
-import org.jboss.arquillian.container.spi.client.container.ContainerConfiguration;
+import org.jboss.arquillian.container.tomcat.CommonTomcatConfiguration;
 
 /**
  * Arquillian Tomcat Container Configuration
- * 
+ *
+ * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
-public class TomcatRemoteConfiguration implements ContainerConfiguration
+public class TomcatRemoteConfiguration extends CommonTomcatConfiguration
 {
-   private static final int MAX_PORT = 65535;
-
-   private String host = "localhost";
-
-   private int httpPort = 8080;
-
-   private String user;
-
-   private String pass;
-
-   private int jmxPort = 8089;
-
-   private URI jmxUrl;
-
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    *
     * @see org.jboss.arquillian.spi.client.container.ContainerConfiguration#validate()
     */
    @Override
    public void validate() throws ConfigurationException
    {
-      if (this.jmxPort > MAX_PORT)
-         throw new ConfigurationException("JMX port larger than " + MAX_PORT + ": " + this.jmxPort);
-
-      try
-      {
-         this.jmxUrl = new URI("service:jmx:rmi:///jndi/rmi://" + this.host + ":" + this.jmxPort + "/jmxrmi");
-      }
-      catch (URISyntaxException ex)
-      {
-         throw new ConfigurationException(ex.getMessage(), ex);
-      }
+      super.validate();
    }
 
-   public String getPass()
-   {
-      return pass;
-   }
-
-   public void setPass(String pass)
-   {
-      this.pass = pass;
-   }
-
-   public String getUser()
-   {
-      return user;
-   }
-
-   public void setUser(String user)
-   {
-      this.user = user;
-   }
-
+   /**
+    * Use {@link TomcatRemoteConfiguration#getBindAddress()} instead
+    *
+    * @return
+    */
+   @Deprecated
    public String getHost()
    {
-      return host;
+      return getBindAddress();
    }
 
+   /**
+    * Use {@link TomcatRemoteConfiguration#setBindHttpPort(int)} instead
+    * @param httpPort
+    */
+   @Deprecated
    public void setHttpPort(int httpPort)
    {
-      this.httpPort = httpPort;
+      setBindHttpPort(httpPort);
    }
 
-   public void setHost(String host)
-   {
-      this.host = host;
-   }
-
-   public int getJmxPort()
-   {
-      return jmxPort;
-   }
-
-   public void setJmxPort(int jmxPort)
-   {
-      this.jmxPort = jmxPort;
-   }
-
-   public URI getJmxUrl()
-   {
-      return jmxUrl;
-   }
-
+   /**
+    * Use {@link TomcatRemoteConfiguration#getBindPort()} instead
+    * @return httpPort
+    */
+   @Deprecated
    public int getHttpPort()
    {
-      return httpPort;
+      return getBindHttpPort();
    }
+
+   /**
+    * Use {@link TomcatRemoteConfiguration#setBindAddress(String)} instead
+    * @param host the http host
+    */
+   @Deprecated
+   public void setHost(String host)
+   {
+      setBindAddress(host);
+   }
+
 }

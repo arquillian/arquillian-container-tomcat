@@ -16,58 +16,38 @@
  */
 package org.jboss.arquillian.container.tomcat.remote_6;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
-import java.util.logging.Logger;
-
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-import javax.ws.rs.core.MediaType;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
+import org.jboss.arquillian.container.spi.client.deployment.Validate;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
-import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
+import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
+import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-
 /**
- * <p>Arquillian {@link DeployableContainer} implementation for an
- * Remote Tomcat server; responsible for both deployment operations.</p>
+ * <p>
+ * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment operations.
+ * </p>
  *
  *
+ * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
 public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration>
 {
-   private static final Logger log = Logger.getLogger(TomcatRemoteContainer.class.getName());
-
-   private static final String URL_PATH_DEPLOY = "/deploy";
-
-   private static final String URL_PATH_UNDEPLOY = "/undeploy";
-
    /**
     * Tomcat container configuration
     */
-   private TomcatRemoteConfiguration conf;
+   private TomcatRemoteConfiguration configuration;
 
-   private String adminBaseUrl;
+   private CommonTomcatManager<TomcatRemoteConfiguration> manager;
 
    public Class<TomcatRemoteConfiguration> getConfigurationClass()
    {
@@ -82,29 +62,25 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    @Override
    public void setup(TomcatRemoteConfiguration configuration)
    {
-      this.conf = configuration;
-
-      this.adminBaseUrl = String.format("http://%s:%s@%s:%d/manager",
-            this.conf.getUser(),
-            this.conf.getPass(),
-            this.conf.getHost(),
-            this.conf.getHttpPort());
-
+      this.configuration = configuration;
+      this.manager = new CommonTomcatManager<TomcatRemoteConfiguration>(configuration);
    }
 
    @Override
    public void start() throws LifecycleException
    {
-      // TODO: Check that Tomcat is running.
+      // no-op
    }
 
    @Override
    public void stop() throws LifecycleException
    {
-      // TODO: Shutdown on :8005?
+      // no-op
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    *
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
    @Override
@@ -113,7 +89,9 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
       throw new UnsupportedOperationException("Not implemented");
    }
 
-   /* (non-Javadoc)
+   /*
+    * (non-Javadoc)
+    *
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
    @Override
@@ -124,6 +102,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
 
    /**
     * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
+    *
     * @param archive
     * @return
     * @throws DeploymentException
@@ -131,197 +110,36 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    @Override
    public ProtocolMetaData deploy(Archive<?> archive) throws DeploymentException
    {
-      if (archive == null)
-      {
-         throw new IllegalArgumentException("archive must not be null");
-      }
+      Validate.notNull(archive, "Archive must not be null");
 
-      final String archiveName = archive.getName();
-
+      String archiveName = manager.normalizeArchiveName(archive.getName());
+      URL archiveURL = ShrinkWrapUtil.toURL(archive);
       try
       {
-         // Export to a file so we can send it over the wire
-         URL archiveURL = ShrinkWrapUtil.toURL(archive);
-
-         // Split the suffix to get deployment.
-         final String name = archiveName.substring(0, archiveName.lastIndexOf("."));
-
-         Builder builder = prepareClientWebResource(URL_PATH_DEPLOY)
-               .queryParam("path", "/" + name)
-               .accept(MediaType.TEXT_PLAIN_TYPE)
-               .type(MediaType.APPLICATION_OCTET_STREAM_TYPE);
-
-         final String reply = builder.put(String.class, new File(archiveURL.getFile()));
-
-         if (!isCallSuccessful(reply))
-         {
-            throw new DeploymentException("Deploy failed, Tomcat says: " + reply);
-         }
-
-         return this.retrieveContextServletInfo(name);
+         manager.deploy("/" + archiveName, archiveURL);
       }
-      catch (Exception ex)
+      catch (IOException e)
       {
-         throw new DeploymentException("Error in creating / deploying archive", ex);
+         throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
       }
-   }// deploy()
+
+      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(configuration);
+      return parser.retrieveContextServletInfo(archiveName);
+   }
 
    @Override
    public void undeploy(final Archive<?> archive) throws DeploymentException
    {
-      // Split the suffix to get deployment.
-      final String archiveName = archive.getName();
-      final String name = archiveName.substring(0, archiveName.lastIndexOf("."));
+      Validate.notNull(archive, "Archive must not be null");
 
-      String reply = prepareClientWebResource(URL_PATH_UNDEPLOY)
-            .queryParam("path", "/" + name)
-            .accept(MediaType.TEXT_PLAIN_TYPE)
-            .get(String.class);
-
+      String archiveName = manager.normalizeArchiveName(archive.getName());
       try
       {
-         if (!isCallSuccessful(reply))
-         {
-            throw new DeploymentException("Undeploy failed, Tomcat says: " + reply);
-         }
+         manager.undeploy("/" + archiveName);
       }
-      catch (Exception e)
+      catch (IOException e)
       {
-         throw new DeploymentException("Error parsing Tomcat's undeploy response.", e);
-      }
-   }// undeploy()
-
-   /**
-    * Basic REST call preparation, with the additional resource url appended
-    *
-    * @param additionalResourceUrl url portion past the base to use
-    * @return the resource builder to execute
-    */
-   private WebResource prepareClientWebResource(String additionalResourceUrl)
-   {
-      // HTTP Client
-      final Client client = Client.create();
-
-      // Auth
-      client.addFilter(new HTTPBasicAuthFilter(this.conf.getUser(), this.conf.getPass()));
-      WebResource resource = client.resource(this.adminBaseUrl + additionalResourceUrl);
-      return resource;
-   }
-
-   /**
-    * Looks for a successful exit code given the response of the call
-    *
-    * @param textResponse XML response from the REST call
-    * @return true if call was successful, false otherwise
-    * @throws XPathExpressionException if the xpath query could not be executed
-    */
-   private boolean isCallSuccessful(String textResponse)
-   {
-      if(textResponse == null)
-      {
-         return false;
-      }
-      // OK - Deployed application at context path /debug
-      // OK - Undeployed application at context path /debug
-      return textResponse.contains("OK");
-   }
-
-   /**
-    * Retrieves given context's servlets information through JMX.
-    *
-    * How it works:
-    *   1)  Get the WebModule, identified as //{host}/{contextPath}
-    *   2)  Get it's path attrib
-    *   3)  Get it's servlets attrib, which is String[] which actually represents ObjectName[]
-    *   4)  Get each of these Servlets and their mappings
-    *   5)  For each of {mapping},  do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
-    *
-       // WebModule -> ... -> Attributes
-       //     -> path == /manager
-       //     -> servlets == String[]
-       //           -> Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication=none,J2EEServer=none
-    *
-    *
-    * @param context
-    * @return
-    * @throws DeploymentException
-    */
-   protected ProtocolMetaData retrieveContextServletInfo(String context) throws DeploymentException
-   {
-      JMXConnector jmxc = null;
-      try
-      {
-         final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
-         final HTTPContext httpContext = new HTTPContext(this.conf.getHost(), this.conf.getHttpPort());
-
-         // Create an RMI connector client and connect it to the RMI connector server
-         // "service:jmx:rmi:///jndi/rmi://localhost:9999/server"
-         String urlStr = String.format("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi",
-               this.conf.getHost(),
-               this.conf.getJmxPort());
-
-         log.info("Connecting to JMX: " + urlStr);
-         JMXServiceURL url = new JMXServiceURL(urlStr);
-
-         // Can we connect?
-         try
-         {
-            jmxc = JMXConnectorFactory.connect(url, null);
-         }
-         catch (IOException ex)
-         {
-            throw new IOException("Can't connect to '" + urlStr + "'."
-                  + "\n   Make sure JMX props are set up for Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
-                  + "\n   Example (with no authentication):"
-                  + "\n     -Dcom.sun.management.jmxremote.port=" + this.conf.getJmxPort()
-                  + "\n     -Dcom.sun.management.jmxremote.ssl=false"
-                  + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
-         }
-
-         MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-         final String virtualHost = "localhost"; // TODO: Can be other virt host.
-
-         // Construct the MBean query string.
-         // Catalina:j2eeType=Servlet,name=Manager,WebModule=//localhost/manager,J2EEApplication=none,J2EEServer=none
-         String jmxWebModuleName = "//" + virtualHost + "/" + context;
-         ObjectName servletON = ObjectName
-               .getInstance("Catalina:j2eeType=Servlet,WebModule=" + jmxWebModuleName + ",*");
-         //ObjectName servletON = ObjectName.getInstance("Catalina:j2eeType=Servlet,*"); /// DEBUG - list all servlets of all modules (contexts).
-
-         Set<ObjectInstance> servletMBeans = mbsc.queryMBeans(servletON, null);
-         if (servletMBeans.size() == 0)
-            throw new DeploymentException("No Servlet MBeans found for: " + servletON);
-
-         // For each servlet MBean of the given context
-         // add the servlet info to the HTTPContext.
-         for (ObjectInstance oi : servletMBeans)
-         {
-            String servletName = oi.getObjectName().getKeyProperty("name");
-            log.fine("  Servlet: " + oi.toString());
-            httpContext.add(new Servlet(servletName, context));
-         }
-
-         protocolMetaData.addContext(httpContext);
-         return protocolMetaData;
-      }
-      catch (Exception ex)
-      {
-         throw new DeploymentException("Error listing context's '" + context + "' servlets and mappings: "
-               + ex.toString(), ex);
-      }
-      finally
-      {
-         if (jmxc != null)
-         {
-            try
-            {
-               jmxc.close();
-            }
-            catch (IOException ex)
-            {
-               log.severe(ex.getMessage());
-            }
-         }
+         throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
       }
    }
-}// class
+}
