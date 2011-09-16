@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <!-- Parent -->
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
         <version>6-beta-2</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <!-- Model Version -->
@@ -60,11 +61,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
             <dependency>
                 <groupId>org.jboss.shrinkwrap.container</groupId>
                 <artifactId>shrinkwrap-container-tomcat-60</artifactId>
                 <version>${version.shrinkwrap_tomcat}</version>
             </dependency>
+            
+            <!-- test dependecies -->
             <dependency>
                 <groupId>org.jboss.weld.servlet</groupId>
                 <artifactId>weld-servlet</artifactId>
@@ -115,10 +119,12 @@
         </profile>
     </profiles>
     <modules>
-        <module>tomcat-embedded-6</module>
+        <module>tomcat-common</module>
+        <module>tomcat-managed-5.5</module> 
+        <module>tomcat-embedded-6</module> 
         <module>tomcat-remote-6</module>
-        <module>tomcat-managed-6</module>
-        <module>tomcat-embedded-7</module>
-	<module>tomcat-managed-7</module>
+        <module>tomcat-managed-6</module> 
+        <module>tomcat-embedded-7</module> 
+        <module>tomcat-managed-7</module>
     </modules>
 </project>
