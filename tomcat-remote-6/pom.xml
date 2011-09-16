@@ -20,12 +20,11 @@
     </properties>
 
     <dependencies>
-
-        <!-- HTTPClient -->
+    
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-bundle</artifactId>
-            <version>${version.jersey}</version>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- org.jboss.arquillian -->

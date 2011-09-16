@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed_6;
+package org.jboss.arquillian.container.tomcat.managed_5_5;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -35,11 +35,11 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- * 
+ *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @version $Revision: $
- * 
+ *
  */
 @RunWith(Arquillian.class)
 public class TomcatManagedClientTestCase
@@ -68,7 +68,7 @@ public class TomcatManagedClientTestCase
             .addClass(MyServlet.class)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class)
-                        .version("2.5")
+                        .version("2.4")
                         .servlet(MyServlet.class, "/Test")
                         .exportAsString()));
    }

@@ -24,25 +24,16 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
-
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectInstance;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
-import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
-import org.jboss.arquillian.core.spi.Validate;
+import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
+import org.jboss.arquillian.container.tomcat.Validate;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
@@ -119,12 +110,12 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
                 for (String opt : ADDITIONAL_JAVA_OPTS.split(" ")) {
                     cmd.add(opt);
                 }
-            }	
+            }
 
             String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
             String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-            CLASS_PATH += absolutePath + "/bin/tomcat-juli.jar"; 
-            
+            CLASS_PATH += absolutePath + "/bin/tomcat-juli.jar";
+
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
@@ -143,7 +134,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
             log.info("Starting Tomcat with: " + cmd.toString());
             startupProcess = startupProcessBuilder.start();
-            new Thread(new ConsoleConsumer(configuration.isWriteOutputToConsole())).start();
+            new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
             final Process proc = startupProcess;
 
             shutdownThread = new Thread(new Runnable() {
@@ -220,7 +211,8 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
         }
 
-        return retrieveContextServletInfo(archiveName);
+        ProtocolMetadataParser<TomcatManagedConfiguration> parser = new ProtocolMetadataParser<TomcatManagedConfiguration>(configuration);
+        return parser.retrieveContextServletInfo(archiveName);
     }
 
     @Override
@@ -247,87 +239,6 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
 
         throw new UnsupportedOperationException("Not implemented");
 
-    }
-
-    /**
-     * Retrieves given context's servlets information through JMX.
-     *
-     * How it works: 1) Get the WebModule, identified as //{host}/{contextPath} 2) Get it's path attrib 3) Get it's servlets
-     * attrib, which is String[] which actually represents ObjectName[] 4) Get each of these Servlets and their mappings 5) For
-     * each of {mapping}, do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
-     *
-     * // WebModule -> ... -> Attributes // -> path == /manager // -> servlets == String[] // ->
-     * Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication =none,J2EEServer=none
-     *
-     *
-     * @param context
-     * @return
-     * @throws DeploymentException
-     */
-    protected ProtocolMetaData retrieveContextServletInfo(String context) throws DeploymentException {
-        JMXConnector jmxc = null;
-        try {
-            final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
-            final HTTPContext httpContext = new HTTPContext(this.configuration.getBindAddress(),
-                    this.configuration.getBindHttpPort());
-
-            // Create an RMI connector client and connect it to the RMI
-            // connector server
-            // "service:jmx:rmi:///jndi/rmi://localhost:9999/server"
-            String urlStr = String.format("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi", this.configuration.getBindAddress(),
-                    this.configuration.getJmxPort());
-
-            log.info("Connecting to JMX: " + urlStr);
-            JMXServiceURL url = new JMXServiceURL(urlStr);
-
-            // Can we connect?
-            try {
-                jmxc = JMXConnectorFactory.connect(url, null);
-            } catch (IOException ex) {
-                throw new IOException("Can't connect to '" + urlStr + "'."
-                        + "\n   Make sure JMX props are set up for Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
-                        + "\n   Example (with no authentication):" + "\n     -Dcom.sun.management.jmxremote.port="
-                        + this.configuration.getJmxPort() + "\n     -Dcom.sun.management.jmxremote.ssl=false"
-                        + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
-            }
-
-            MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-            final String virtualHost = "localhost"; // TODO: Can be other virthost.
-
-            // Construct the MBean query string.
-            // Catalina:j2eeType=Servlet,name=Manager,WebModule=//localhost/manager,J2EEApplication=none,J2EEServer=none
-            String jmxWebModuleName = "//" + virtualHost + "/" + context;
-            ObjectName servletON = ObjectName.getInstance("Catalina:j2eeType=Servlet,WebModule=" + jmxWebModuleName + ",*");
-            // ObjectName servletON =
-            // ObjectName.getInstance("Catalina:j2eeType=Servlet,*"); /// DEBUG
-            // - list all servlets of all modules (contexts).
-
-            Set<ObjectInstance> servletMBeans = mbsc.queryMBeans(servletON, null);
-            if (servletMBeans.size() == 0)
-                throw new DeploymentException("No Servlet MBeans found for: " + servletON);
-
-            // For each servlet MBean of the given context
-            // add the servlet info to the HTTPContext.
-            for (ObjectInstance oi : servletMBeans) {
-                String servletName = oi.getObjectName().getKeyProperty("name");
-                log.fine("  Servlet: " + oi.toString());
-                httpContext.add(new Servlet(servletName, context));
-            }
-           
-            protocolMetaData.addContext(httpContext);
-            return protocolMetaData;
-        } catch (Exception ex) {
-            throw new DeploymentException("Error listing context's '" + context + "' servlets and mappings: " + ex.toString(),
-                    ex);
-        } finally {
-            if (jmxc != null) {
-                try {
-                    jmxc.close();
-                } catch (IOException ex) {
-                    log.severe(ex.getMessage());
-                }
-            }
-        }
     }
 
     /**

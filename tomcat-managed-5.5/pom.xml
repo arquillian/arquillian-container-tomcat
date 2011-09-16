@@ -10,18 +10,17 @@
 
     <artifactId>arquillian-tomcat-managed-5.5</artifactId>
     <name>Arquillian Container Tomcat Managed 5.5.x</name>
-    
+
     <properties>
         <version.org.apache.tomcat>5.5.33</version.org.apache.tomcat>
         <tomcat.home>${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}</tomcat.home>
     </properties>
 
     <dependencies>
-        <!-- Base64 -->
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.5</version>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- org.jboss.arquillian -->
@@ -56,11 +55,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.shrinkwrap.descriptors</groupId>
             <artifactId>shrinkwrap-descriptors-impl</artifactId>
             <scope>test</scope>
@@ -71,15 +65,18 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- org.jboss.weld.resources.ManagerObjectFactory -->
+        <!-- Tomcat 5.5 specific tests, Weld is not compatible, testing @Resource injection -->
         <dependency>
-            <groupId>org.jboss.weld.servlet</groupId>
-            <artifactId>weld-servlet</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

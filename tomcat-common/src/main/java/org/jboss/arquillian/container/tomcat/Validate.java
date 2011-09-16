@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed_7.util;
+package org.jboss.arquillian.container.tomcat;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,6 +113,21 @@ public final class Validate {
         if (string == null || string.length() == 0 || new File(string).isDirectory() == false) {
             throw new ConfigurationException(message);
         }
+    }
+
+    /**
+     * Checks if value lies in an interval (exclusive)
+     * @param value the value
+     * @param bottom the bottom boundary
+     * @param top the top boundary
+     * @param message the exception message
+     * @throws IllegalArgumentException Thrown if value does not lie in the interval
+     */
+    public static void isInRange(final int value, final int bottom, final int top, final String message) throws IllegalArgumentException {
+       if(value > top && value < bottom)
+       {
+          throw new IllegalArgumentException(message);
+       }
     }
 
     public static void isInReadableDirectory(final String path, final String message) throws IllegalArgumentException {

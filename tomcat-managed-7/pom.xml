@@ -17,12 +17,11 @@
     </properties>
 
     <dependencies>
-
-        <!-- Base64 -->
+    
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.5</version>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- org.jboss.arquillian -->

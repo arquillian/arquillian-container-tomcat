@@ -14,20 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed_6;
+package org.jboss.arquillian.container.tomcat;
 
-import javax.annotation.Resource;
+import java.io.InputStream;
 
 /**
- * @author Dan Allen
+ * IOUtilDelegator
+ *
+ * Class that helps expose package private {@link ByteArrayIOUtil}
+ *
+ * @author <a href="mailto:ken@glxn.net">Ken Gullaksen</a>
+ * @version $Revision: $
  */
-public class MyBean
+class IOUtilDelegator
 {
-   @Resource(name = "resourceInjectionTestName")
-   private String name;
-
-   public String getName()
+   /**
+    * Delegates to {@link ByteArrayIOUtil#asByteArray(java.io.InputStream)}
+    * @param in
+    * @throws IllegalArgumentException If the stream was not specified
+    * @return  the byte[] for the given InputStream
+    */
+   public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException
    {
-      return name;
+      return ByteArrayIOUtil.asByteArray(in);
    }
+
 }
