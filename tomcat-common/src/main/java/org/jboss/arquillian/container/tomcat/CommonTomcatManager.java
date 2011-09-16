@@ -40,6 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 
 /**
@@ -204,7 +205,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
          }
          hconn.setRequestProperty("User-Agent", "Arquillian-Tomcat-Manager-Util/1.0");
          // add authorization header if password is provided
-         if(configuration.getUser()!=null && configuration.getUser().length() != 0)
+         if (configuration.getUser() != null && configuration.getUser().length() != 0)
          {
             hconn.setRequestProperty("Authorization", constructHttpBasicAuthHeader());
          }
@@ -235,7 +236,16 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
    {
       int httpResponseCode = hconn.getResponseCode();
       // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-      if (httpResponseCode >= 300)
+      if (httpResponseCode >= 400 && httpResponseCode < 500)
+      {
+         throw new ConfigurationException("Unable to connect to Tomcat manager. "
+               + "The server command (" + command + ") failed with responseCode ("
+               + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").\n\n"
+               + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
+               + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
+               + "The user must have appripriate role specified in tomcat-users.xml file.\n");
+      }
+      else if (httpResponseCode >= 300)
       {
          throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
                     + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
