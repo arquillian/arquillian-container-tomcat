@@ -107,9 +107,12 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             cmd.add("-Dcom.sun.management.jmxremote.authenticate=false");
 
             if (ADDITIONAL_JAVA_OPTS != null) {
-                for (String opt : ADDITIONAL_JAVA_OPTS.split(" ")) {
-                    cmd.add(opt);
-                }
+            	  for (String opt : ADDITIONAL_JAVA_OPTS.split(" ")) {
+
+            	    if ( !(opt.trim()).isEmpty() ) {
+            		  cmd.add(opt);
+            	    }
+            	  }
             }
 
             String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
