@@ -64,7 +64,6 @@ public class TomcatManagedInContainerTestCase
                                                .resolveAs(GenericArchive.class))
 
                                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                                .addAsManifestResource("in-container-context.xml", "context.xml")
                                 .setWebXML("in-container-web.xml");
         /// DEBUG - see what's
         //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );

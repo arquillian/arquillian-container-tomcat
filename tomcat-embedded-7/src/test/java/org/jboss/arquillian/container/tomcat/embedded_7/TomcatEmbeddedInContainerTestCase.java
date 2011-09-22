@@ -75,7 +75,6 @@ public class TomcatEmbeddedInContainerTestCase
                         .goOffline()
                         .artifact("org.jboss.weld.servlet:weld-servlet").resolveAs(GenericArchive.class))
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsManifestResource("in-container-context.xml", "context.xml")
             .setWebXML("in-container-web.xml");
    }
 
