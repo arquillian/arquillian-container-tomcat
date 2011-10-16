@@ -9,8 +9,10 @@
             <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
             <property name="jmxPort">8089</property>
             <property name="bindHttpPort">8080</property>
-            <property name="user">tomcat</property>
-            <property name="pass">tomcat</property>
+            <!-- [ARQ-630]. We'll use credentials with ISO-8859-1 characters for testing. 
+                This also tests for US-ASCII support as some characters overlap with US-ASCII. -->
+            <property name="user">Schröder</property>
+            <property name="pass">Contraseña</property>
             <property name="serverConfig">server.xml</property>
         </configuration>
     </container>
