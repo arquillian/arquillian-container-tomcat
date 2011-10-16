@@ -128,6 +128,8 @@
                     <environmentVariables>
                         <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
                     </environmentVariables>
+                    <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
+                    <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
                 </configuration>
             </plugin>
         </plugins>
