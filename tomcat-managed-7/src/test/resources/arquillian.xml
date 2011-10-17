@@ -10,7 +10,7 @@
             <property name="jmxPort">8089</property>
             <property name="bindHttpPort">8080</property>
             <!-- [ARQ-630]. We'll use credentials with ISO-8859-1 characters for testing. 
-                This also tests for US-ASCII support as some characters overlap with US-ASCII. -->
+                This also tests for US-ASCII support as the G0 subset overlaps with US-ASCII. -->
             <property name="user">Schröder</property>
             <property name="pass">Contraseña</property>
             <property name="serverConfig">server.xml</property>
