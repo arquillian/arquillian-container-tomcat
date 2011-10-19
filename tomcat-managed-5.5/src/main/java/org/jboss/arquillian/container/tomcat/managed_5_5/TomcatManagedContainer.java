@@ -95,10 +95,15 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
          final String CATALINA_HOME = configuration.getCatalinaHome();
          final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
 
+         String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
+
          // construct a command to execute
          List<String> cmd = new ArrayList<String>();
 
          cmd.add(JAVA_FROM_CURRENT_VM);
+
+         cmd.add("-Djava.util.logging.config.file=" + absolutePath + "/conf/" + configuration.getLoggingProperties());
+         cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
          cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
          cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
@@ -106,7 +111,6 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
 
          cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
-         String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
          String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
          CLASS_PATH += absolutePath + "/bin/tomcat-juli.jar";
 

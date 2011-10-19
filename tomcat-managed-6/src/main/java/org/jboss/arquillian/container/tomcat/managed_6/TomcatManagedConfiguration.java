@@ -51,6 +51,8 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String serverConfig = "server.xml";
 
+   private String loggingProperties = "logging.properties";
+
    public TomcatManagedConfiguration() {
        // if no javaHome set, reuse this Java JVM
        if (javaHome == null || "".equals(javaHome)) {
@@ -176,6 +178,22 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    public void setServerConfig(String serverConfig)
    {
       this.serverConfig = serverConfig;
+   }
+
+   /**
+    * @return the loggingProperties
+    */
+   public String getLoggingProperties()
+   {
+      return loggingProperties;
+   }
+
+   /**
+    * @param loggingProperties the loggingProperties to set
+    */
+   public void setLoggingProperties(String loggingProperties)
+   {
+      this.loggingProperties = loggingProperties;
    }
 
    /**
