@@ -50,6 +50,8 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    private String serverName = "arquillian-tomcat-managed-6";
 
    private String serverConfig = "server.xml";
+   
+   private String loggingProperties = "logging.properties";
 
    @Override
    public void validate() throws ConfigurationException
@@ -171,6 +173,20 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    }
 
    /**
+ * @return the loggingProperties
+ */
+public String getLoggingProperties() {
+	return loggingProperties;
+}
+
+/**
+ * @param loggingProperties the loggingProperties to set
+ */
+public void setLoggingProperties(String loggingProperties) {
+	this.loggingProperties = loggingProperties;
+}
+
+/**
     * @return the outputToConsole
     */
    public boolean isOutputToConsole()

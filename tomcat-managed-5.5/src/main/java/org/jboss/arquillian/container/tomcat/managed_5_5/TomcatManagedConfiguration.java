@@ -49,6 +49,8 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    private String workDir = null;
 
    private String serverConfig = "server.xml";
+   
+   private String loggingProperties = "logging.properties";
 
    @Override
    public void validate() throws ConfigurationException
@@ -159,7 +161,15 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
       this.serverConfig = serverConfig;
    }
 
-   /**
+   public String getLoggingProperties() {
+	return loggingProperties;
+}
+
+public void setLoggingProperties(String loggingProperties) {
+	this.loggingProperties = loggingProperties;
+}
+
+/**
     * @param outputToConsole the outputToConsole to set
     */
    public void setOutputToConsole(boolean writeOutputToConsole)
