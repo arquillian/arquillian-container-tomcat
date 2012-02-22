@@ -51,6 +51,13 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String serverConfig = "server.xml";
 
+   public TomcatManagedConfiguration() {
+       // if no javaHome set, reuse this Java JVM
+       if (javaHome == null || javaHome.isEmpty()) {
+           javaHome = System.getProperty("java.home");
+       }
+   }
+
    @Override
    public void validate() throws ConfigurationException
    {
@@ -60,6 +67,7 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
                 catalinaHome,
                 "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
                         + catalinaHome + " is not valid directory!");
+
       Validate.configurationDirectoryExists(
                 javaHome,
                 "Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "

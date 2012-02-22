@@ -4,7 +4,6 @@
     <container qualifier="tomcat" default="true">
         <configuration>
             <property name="catalinaHome">${CATALINA_HOME:target/apache-tomcat-6.0.32}</property>
-            <property name="javaHome">${JAVA_HOME:/usr/lib/jvm/java-6-openjdk/}</property>
             <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
             <property name="jmxPort">8089</property>
             <property name="bindHttpPort">8080</property>
