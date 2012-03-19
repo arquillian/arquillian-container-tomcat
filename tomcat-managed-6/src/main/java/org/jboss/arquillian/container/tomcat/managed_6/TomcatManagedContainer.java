@@ -111,7 +111,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             if (ADDITIONAL_JAVA_OPTS != null) {
             	  for (String opt : ADDITIONAL_JAVA_OPTS.split(" ")) {
 
-            	    if ( !(opt.trim()).isEmpty() ) {
+            	    if ( !(opt.trim()).equals("") ) {
             		  cmd.add(opt);
             	    }
             	  }

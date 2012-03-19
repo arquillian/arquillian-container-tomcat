@@ -286,8 +286,15 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       String credentials = configuration.getUser() + ":" + configuration.getPass();
       // Encodes the user:password pair as a sequence of ISO-8859-1 bytes.
       // We'll return the Base64 encoded form of this ISO-8859-1 byte sequence.
-      return "Basic "
-                + Base64.encodeBase64String(credentials.getBytes(Charset.forName("ISO-8859-1")));
+      try
+      {
+          return "Basic "
+                    + Base64.encodeBase64String(credentials.getBytes("ISO-8859-1"));
+      }
+      catch(UnsupportedEncodingException e)
+      {
+          throw new RuntimeException(e);
+      }
    }
 
 }
