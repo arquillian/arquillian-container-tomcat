@@ -28,7 +28,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
-import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.WebAppDescriptor;
+import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -93,7 +93,13 @@ public class TomcatEmbeddedClientTestCase
             .addAsWebResource(TEST_WELCOME_FILE)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0")
-                        .servlet(MyServlet.class, "/" + TEST_SERVLET).exportAsString()));
+                          .createServlet()
+                              .servletClass(MyServlet.class.getName())
+                              .servletName("MyServlet").up()
+                          .createServletMapping()
+                              .servletName("MyServlet")
+                              .urlPattern("/" + TEST_SERVLET).up()
+                        .exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||

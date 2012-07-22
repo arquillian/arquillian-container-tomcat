@@ -27,7 +27,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
-import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.WebAppDescriptor;
+import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,10 +67,14 @@ public class TomcatManagedClientTestCase
             .create(WebArchive.class, "test.war")
             .addClass(MyServlet.class)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class)
-                        .version("2.4")
-                        .servlet(MyServlet.class, "/Test")
-                        .exportAsString()));
+                    new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.4")
+                            .createServlet()
+                                .servletClass(MyServlet.class.getName())
+                                .servletName("MyServlet").up()
+                            .createServletMapping()
+                                .servletName("MyServlet")
+                                .urlPattern("/Test").up()
+                          .exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||
