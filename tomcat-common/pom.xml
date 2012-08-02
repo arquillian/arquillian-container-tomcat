@@ -33,6 +33,13 @@
             <artifactId>arquillian-container-test-spi</artifactId>
         </dependency>
 
+        <!--  JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>
