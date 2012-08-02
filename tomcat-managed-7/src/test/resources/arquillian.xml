@@ -5,7 +5,7 @@
     <container qualifier="tomcat" default="true">
         <configuration>
             <property name="catalinaHome">${CATALINA_HOME:target/apache-tomcat-7.0.20}</property>
-            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
+            <property name="javaVmArguments">-Xmx1024m  -XX:MaxPermSize=512m</property>
             <property name="jmxPort">8089</property>
             <property name="bindHttpPort">8080</property>
             <!-- [ARQ-630]. We'll use credentials with ISO-8859-1 characters for testing. 

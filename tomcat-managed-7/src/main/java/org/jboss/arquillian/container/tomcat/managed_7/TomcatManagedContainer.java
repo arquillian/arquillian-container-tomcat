@@ -32,6 +32,7 @@ import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
+import org.jboss.arquillian.container.tomcat.AdditionalJavaOptionsParser;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.arquillian.container.tomcat.Validate;
 import org.jboss.shrinkwrap.api.Archive;
@@ -106,14 +107,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
             cmd.add("-Dcom.sun.management.jmxremote.authenticate=false");
 
-            if (ADDITIONAL_JAVA_OPTS != null) {
-            	  for (String opt : ADDITIONAL_JAVA_OPTS.split(" ")) {
-
-            	    if ( !(opt.trim()).equals("") ) {
-            		  cmd.add(opt);
-            	    }
-            	  }
-            }
+            cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
             String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
             String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
