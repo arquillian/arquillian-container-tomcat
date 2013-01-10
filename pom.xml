@@ -145,5 +145,6 @@
         <module>tomcat-managed-6</module> 
         <module>tomcat-embedded-7</module> 
         <module>tomcat-managed-7</module>
+        <module>tomcat-remote-7</module>
     </modules>
 </project>
