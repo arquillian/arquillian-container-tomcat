@@ -35,7 +35,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -133,6 +132,11 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
    public String normalizeArchiveName(String name)
    {
       Validate.notNull(name, "Archive name must not be empty");
+
+      if ("ROOT.war".equals(name))
+      {
+         return "";
+      }
 
       if (name.indexOf('.') != -1)
       {

@@ -16,11 +16,14 @@
  */
 package org.jboss.arquillian.container.tomcat.managed_7;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -35,11 +38,11 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- * 
+ *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @version $Revision: $
- * 
+ *
  */
 @RunWith(Arquillian.class)
 public class TomcatManagedClientTestCase
@@ -53,18 +56,40 @@ public class TomcatManagedClientTestCase
     */
    private static final Logger log = Logger.getLogger(TomcatManagedClientTestCase.class.getName());
 
+   private static final String ROOT_CONTEXT = "ROOT";
+
+   private static final String TEST_CONTEXT = "test";
+
    // -------------------------------------------------------------------------------------||
    // Instance Members --------------------------------------------------------------------||
    // -------------------------------------------------------------------------------------||
 
    /**
-    * Define the deployment
+    * Define the ROOT context deployment
     */
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
+   @Deployment(name=ROOT_CONTEXT, testable = false)
+   public static WebArchive createRootDeployment()
+   {
+      final String archiveName = ROOT_CONTEXT + ".war";
+
+      return createDeployment(archiveName);
+   }
+
+   /**
+    * Define the test context deployment
+    */
+   @Deployment(name=TEST_CONTEXT, testable = false)
+   public static WebArchive createTestDeployment()
+   {
+      final String archiveName = TEST_CONTEXT + ".war";
+
+      return createDeployment(archiveName);
+   }
+
+   private static WebArchive createDeployment(final String archiveName)
    {
       return ShrinkWrap
-            .create(WebArchive.class, "test.war")
+            .create(WebArchive.class, archiveName)
             .addClass(MyServlet.class)
             .setWebXML(
                     new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5")
@@ -82,10 +107,26 @@ public class TomcatManagedClientTestCase
    // -------------------------------------------------------------------------------------||
 
    /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
+    * Ensures the {@link HelloWorldServlet} returns the expected response for the ROOT context
     */
    @Test
+   @OperateOnDeployment(ROOT_CONTEXT)
+   public void shouldBeAbleToInvokeServletInDeployedRootWebApp(@ArquillianResource URL contextRoot) throws Exception
+   {
+      testDeployment(contextRoot);
+   }
+
+   /**
+    * Ensures the {@link HelloWorldServlet} returns the expected response for the test context
+    */
+   @Test
+   @OperateOnDeployment(TEST_CONTEXT)
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
+   {
+      testDeployment(contextRoot);
+   }
+
+   private void testDeployment(final URL contextRoot) throws MalformedURLException, IOException
    {
       // Define the input and expected outcome
       final String expected = "hello";
