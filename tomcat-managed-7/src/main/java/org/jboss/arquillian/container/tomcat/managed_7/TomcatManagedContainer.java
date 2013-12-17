@@ -51,6 +51,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  */
 public class TomcatManagedContainer implements DeployableContainer<TomcatManagedConfiguration> {
     private static final Logger log = Logger.getLogger(TomcatManagedContainer.class.getName());
+    private static final String JAVA_FROM_CURRENT_VM = 
+        System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 
     /**
      * Tomcat container configuration
@@ -101,7 +103,7 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
             // construct a command to execute
             List<String> cmd = new ArrayList<String>();
 
-            cmd.add("java");
+            cmd.add(JAVA_FROM_CURRENT_VM);
 
             cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
             cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
