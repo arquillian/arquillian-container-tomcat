@@ -30,7 +30,7 @@
     <properties>
 
         <!-- Versioning -->
-        <version.arquillian_core>1.0.0.Final</version.arquillian_core>
+        <version.arquillian_core>1.0.2.Final</version.arquillian_core>
 
         <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
@@ -59,13 +59,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.jboss.shrinkwrap.container</groupId>
                 <artifactId>shrinkwrap-container-tomcat-60</artifactId>
                 <version>${version.shrinkwrap_tomcat}</version>
             </dependency>
-            
+
             <!-- test dependecies -->
             <dependency>
                 <groupId>org.jboss.weld.servlet</groupId>
@@ -114,6 +114,35 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+           <plugins>
+              <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+              <plugin>
+                 <groupId>org.eclipse.m2e</groupId>
+                 <artifactId>lifecycle-mapping</artifactId>
+                 <version>1.0.0</version>
+                 <configuration>
+                    <lifecycleMappingMetadata>
+                       <pluginExecutions>
+                          <pluginExecution>
+                             <pluginExecutionFilter>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-antrun-plugin</artifactId>
+                                <versionRange>[1.6,)</versionRange>
+                                <goals>
+                                   <goal>run</goal>
+                                </goals>
+                             </pluginExecutionFilter>
+                             <action>
+                                <ignore></ignore>
+                             </action>
+                          </pluginExecution>
+                       </pluginExecutions>
+                    </lifecycleMappingMetadata>
+                 </configuration>
+              </plugin>
+           </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -123,7 +152,7 @@
                 <plugins>
                     <!--
                         surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the MavenResovler used in
-                        the test cases can read from the same lcoal repo.
+                        the test cases can read from the same local repo.
                      -->
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
@@ -139,11 +168,11 @@
     </profiles>
     <modules>
         <module>tomcat-common</module>
-        <module>tomcat-managed-5.5</module> 
-        <module>tomcat-embedded-6</module> 
+        <module>tomcat-managed-5.5</module>
+        <module>tomcat-embedded-6</module>
         <module>tomcat-remote-6</module>
-        <module>tomcat-managed-6</module> 
-        <module>tomcat-embedded-7</module> 
+        <module>tomcat-managed-6</module>
+        <module>tomcat-embedded-7</module>
         <module>tomcat-managed-7</module>
         <module>tomcat-remote-7</module>
     </modules>
