@@ -317,7 +317,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
     */
    private ContextName getContextName(final Archive<?> archive)
    {
-      return new ContextName(archive.getName());
+      return new ContextName(archive.getName(), true);
    }
 
    /**
