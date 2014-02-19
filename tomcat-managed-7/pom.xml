@@ -4,7 +4,7 @@
     <parent>
         <artifactId>arquillian-parent-tomcat</artifactId>
         <groupId>org.jboss.arquillian.container</groupId>
-        <version>1.0.0.Final-SNAPSHOT</version>
+        <version>1.0.0.CR6</version>
     </parent>
     <artifactId>arquillian-tomcat-managed-7</artifactId>
     <name>Arquillian Container Tomcat Managed 7.x</name>
