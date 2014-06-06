@@ -185,6 +185,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          try
          {
             tomcat.stop();
+            tomcat.destroy();
          }
          catch (org.apache.catalina.LifecycleException e)
          {

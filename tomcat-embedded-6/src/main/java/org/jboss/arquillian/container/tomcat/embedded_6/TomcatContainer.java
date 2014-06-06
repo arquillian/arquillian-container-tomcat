@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.catalina.Container;
@@ -223,6 +224,15 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       if (standardContext != null)
       {
          standardHost.removeChild(standardContext);
+         try
+         {
+            standardContext.stop();
+            standardContext.destroy();
+         }
+         catch (Exception e)
+         {
+            log.log(Level.WARNING, "Error on undeployment of "+standardContext.getName(), e);
+         }
          if (standardContext.getUnpackWAR())
          {
             deleteUnpackedWAR(standardContext);
@@ -330,6 +340,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    protected void stopTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException
    {
       embedded.stop();
+      embedded.destroy();
    }
 
    /**

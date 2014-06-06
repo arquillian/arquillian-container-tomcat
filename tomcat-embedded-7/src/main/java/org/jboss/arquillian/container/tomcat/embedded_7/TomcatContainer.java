@@ -125,6 +125,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          final File tempDir = getTomcatHomeFile();
 
          System.setProperty("catalina.base", tempDir.getAbsolutePath());
+         System.setProperty("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE", "true");
+
          // Trigger loading of catalina.properties.
          CatalinaProperties.getProperty("foo");
 
@@ -185,6 +187,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          try
          {
             tomcat.stop();
+            tomcat.destroy();
          }
          catch (org.apache.catalina.LifecycleException e)
          {
@@ -317,7 +320,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
     */
    private ContextName getContextName(final Archive<?> archive)
    {
-      return new ContextName(archive.getName());
+      return new ContextName(archive.getName(), true);
    }
 
    /**
