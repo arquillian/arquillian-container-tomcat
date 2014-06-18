@@ -38,7 +38,6 @@ import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.codec.binary.Base64;
 import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 
@@ -293,7 +292,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       try
       {
           return "Basic "
-                    + Base64.encodeBase64String(credentials.getBytes("ISO-8859-1"));
+                    + Base64Coder.encodeString_IOS_8859_1(credentials);
       }
       catch(UnsupportedEncodingException e)
       {

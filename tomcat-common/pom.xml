@@ -16,12 +16,6 @@
     </properties>
 
     <dependencies>
-        <!-- Base64 -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.5</version>
-        </dependency>
 
         <!-- org.jboss.arquillian -->
         <dependency>
