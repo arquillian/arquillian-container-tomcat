@@ -37,6 +37,8 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String catalinaHome = System.getenv("CATALINA_HOME");
 
+   private String catalinaBase = System.getenv("CATALINA_BASE");
+
    private String javaHome = System.getenv("JAVA_HOME");
 
    private String javaVmArguments = "-Xmx512m -XX:MaxPermSize=128m";
@@ -57,6 +59,9 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
        // if no javaHome set, reuse this Java JVM
        if (javaHome == null || "".equals(javaHome)) {
            javaHome = System.getProperty("java.home");
+       }
+       if (catalinaBase == null || "".equals(catalinaBase)) {
+           catalinaBase = catalinaHome;
        }
    }
 
@@ -101,6 +106,14 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    {
       this.catalinaHome = catalinaHome;
    }
+
+   public String getCatalinaBase() {
+        return catalinaBase;
+    }
+
+   public void setCatalinaBase(String catalinaBase) {
+        this.catalinaBase = catalinaBase;
+    }
 
    public String getJavaHome()
    {
