@@ -100,16 +100,18 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
 
         try {
             final String CATALINA_HOME = configuration.getCatalinaHome();
+            final String CATALINA_BASE = configuration.getCatalinaBase();
             final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
 
-            String absolutePath = new File(CATALINA_HOME).getAbsolutePath();
+            final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
+            final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();
 
             // construct a command to execute
             List<String> cmd = new ArrayList<String>();
 
             cmd.add(JAVA_FROM_CURRENT_VM);
 
-            cmd.add("-Djava.util.logging.config.file=" + absolutePath + "/conf/" + configuration.getLoggingProperties());
+            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/" + configuration.getLoggingProperties());
             cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
             cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
@@ -118,19 +120,19 @@ public class TomcatManagedContainer implements DeployableContainer<TomcatManaged
 
             cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
-            String CLASS_PATH = absolutePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-            CLASS_PATH += absolutePath + "/bin/tomcat-juli.jar";
+            String CLASS_PATH = absoluteCatalinaHomePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
+            CLASS_PATH += absoluteCatalinaHomePath + "/bin/tomcat-juli.jar";
 
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
-            cmd.add("-Djava.endorsed.dirs=" + absolutePath + "/endorsed");
-            cmd.add("-Dcatalina.base=" + absolutePath);
-            cmd.add("-Dcatalina.home=" + absolutePath);
-            cmd.add("-Djava.io.tmpdir=" + absolutePath + "/temp");
+            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + "/endorsed");
+            cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
+            cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
+            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + "/temp");
             cmd.add("org.apache.catalina.startup.Bootstrap");
             cmd.add("-config");
-            cmd.add(absolutePath + "/conf/" + configuration.getServerConfig());
+            cmd.add(absoluteCatalinaBasePath + "/conf/" + configuration.getServerConfig());
             cmd.add("start");
 
             // execute command
