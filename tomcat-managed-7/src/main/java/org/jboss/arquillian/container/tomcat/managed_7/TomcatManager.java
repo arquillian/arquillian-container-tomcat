@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2011, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -17,6 +17,7 @@
 package org.jboss.arquillian.container.tomcat.managed_7;
 
 import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
+import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedConfiguration;
 
 /**
  * Tomcat manager with different commands required for Tomcat 7 container
@@ -24,9 +25,9 @@ import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  *
  */
-public class TomcatManager extends CommonTomcatManager<TomcatManagedConfiguration>{
+public class TomcatManager extends CommonTomcatManager<CommonTomcatManagedConfiguration>{
 
-   public TomcatManager(TomcatManagedConfiguration configuration)
+   public TomcatManager(CommonTomcatManagedConfiguration configuration)
    {
       super(configuration);
    }

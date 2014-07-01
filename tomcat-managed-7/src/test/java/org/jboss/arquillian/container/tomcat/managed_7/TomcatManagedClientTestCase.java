@@ -24,9 +24,11 @@ import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.container.tomcat.managed.MyServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.IOUtilDelegator;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
@@ -107,7 +109,7 @@ public class TomcatManagedClientTestCase
    // -------------------------------------------------------------------------------------||
 
    /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response for the ROOT context
+    * Ensures the {@link MyServlet} returns the expected response for the ROOT context
     */
    @Test
    @OperateOnDeployment(ROOT_CONTEXT)
@@ -117,7 +119,7 @@ public class TomcatManagedClientTestCase
    }
 
    /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response for the test context
+    * Ensures the {@link MyServlet} returns the expected response for the test context
     */
    @Test
    @OperateOnDeployment(TEST_CONTEXT)
@@ -134,11 +136,8 @@ public class TomcatManagedClientTestCase
       URL url = new URL(contextRoot, "Test");
       InputStream in = url.openConnection().getInputStream();
 
-      byte[] buffer = new byte[10000];
-      int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-         httpResponse += (char) buffer[q];
+       byte[] buffer = IOUtilDelegator.asByteArray(in);
+       String httpResponse = new String(buffer);
 
       // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

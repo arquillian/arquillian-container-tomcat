@@ -1,8 +1,7 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2011 Red Hat Inc. and/or its affiliates and other contributors
- * as indicated by the @authors tag. All rights reserved.
- * See the copyright.txt in the distribution for a
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
+ * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed_6;
+package org.jboss.arquillian.container.tomcat.managed;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -29,9 +28,10 @@ import org.jboss.arquillian.container.tomcat.Validate;
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
+ * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
  * @version $Revision: $
  */
-public class TomcatManagedConfiguration extends CommonTomcatConfiguration
+public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
 {
    private boolean outputToConsole = true;
 
@@ -49,13 +49,11 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String workDir = null;
 
-   private String serverName = "arquillian-tomcat-managed-6";
-
    private String serverConfig = "server.xml";
 
    private String loggingProperties = "logging.properties";
 
-   public TomcatManagedConfiguration() {
+   public CommonTomcatManagedConfiguration() {
        // if no javaHome set, reuse this Java JVM
        if (javaHome == null || "".equals(javaHome)) {
            javaHome = System.getProperty("java.home");
@@ -85,16 +83,16 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
                         + "/conf/" + serverConfig + " does not!");
 
       // set write output to console
-      this.outputToConsole = AccessController.doPrivileged(new PrivilegedAction<Boolean>()
+      this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>()
       {
-         @Override
          public Boolean run()
          {
             // By default, redirect to stdout unless disabled by this property
             String val = System.getProperty("org.apache.tomcat.writeconsole");
             return val == null || !"false".equals(val);
          }
-      });
+      }));
+
    }
 
    public String getCatalinaHome()
@@ -173,16 +171,6 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
       this.workDir = workDir;
    }
 
-   public String getServerName()
-   {
-      return serverName;
-   }
-
-   public void setServerName(String serverName)
-   {
-      this.serverName = serverName;
-   }
-
    public String getServerConfig()
    {
       return serverConfig;
@@ -210,6 +198,14 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
    }
 
    /**
+    * @param outputToConsole the outputToConsole to set
+    */
+   public void setOutputToConsole(boolean outputToConsole)
+   {
+      this.outputToConsole = outputToConsole;
+   }
+
+   /**
     * @return the outputToConsole
     */
    public boolean isOutputToConsole()
@@ -217,11 +213,4 @@ public class TomcatManagedConfiguration extends CommonTomcatConfiguration
       return outputToConsole;
    }
 
-   /**
-    * @param outputToConsole the outputToConsole to set
-    */
-   public void setOutputToConsole(boolean outputToConsole)
-   {
-      this.outputToConsole = outputToConsole;
-   }
 }

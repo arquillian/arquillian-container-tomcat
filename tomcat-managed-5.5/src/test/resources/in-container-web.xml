@@ -12,7 +12,7 @@
 
     <servlet>
         <servlet-name>TestServlet</servlet-name>
-        <servlet-class>org.jboss.arquillian.container.tomcat.managed_5_5.MyServlet</servlet-class>
+        <servlet-class>org.jboss.arquillian.container.tomcat.managed.MyServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
