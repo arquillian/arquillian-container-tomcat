@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -19,15 +19,17 @@ package org.jboss.arquillian.container.tomcat.managed_6;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
-
 import javax.annotation.Resource;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.container.tomcat.managed.MyBean;
+import org.jboss.arquillian.container.tomcat.managed.MyServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.asset.IOUtilDelegator;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Assert;
@@ -75,7 +77,7 @@ public class TomcatManagedInContainerTestCase
     @Resource(name = "resourceInjectionTestName") private String resourceInjectionTestValue;
 
     /**
-     * Ensures the {@link HelloWorldServlet} returns the expected response
+     * Ensures the {@link MyServlet} returns the expected response
      */
     @Test
     public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
@@ -95,13 +97,8 @@ public class TomcatManagedInContainerTestCase
         URL url = new URL(contextRoot, "Test");
         InputStream in = url.openConnection().getInputStream();
 
-        byte[] buffer = new byte[10000];
-        int len = in.read(buffer);
-        String httpResponse = "";
-        for (int q = 0; q < len; q++)
-      {
-            httpResponse += (char) buffer[q];
-      }
+       byte[] buffer = IOUtilDelegator.asByteArray(in);
+       String httpResponse = new String(buffer);
 
         // Test
         Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

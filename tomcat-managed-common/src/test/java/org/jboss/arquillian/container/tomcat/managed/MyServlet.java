@@ -14,20 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed_7;
+package org.jboss.arquillian.container.tomcat.managed;
 
-import javax.annotation.Resource;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Dan Allen
+ * TestServlet
+ *
+ * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
+ * @version $Revision: $
  */
-public class MyBean
+public class MyServlet extends HttpServlet
 {
-   @Resource(name = "resourceInjectionTestName")
-   private String name;
+   private static final long serialVersionUID = 1L;
 
-   public String getName()
+   public static final String URL_PATTERN = "/Test";
+
+   public static final String MESSAGE = "hello";
+
+   @Override
+   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
    {
-      return name;
+      response.getWriter().append(MESSAGE);
    }
 }

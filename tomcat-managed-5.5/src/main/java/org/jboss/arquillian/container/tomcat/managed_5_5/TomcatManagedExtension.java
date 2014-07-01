@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2011 Red Hat Inc. and/or its affiliates and other contributors
+ * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors
  * as indicated by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
@@ -23,7 +23,6 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
 
 public class TomcatManagedExtension implements LoadableExtension
 {
-   @Override
    public void register(ExtensionBuilder builder)
    {
       builder.service(DeployableContainer.class, TomcatManagedContainer.class);
