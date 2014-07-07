@@ -58,9 +58,6 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
        if (javaHome == null || "".equals(javaHome)) {
            javaHome = System.getProperty("java.home");
        }
-       if (catalinaBase == null || "".equals(catalinaBase)) {
-           catalinaBase = catalinaHome;
-       }
    }
 
    @Override
@@ -106,7 +103,11 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
    }
 
    public String getCatalinaBase() {
-        return catalinaBase;
+       if (catalinaBase == null || "".equals(catalinaBase)) {
+           return catalinaHome;
+       } else {
+           return catalinaBase;
+       }
     }
 
    public void setCatalinaBase(String catalinaBase) {
