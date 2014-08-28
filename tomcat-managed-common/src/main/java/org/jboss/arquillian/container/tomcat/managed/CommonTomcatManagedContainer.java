@@ -40,8 +40,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
- * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an Managed Tomcat server; responsible for both lifecycle and
- * deployment operations.
+ * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an 
+ * Managed Tomcat server; responsible for both lifecycle and deployment operations.
  * </p>
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
@@ -53,9 +53,6 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 public abstract class CommonTomcatManagedContainer implements DeployableContainer<CommonTomcatManagedConfiguration>
 {
    private static final Logger log = Logger.getLogger(CommonTomcatManagedContainer.class.getName());
-
-   private static final String JAVA_FROM_CURRENT_VM = System.getProperty("java.home") + File.separator + "bin"
-         + File.separator + "java";
 
    /**
     * Tomcat container configuration
@@ -101,10 +98,12 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
          final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();
 
+         final String javaCommand = getJavaCommand();
+
          // construct a command to execute
          List<String> cmd = new ArrayList<String>();
 
-         cmd.add(JAVA_FROM_CURRENT_VM);
+         cmd.add(javaCommand);
 
          cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/"
                + configuration.getLoggingProperties());
@@ -317,5 +316,14 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
       {
          throw new RuntimeException(e);
       }
+   }
+
+   protected String getJavaCommand()
+   {
+      if (configuration == null) {
+         throw new IllegalStateException("setup not called");
+      }
+
+      return configuration.getJavaHome() + File.separator + "bin" + File.separator + "java";
    }
 }

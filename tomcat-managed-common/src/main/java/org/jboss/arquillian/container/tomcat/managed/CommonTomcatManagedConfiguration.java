@@ -33,13 +33,15 @@ import org.jboss.arquillian.container.tomcat.Validate;
  */
 public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
 {
+   static final String JAVA_HOME_SYSTEM_PROPERTY = "java.home";
+
    private boolean outputToConsole = true;
 
    private String catalinaHome = System.getenv("CATALINA_HOME");
 
    private String catalinaBase = System.getenv("CATALINA_BASE");
 
-   private String javaHome = System.getenv("JAVA_HOME");
+   private String javaHome = System.getProperty(JAVA_HOME_SYSTEM_PROPERTY);
 
    private String javaVmArguments = "-Xmx512m -XX:MaxPermSize=128m";
 
@@ -53,31 +55,18 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String loggingProperties = "logging.properties";
 
-   public CommonTomcatManagedConfiguration()
-   {
-      // if no javaHome set, reuse this Java JVM
-      if (javaHome == null || "".equals(javaHome))
-      {
-         javaHome = System.getProperty("java.home");
-      }
-   }
-
    @Override
    public void validate() throws ConfigurationException
    {
       super.validate();
 
-      Validate
-            .configurationDirectoryExists(
-                  catalinaHome,
-                  "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
-                        + catalinaHome + " is not valid directory!");
+      Validate.configurationDirectoryExists(catalinaHome,
+            "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration "
+                  + "must be set and point to a valid directory! " + catalinaHome + " is not valid directory!");
 
-      Validate
-            .configurationDirectoryExists(
-                  javaHome,
-                  "Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
-                        + javaHome + " is not valid directory!");
+      Validate.configurationDirectoryExists(javaHome,
+            "Either \"java.home\" system property or javaHome property in Arquillian configuration "
+                  + "must be set and point to a valid directory! " + javaHome + " is not valid directory!");
 
       Validate.isValidFile(catalinaHome + "/conf/" + serverConfig,
             "The server configuration file denoted by serverConfig property has to exist! This file: " + catalinaHome
@@ -86,10 +75,11 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       // set write output to console
       this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>()
       {
+         @Override
          public Boolean run()
          {
             // By default, redirect to stdout unless disabled by this property
-            String val = System.getProperty("org.apache.tomcat.writeconsole");
+            final String val = System.getProperty("org.apache.tomcat.writeconsole");
             return val == null || !"false".equals(val);
          }
       }));
@@ -101,7 +91,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       return catalinaHome;
    }
 
-   public void setCatalinaHome(String catalinaHome)
+   public void setCatalinaHome(final String catalinaHome)
    {
       this.catalinaHome = catalinaHome;
    }
@@ -118,7 +108,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       }
    }
 
-   public void setCatalinaBase(String catalinaBase)
+   public void setCatalinaBase(final String catalinaBase)
    {
       this.catalinaBase = catalinaBase;
    }
@@ -128,7 +118,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       return javaHome;
    }
 
-   public void setJavaHome(String javaHome)
+   public void setJavaHome(final String javaHome)
    {
       this.javaHome = javaHome;
    }
@@ -143,7 +133,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
     *
     * @param javaVmArguments use as start up arguments
     */
-   public void setJavaVmArguments(String javaVmArguments)
+   public void setJavaVmArguments(final String javaVmArguments)
    {
       this.javaVmArguments = javaVmArguments;
    }
@@ -153,7 +143,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       return startupTimeoutInSeconds;
    }
 
-   public void setStartupTimeoutInSeconds(int startupTimeoutInSeconds)
+   public void setStartupTimeoutInSeconds(final int startupTimeoutInSeconds)
    {
       this.startupTimeoutInSeconds = startupTimeoutInSeconds;
    }
@@ -163,7 +153,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       return shutdownTimeoutInSeconds;
    }
 
-   public void setShutdownTimeoutInSeconds(int shutdownTimeoutInSeconds)
+   public void setShutdownTimeoutInSeconds(final int shutdownTimeoutInSeconds)
    {
       this.shutdownTimeoutInSeconds = shutdownTimeoutInSeconds;
    }
@@ -176,7 +166,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
    /**
     * @param workDir the directory where the compiled JSP files and session serialization data is stored
     */
-   public void setWorkDir(String workDir)
+   public void setWorkDir(final String workDir)
    {
       this.workDir = workDir;
    }
@@ -186,7 +176,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       return serverConfig;
    }
 
-   public void setServerConfig(String serverConfig)
+   public void setServerConfig(final String serverConfig)
    {
       this.serverConfig = serverConfig;
    }
@@ -202,7 +192,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
    /**
     * @param loggingProperties the loggingProperties to set
     */
-   public void setLoggingProperties(String loggingProperties)
+   public void setLoggingProperties(final String loggingProperties)
    {
       this.loggingProperties = loggingProperties;
    }
@@ -210,7 +200,7 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
    /**
     * @param outputToConsole the outputToConsole to set
     */
-   public void setOutputToConsole(boolean outputToConsole)
+   public void setOutputToConsole(final boolean outputToConsole)
    {
       this.outputToConsole = outputToConsole;
    }
