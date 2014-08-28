@@ -1,152 +1,156 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>arquillian-parent-tomcat</artifactId>
-        <groupId>org.jboss.arquillian.container</groupId>
-        <version>1.0.0.Final-SNAPSHOT</version>
-    </parent>
-    <artifactId>arquillian-tomcat-managed-7</artifactId>
-    <name>Arquillian Container Tomcat Managed 7.x</name>
-    <url>http://maven.apache.org</url>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <artifactId>arquillian-parent-tomcat</artifactId>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <version>1.0.0.Final-SNAPSHOT</version>
+   </parent>
+   <artifactId>arquillian-tomcat-managed-7</artifactId>
+   <name>Arquillian Container Tomcat Managed 7.x</name>
+   <url>http://maven.apache.org</url>
 
-    <properties>
-        <version.org.apache.tomcat>7.0.20</version.org.apache.tomcat>
-         <tomcat.home>${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}</tomcat.home>
-    </properties>
+   <properties>
+      <version.org.apache.tomcat>7.0.20</version.org.apache.tomcat>
+      <tomcat.home>${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}</tomcat.home>
+   </properties>
 
-    <dependencies>
+   <dependencies>
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-managed-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-managed-common</artifactId>
-            <type>test-jar</type>
-            <version>${project.version}</version>
-        </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-managed-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-managed-common</artifactId>
+         <type>test-jar</type>
+         <version>${project.version}</version>
+      </dependency>
 
-        <!-- org.jboss.arquillian -->
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-spi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-test-spi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.testenricher</groupId>
-            <artifactId>arquillian-testenricher-cdi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.testenricher</groupId>
-            <artifactId>arquillian-testenricher-resource</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.testenricher</groupId>
-            <artifactId>arquillian-testenricher-initialcontext</artifactId>
-        </dependency>
-        <!-- testing -->
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-            <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <!-- org.jboss.arquillian -->
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-test-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.protocol</groupId>
+         <artifactId>arquillian-protocol-servlet</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.testenricher</groupId>
+         <artifactId>arquillian-testenricher-cdi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.testenricher</groupId>
+         <artifactId>arquillian-testenricher-resource</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.testenricher</groupId>
+         <artifactId>arquillian-testenricher-initialcontext</artifactId>
+      </dependency>
+      <!-- testing -->
+      <dependency>
+         <groupId>org.jboss.arquillian.junit</groupId>
+         <artifactId>arquillian-junit-container</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.resolver</groupId>
+         <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
 
-        <!-- org.jboss.weld.resources.ManagerObjectFactory -->
-        <dependency>
-            <groupId>org.jboss.weld.servlet</groupId>
-            <artifactId>weld-servlet</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+      <!-- org.jboss.weld.resources.ManagerObjectFactory -->
+      <dependency>
+         <groupId>org.jboss.weld.servlet</groupId>
+         <artifactId>weld-servlet</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.spec.javax.servlet</groupId>
+         <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
 
-    <build>
-        <plugins>
-             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-test-resources</phase>
-                        <configuration>
-                            <tasks>
-                                <mkdir dir="${project.build.directory}/downloads" />
-                                <get src="http://archive.apache.org/dist/tomcat/tomcat-7/v${version.org.apache.tomcat}/bin/apache-tomcat-${version.org.apache.tomcat}.zip" dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
-                                <unzip src="${project.build.directory}/downloads/apache-tomcat-${version.org.apache.tomcat}.zip" dest="${project.build.directory}" />
-                                <!-- Remove the default ROOT webapp so it won't collide with tests -->
-                                <delete dir="${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}/webapps/ROOT" />
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${tomcat.home}/conf</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/test/resources/container</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <environmentVariables>
-                        <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
-                    </environmentVariables>
-                    <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
-                    <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>generate-test-resources</phase>
+                  <configuration>
+                     <tasks>
+                        <mkdir dir="${project.build.directory}/downloads" />
+                        <get
+                           src="http://archive.apache.org/dist/tomcat/tomcat-7/v${version.org.apache.tomcat}/bin/apache-tomcat-${version.org.apache.tomcat}.zip"
+                           dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
+                        <unzip src="${project.build.directory}/downloads/apache-tomcat-${version.org.apache.tomcat}.zip"
+                           dest="${project.build.directory}" />
+                        <!-- Remove the default ROOT webapp so it won't collide with tests -->
+                        <delete dir="${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}/webapps/ROOT" />
+                     </tasks>
+                  </configuration>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>copy-resources</id>
+                  <phase>process-test-resources</phase>
+                  <goals>
+                     <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${tomcat.home}/conf</outputDirectory>
+                     <overwrite>true</overwrite>
+                     <resources>
+                        <resource>
+                           <directory>${basedir}/src/test/resources/container</directory>
+                        </resource>
+                     </resources>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <environmentVariables>
+                  <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
+               </environmentVariables>
+               <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
+               <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
 </project>

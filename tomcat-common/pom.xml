@@ -1,39 +1,40 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>arquillian-parent-tomcat</artifactId>
-        <groupId>org.jboss.arquillian.container</groupId>
-        <version>1.0.0.Final-SNAPSHOT</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <artifactId>arquillian-parent-tomcat</artifactId>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <version>1.0.0.Final-SNAPSHOT</version>
+   </parent>
 
-    <artifactId>arquillian-tomcat-common</artifactId>
-    <name>Arquillian Container Tomcat Common Functionality</name>
-    <url>http://maven.apache.org</url>
-    
-    <properties>
-        <!-- versioning -->
-    </properties>
+   <artifactId>arquillian-tomcat-common</artifactId>
+   <name>Arquillian Container Tomcat Common Functionality</name>
+   <url>http://maven.apache.org</url>
 
-    <dependencies>
+   <properties>
+      <!-- versioning -->
+   </properties>
 
-        <!-- org.jboss.arquillian -->
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-spi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-test-spi</artifactId>
-        </dependency>
+   <dependencies>
 
-        <!--  JUnit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <!-- org.jboss.arquillian -->
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-test-spi</artifactId>
+      </dependency>
 
-    </dependencies>
+      <!-- JUnit -->
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
 
 </project>

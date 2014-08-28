@@ -1,185 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <!-- Parent -->
-    <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>14</version>
-        <relativePath />
-    </parent>
+   <!-- Parent -->
+   <parent>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-parent</artifactId>
+      <version>14</version>
+      <relativePath />
+   </parent>
 
-    <!-- Model Version -->
-    <modelVersion>4.0.0</modelVersion>
+   <!-- Model Version -->
+   <modelVersion>4.0.0</modelVersion>
 
-    <!-- Artifact Configuration -->
-    <groupId>org.jboss.arquillian.container</groupId>
-    <artifactId>arquillian-parent-tomcat</artifactId>
-    <version>1.0.0.Final-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Arquillian Container Parent Tomcat</name>
-    <description>Tomcat Container integrations for the Arquillian Project</description>
+   <!-- Artifact Configuration -->
+   <groupId>org.jboss.arquillian.container</groupId>
+   <artifactId>arquillian-parent-tomcat</artifactId>
+   <version>1.0.0.Final-SNAPSHOT</version>
+   <packaging>pom</packaging>
+   <name>Arquillian Container Parent Tomcat</name>
+   <description>Tomcat Container integrations for the Arquillian Project</description>
 
-    <scm>
-        <connection>scm:git:git://git@github.com:arquillian/arquillian-container-tomcat.git</connection>
-        <developerConnection>scm:git:ssh://github.com/arquillian/arquillian-container-tomcat.git</developerConnection>
-        <url>git://github.com/arquillian/arquillian-container-tomcat.git</url>
+   <scm>
+      <connection>scm:git:git://git@github.com:arquillian/arquillian-container-tomcat.git</connection>
+      <developerConnection>scm:git:ssh://github.com/arquillian/arquillian-container-tomcat.git</developerConnection>
+      <url>git://github.com/arquillian/arquillian-container-tomcat.git</url>
       <tag>HEAD</tag>
-  </scm>
+   </scm>
 
-    <!-- Properties -->
-    <properties>
+   <!-- Properties -->
+   <properties>
 
-        <!-- Versioning -->
-        <version.arquillian_core>1.1.5.Final</version.arquillian_core>
+      <!-- Versioning -->
+      <version.arquillian_core>1.1.5.Final</version.arquillian_core>
 
-        <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
+      <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
 
-        <version.jboss_spec>1.0.0.Final</version.jboss_spec>
-        <version.weld_servlet>1.1.8.Final</version.weld_servlet>
+      <version.jboss_spec>1.0.0.Final</version.jboss_spec>
+      <version.weld_servlet>1.1.8.Final</version.weld_servlet>
 
-        <!-- override from parent -->
-        <maven.compiler.argument.target>1.5</maven.compiler.argument.target>
-        <maven.compiler.argument.source>1.5</maven.compiler.argument.source>
+      <!-- override from parent -->
+      <maven.compiler.argument.target>1.5</maven.compiler.argument.target>
+      <maven.compiler.argument.source>1.5</maven.compiler.argument.source>
 
-    </properties>
+   </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian_core}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-build</artifactId>
-                <version>${version.arquillian_core}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-bom</artifactId>
+            <version>${version.arquillian_core}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-build</artifactId>
+            <version>${version.arquillian_core}</version>
+            <type>pom</type>
+            <scope>import</scope>
+         </dependency>
 
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.container</groupId>
-                <artifactId>shrinkwrap-container-tomcat-60</artifactId>
-                <version>${version.shrinkwrap_tomcat}</version>
-            </dependency>
+         <dependency>
+            <groupId>org.jboss.shrinkwrap.container</groupId>
+            <artifactId>shrinkwrap-container-tomcat-60</artifactId>
+            <version>${version.shrinkwrap_tomcat}</version>
+         </dependency>
 
-            <!-- test dependecies -->
-            <dependency>
-                <groupId>org.jboss.weld.servlet</groupId>
-                <artifactId>weld-servlet</artifactId>
-                <version>${version.weld_servlet}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.servlet</groupId>
-                <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-                <version>${version.jboss_spec}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+         <!-- test dependecies -->
+         <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+            <version>${version.weld_servlet}</version>
+            <scope>test</scope>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <version>${version.jboss_spec}</version>
+            <scope>test</scope>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
 
-    <build>
-        <plugins>
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <configuration>
+               <autoVersionSubmodules>true</autoVersionSubmodules>
+               <pushChanges>false</pushChanges>
+               <localCheckout>true</localCheckout>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>animal-sniffer-maven-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+               <execution>
+                  <id>signature-check</id>
+                  <phase>verify</phase>
+                  <goals>
+                     <goal>check</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <signature>
+                  <groupId>org.codehaus.mojo.signature</groupId>
+                  <artifactId>java15</artifactId>
+                  <version>1.0</version>
+               </signature>
+            </configuration>
+         </plugin>
+      </plugins>
+      <pluginManagement>
+         <plugins>
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
+               build itself. -->
             <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <pushChanges>false</pushChanges>
-                    <localCheckout>true</localCheckout>
-                </configuration>
+               <groupId>org.eclipse.m2e</groupId>
+               <artifactId>lifecycle-mapping</artifactId>
+               <version>1.0.0</version>
+               <configuration>
+                  <lifecycleMappingMetadata>
+                     <pluginExecutions>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.maven.plugins</groupId>
+                              <artifactId>maven-antrun-plugin</artifactId>
+                              <versionRange>[1.7,)</versionRange>
+                              <goals>
+                                 <goal>run</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <execute>
+                                 <runOnIncremental>true</runOnIncremental>
+                              </execute>
+                           </action>
+                        </pluginExecution>
+                     </pluginExecutions>
+                  </lifecycleMappingMetadata>
+               </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>signature-check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <signature>
-                        <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java15</artifactId>
-                        <version>1.0</version>
-                    </signature>
-                </configuration>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-           <plugins>
-              <!--This plugin's configuration is used to store Eclipse m2e settings only. 
-                  It has no influence on the Maven build itself.-->
-              <plugin>
-                 <groupId>org.eclipse.m2e</groupId>
-                 <artifactId>lifecycle-mapping</artifactId>
-                 <version>1.0.0</version>
-                 <configuration>
-                    <lifecycleMappingMetadata>
-                       <pluginExecutions>
-                          <pluginExecution>
-                             <pluginExecutionFilter>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-antrun-plugin</artifactId>
-                                <versionRange>[1.7,)</versionRange>
-                                <goals>
-                                   <goal>run</goal>
-                                </goals>
-                             </pluginExecutionFilter>
-                             <action>
-                                <execute>
-                                   <runOnIncremental>true</runOnIncremental>
-                                </execute>
-                             </action>
-                          </pluginExecution>
-                       </pluginExecutions>
-                    </lifecycleMappingMetadata>
-                 </configuration>
-              </plugin>
-           </plugins>
-        </pluginManagement>
-    </build>
+         </plugins>
+      </pluginManagement>
+   </build>
 
-    <profiles>
-        <profile>
-            <id>build-server</id>
-            <build>
-                <plugins>
-                    <!--
-                        surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the MavenResolver used in
-                        the test cases can read from the same local repo.
-                     -->
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemProperties>
-                                <maven.repo.local>${maven.repo.local}</maven.repo.local>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    <modules>
-        <module>tomcat-common</module>
-        <module>tomcat-managed-common</module>
-        <module>tomcat-managed-5.5</module>
-        <module>tomcat-embedded-6</module>
-        <module>tomcat-remote-6</module>
-        <module>tomcat-managed-6</module>
-        <module>tomcat-embedded-7</module>
-        <module>tomcat-managed-7</module>
-        <module>tomcat-remote-7</module>
-        <module>tomcat-embedded-8</module>
-    </modules>
+   <profiles>
+      <profile>
+         <id>build-server</id>
+         <build>
+            <plugins>
+               <!-- surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the 
+                  MavenResolver used in the test cases can read from the same local repo. -->
+               <plugin>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <systemProperties>
+                        <maven.repo.local>${maven.repo.local}</maven.repo.local>
+                     </systemProperties>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+   <modules>
+      <module>tomcat-common</module>
+      <module>tomcat-managed-common</module>
+      <module>tomcat-managed-5.5</module>
+      <module>tomcat-embedded-6</module>
+      <module>tomcat-remote-6</module>
+      <module>tomcat-managed-6</module>
+      <module>tomcat-embedded-7</module>
+      <module>tomcat-managed-7</module>
+      <module>tomcat-remote-7</module>
+      <module>tomcat-embedded-8</module>
+   </modules>
 </project>
