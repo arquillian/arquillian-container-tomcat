@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class CommonTomcatManagerTest
 {
-   private static final CommonTomcatManager<CommonTomcatConfiguration> COMMON_TOMCAT_MANAGER
-         = new CommonTomcatManager<CommonTomcatConfiguration>(new CommonTomcatConfiguration());
+   private static final CommonTomcatManager<CommonTomcatConfiguration> COMMON_TOMCAT_MANAGER = new CommonTomcatManager<CommonTomcatConfiguration>(
+         new CommonTomcatConfiguration());
 
    @Test
    public void testNormalizeArchiveName()

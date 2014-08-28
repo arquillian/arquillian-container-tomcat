@@ -33,7 +33,9 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  */
 final class ShrinkWrapUtil
 {
-   private ShrinkWrapUtil() { }
+   private ShrinkWrapUtil()
+   {
+   }
 
    /**
     * Creates a tmp folder and exports the file. Returns the URL for that file location.
@@ -49,18 +51,18 @@ final class ShrinkWrapUtil
          File root = File.createTempFile("arquillian", archive.getName());
          root.delete();
          root.mkdirs();
-         
+
          File deployment = new File(root, archive.getName());
          deployment.deleteOnExit();
          archive.as(ZipExporter.class).exportTo(deployment, true);
          return deployment.toURI().toURL();
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
          throw new RuntimeException("Could not export deployment to temp", e);
       }
    }
-   
+
    public static URL toURL(final Descriptor descriptor)
    {
       // create a random named temp file, then delete and use it as a directory
@@ -69,10 +71,10 @@ final class ShrinkWrapUtil
          File root = File.createTempFile("arquillian", descriptor.getDescriptorName());
          root.delete();
          root.mkdirs();
-         
+
          File deployment = new File(root, descriptor.getDescriptorName());
          deployment.deleteOnExit();
-         
+
          FileOutputStream stream = new FileOutputStream(deployment);
          try
          {
@@ -81,18 +83,18 @@ final class ShrinkWrapUtil
          finally
          {
             try
-            {   
+            {
                stream.close();
             }
             catch (Exception e)
             {
-               throw new RuntimeException(e); 
+               throw new RuntimeException(e);
             }
          }
 
          return deployment.toURI().toURL();
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
          throw new RuntimeException("Could not export deployment to temp", e);
       }

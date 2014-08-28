@@ -69,7 +69,7 @@ public class TomcatManagedClientTestCase
    /**
     * Define the ROOT context deployment
     */
-   @Deployment(name=ROOT_CONTEXT, testable = false)
+   @Deployment(name = ROOT_CONTEXT, testable = false)
    public static WebArchive createRootDeployment()
    {
       final String archiveName = ROOT_CONTEXT + ".war";
@@ -80,7 +80,7 @@ public class TomcatManagedClientTestCase
    /**
     * Define the test context deployment
     */
-   @Deployment(name=TEST_CONTEXT, testable = false)
+   @Deployment(name = TEST_CONTEXT, testable = false)
    public static WebArchive createTestDeployment()
    {
       final String archiveName = TEST_CONTEXT + ".war";
@@ -94,14 +94,9 @@ public class TomcatManagedClientTestCase
             .create(WebArchive.class, archiveName)
             .addClass(MyServlet.class)
             .setWebXML(
-                    new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5")
-                            .createServlet()
-                                .servletClass(MyServlet.class.getName())
-                                .servletName("MyServlet").up()
-                            .createServletMapping()
-                                .servletName("MyServlet")
-                                .urlPattern("/Test").up()
-                          .exportAsString()));
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
+                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
+                        .servletName("MyServlet").urlPattern("/Test").up().exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||
@@ -136,8 +131,8 @@ public class TomcatManagedClientTestCase
       URL url = new URL(contextRoot, "Test");
       InputStream in = url.openConnection().getInputStream();
 
-       byte[] buffer = IOUtilDelegator.asByteArray(in);
-       String httpResponse = new String(buffer);
+      byte[] buffer = IOUtilDelegator.asByteArray(in);
+      String httpResponse = new String(buffer);
 
       // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

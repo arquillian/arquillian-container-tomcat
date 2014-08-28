@@ -44,67 +44,65 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteInContainerTestCase
 {
-    private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
+   private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
 
-    /**
-     * Define the deployment
-     */
-    @Deployment
-    public static WebArchive createTestArchive()
-    {
-        WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war")
-                                .addClasses(MyServlet.class, MyBean.class)
-                                   .addAsLibraries(
-                                           Maven.configureResolver()
-                                               .workOffline()
-                                               .loadPomFromFile("pom.xml")
-                                               .resolve("org.jboss.weld.servlet:weld-servlet")
-                                               .withTransitivity()
-                                               .asFile())
-                                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                                .setWebXML("in-container-web.xml");
-        /// DEBUG - see what's 
-        //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
-        return war;
-    }
+   /**
+    * Define the deployment
+    */
+   @Deployment
+   public static WebArchive createTestArchive()
+   {
+      WebArchive war = ShrinkWrap
+            .create(WebArchive.class, "test2.war")
+            .addClasses(MyServlet.class, MyBean.class)
+            .addAsLibraries(
+                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
+                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
+      /// DEBUG - see what's 
+      //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
+      return war;
+   }
 
-    // -------------------------------------------------------------------------------------||
-    // Tests -------------------------------------------------------------------------------||
-    // -------------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
+   // Tests -------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-    @Resource(name = "resourceInjectionTestName") private String resourceInjectionTestValue;
+   @Resource(name = "resourceInjectionTestName")
+   private String resourceInjectionTestValue;
 
-    /**
-     * Ensures the {@link HelloWorldServlet} returns the expected response
-     */
-    @Test
-    public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
-    {
+   /**
+    * Ensures the {@link HelloWorldServlet} returns the expected response
+    */
+   @Test
+   public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
+   {
       log.info("Name: " + this.resourceInjectionTestValue);
       Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
       Assert.assertNotNull(testBean);
       Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
-    }
+   }
 
-   @Test @RunAsClient
+   @Test
+   @RunAsClient
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
    {
-        // Define the input and expected outcome
-        final String expected = "hello";
+      // Define the input and expected outcome
+      final String expected = "hello";
 
-        URL url = new URL(contextRoot, "Test");
-        InputStream in = url.openConnection().getInputStream();
+      URL url = new URL(contextRoot, "Test");
+      InputStream in = url.openConnection().getInputStream();
 
-        byte[] buffer = new byte[10000];
-        int len = in.read(buffer);
-        String httpResponse = "";
-        for (int q = 0; q < len; q++)
+      byte[] buffer = new byte[10000];
+      int len = in.read(buffer);
+      String httpResponse = "";
+      for (int q = 0; q < len; q++)
       {
-            httpResponse += (char) buffer[q];
+         httpResponse += (char) buffer[q];
       }
 
-        // Test
-        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-        log.info("Got expected result from Http Servlet: " + httpResponse);
+      // Test
+      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

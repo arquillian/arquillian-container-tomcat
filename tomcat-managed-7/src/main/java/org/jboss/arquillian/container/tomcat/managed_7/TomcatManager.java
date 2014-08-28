@@ -25,7 +25,8 @@ import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedConfigur
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  *
  */
-public class TomcatManager extends CommonTomcatManager<CommonTomcatManagedConfiguration>{
+public class TomcatManager extends CommonTomcatManager<CommonTomcatManagedConfiguration>
+{
 
    public TomcatManager(CommonTomcatManagedConfiguration configuration)
    {

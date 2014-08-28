@@ -65,7 +65,8 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    public void validate() throws ConfigurationException
    {
       Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
-      Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT + "[, but was " + jmxPort);
+      Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
+            + "[, but was " + jmxPort);
 
       try
       {

@@ -79,13 +79,12 @@ public class ProtocolMetadataParser<C extends CommonTomcatConfiguration>
       }
       catch (IOException ex)
       {
-         throw new DeploymentException(
-                      "Unable to contruct metadata for archive deployment.\n" +
-                            "Can't connect to '" + configuration.getJmxUri() + "'."
-                            + "\n   Make sure JMX remote acces is enabled Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
-                            + "\n   Example (with no authentication):" + "\n     -Dcom.sun.management.jmxremote.port="
-                            + configuration.getJmxPort() + "\n     -Dcom.sun.management.jmxremote.ssl=false"
-                            + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
+         throw new DeploymentException("Unable to contruct metadata for archive deployment.\n" + "Can't connect to '"
+               + configuration.getJmxUri() + "'."
+               + "\n   Make sure JMX remote acces is enabled Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
+               + "\n   Example (with no authentication):" + "\n     -Dcom.sun.management.jmxremote.port="
+               + configuration.getJmxPort() + "\n     -Dcom.sun.management.jmxremote.ssl=false"
+               + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
       }
 
       Set<ObjectInstance> servletMBeans;

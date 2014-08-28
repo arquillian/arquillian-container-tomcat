@@ -53,11 +53,13 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
 
    private String loggingProperties = "logging.properties";
 
-   public CommonTomcatManagedConfiguration() {
-       // if no javaHome set, reuse this Java JVM
-       if (javaHome == null || "".equals(javaHome)) {
-           javaHome = System.getProperty("java.home");
-       }
+   public CommonTomcatManagedConfiguration()
+   {
+      // if no javaHome set, reuse this Java JVM
+      if (javaHome == null || "".equals(javaHome))
+      {
+         javaHome = System.getProperty("java.home");
+      }
    }
 
    @Override
@@ -65,19 +67,21 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
    {
       super.validate();
 
-      Validate.configurationDirectoryExists(
-                catalinaHome,
-                "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
+      Validate
+            .configurationDirectoryExists(
+                  catalinaHome,
+                  "Either CATALINA_HOME environment variable or catalinaHome property in Arquillian configuration must be set and point to a valid directory! "
                         + catalinaHome + " is not valid directory!");
 
-      Validate.configurationDirectoryExists(
-                javaHome,
-                "Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
+      Validate
+            .configurationDirectoryExists(
+                  javaHome,
+                  "Either JAVA_HOME environment variable or javaHome property in Arquillian configuration must be set and point to a valid directory! "
                         + javaHome + " is not valid directory!");
 
       Validate.isValidFile(catalinaHome + "/conf/" + serverConfig,
-                "The server configuration file denoted by serverConfig property has to exist! This file: " + catalinaHome
-                        + "/conf/" + serverConfig + " does not!");
+            "The server configuration file denoted by serverConfig property has to exist! This file: " + catalinaHome
+                  + "/conf/" + serverConfig + " does not!");
 
       // set write output to console
       this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>()
@@ -102,17 +106,22 @@ public class CommonTomcatManagedConfiguration extends CommonTomcatConfiguration
       this.catalinaHome = catalinaHome;
    }
 
-   public String getCatalinaBase() {
-       if (catalinaBase == null || "".equals(catalinaBase)) {
-           return catalinaHome;
-       } else {
-           return catalinaBase;
-       }
-    }
+   public String getCatalinaBase()
+   {
+      if (catalinaBase == null || "".equals(catalinaBase))
+      {
+         return catalinaHome;
+      }
+      else
+      {
+         return catalinaBase;
+      }
+   }
 
-   public void setCatalinaBase(String catalinaBase) {
-        this.catalinaBase = catalinaBase;
-    }
+   public void setCatalinaBase(String catalinaBase)
+   {
+      this.catalinaBase = catalinaBase;
+   }
 
    public String getJavaHome()
    {

@@ -45,7 +45,8 @@ class ByteArrayIOUtil
    static byte[] asByteArray(final InputStream in) throws IllegalArgumentException
    {
       // Precondition check
-      if (in == null) {
+      if (in == null)
+      {
          throw new IllegalArgumentException("stream must be specified");
       }
 
@@ -54,20 +55,27 @@ class ByteArrayIOUtil
       final int len = 4096;
       final byte[] buffer = new byte[len];
       int read = 0;
-      try {
-         while (((read = in.read(buffer)) != -1)) {
+      try
+      {
+         while (((read = in.read(buffer)) != -1))
+         {
             out.write(buffer, 0, read);
          }
       }
-      catch (final IOException ioe) {
+      catch (final IOException ioe)
+      {
          throw new RuntimeException("Error in obtainting bytes from " + in, ioe);
       }
-      finally {
-         try {
+      finally
+      {
+         try
+         {
             in.close();
          }
-         catch (final IOException ignore) {
-            if (log.isLoggable(Level.FINER)) {
+         catch (final IOException ignore)
+         {
+            if (log.isLoggable(Level.FINER))
+            {
                log.finer("Could not close stream due to: " + ignore.getMessage() + "; ignoring");
             }
          }

@@ -172,7 +172,8 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
     * @throws MalformedURLException
     * @throws DeploymentException
     */
-   protected void execute(String command, InputStream istream, String contentType, int contentLength) throws IOException
+   protected void execute(String command, InputStream istream, String contentType, int contentLength)
+         throws IOException
    {
 
       URLConnection conn = null;
@@ -241,17 +242,23 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
       if (httpResponseCode >= 400 && httpResponseCode < 500)
       {
-         throw new ConfigurationException("Unable to connect to Tomcat manager. "
-               + "The server command (" + command + ") failed with responseCode ("
-               + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").\n\n"
-               + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
-               + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
-               + "The user must have appripriate role specified in tomcat-users.xml file.\n");
+         throw new ConfigurationException(
+               "Unable to connect to Tomcat manager. "
+                     + "The server command ("
+                     + command
+                     + ") failed with responseCode ("
+                     + httpResponseCode
+                     + ") and responseMessage ("
+                     + hconn.getResponseMessage()
+                     + ").\n\n"
+                     + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
+                     + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
+                     + "The user must have appripriate role specified in tomcat-users.xml file.\n");
       }
       else if (httpResponseCode >= 300)
       {
          throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
-                    + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
+               + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
       }
       BufferedReader reader = null;
       try
@@ -274,7 +281,8 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
          }
          if (contentError != null)
          {
-            throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError + ").");
+            throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError
+                  + ").");
          }
       }
       finally
@@ -291,12 +299,11 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       // We'll return the Base64 encoded form of this ISO-8859-1 byte sequence.
       try
       {
-          return "Basic "
-                    + Base64Coder.encodeString_IOS_8859_1(credentials);
+         return "Basic " + Base64Coder.encodeString_IOS_8859_1(credentials);
       }
-      catch(UnsupportedEncodingException e)
+      catch (UnsupportedEncodingException e)
       {
-          throw new RuntimeException(e);
+         throw new RuntimeException(e);
       }
    }
 

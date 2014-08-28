@@ -231,7 +231,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          }
          catch (Exception e)
          {
-            log.log(Level.WARNING, "Error on undeployment of "+standardContext.getName(), e);
+            log.log(Level.WARNING, "Error on undeployment of " + standardContext.getName(), e);
          }
          if (standardContext.getUnpackWAR())
          {

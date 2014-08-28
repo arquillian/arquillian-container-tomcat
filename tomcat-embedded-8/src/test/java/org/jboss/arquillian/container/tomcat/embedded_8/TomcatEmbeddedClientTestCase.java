@@ -57,7 +57,6 @@ public class TomcatEmbeddedClientTestCase
 
    private static final String TEST_WELCOME_FILE = "index.jsp";
 
-
    // -------------------------------------------------------------------------------------||
    // Instance Members --------------------------------------------------------------------||
    // -------------------------------------------------------------------------------------||
@@ -92,14 +91,9 @@ public class TomcatEmbeddedClientTestCase
             .addClass(MyServlet.class)
             .addAsWebResource(TEST_WELCOME_FILE)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0")
-                          .createServlet()
-                              .servletClass(MyServlet.class.getName())
-                              .servletName("MyServlet").up()
-                          .createServletMapping()
-                              .servletName("MyServlet")
-                              .urlPattern("/" + TEST_SERVLET).up()
-                        .exportAsString()));
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").createServlet()
+                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
+                        .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||

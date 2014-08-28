@@ -69,14 +69,9 @@ public class TomcatManagedClientTestCase
             .create(WebArchive.class, "test.war")
             .addClass(MyServlet.class)
             .setWebXML(
-                    new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.4")
-                            .createServlet()
-                                .servletClass(MyServlet.class.getName())
-                                .servletName("MyServlet").up()
-                            .createServletMapping()
-                                .servletName("MyServlet")
-                                .urlPattern("/Test").up()
-                          .exportAsString()));
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.4").createServlet()
+                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
+                        .servletName("MyServlet").urlPattern("/Test").up().exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||
@@ -95,8 +90,8 @@ public class TomcatManagedClientTestCase
       URL url = new URL(contextRoot, "Test");
       InputStream in = url.openConnection().getInputStream();
 
-       byte[] buffer = IOUtilDelegator.asByteArray(in);
-       String httpResponse = new String(buffer);
+      byte[] buffer = IOUtilDelegator.asByteArray(in);
+      String httpResponse = new String(buffer);
 
       // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

@@ -38,7 +38,8 @@ public class MyServlet extends HttpServlet
    public static final String MESSAGE = "hello";
 
    @Override
-   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+         IOException
    {
       response.getWriter().append(MESSAGE);
    }

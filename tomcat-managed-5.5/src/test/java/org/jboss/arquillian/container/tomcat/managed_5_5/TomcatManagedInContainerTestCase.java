@@ -51,9 +51,8 @@ public class TomcatManagedInContainerTestCase
    @Deployment
    public static WebArchive createTestArchive()
    {
-      WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war")
-                                .addClasses(MyServlet.class)
-                                .setWebXML("in-container-web.xml");
+      WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(MyServlet.class)
+            .setWebXML("in-container-web.xml");
       // / DEBUG - see what's
       // war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
       return war;
@@ -86,8 +85,8 @@ public class TomcatManagedInContainerTestCase
       URL url = new URL(contextRoot, "Test");
       InputStream in = url.openConnection().getInputStream();
 
-       byte[] buffer = IOUtilDelegator.asByteArray(in);
-       String httpResponse = new String(buffer);
+      byte[] buffer = IOUtilDelegator.asByteArray(in);
+      String httpResponse = new String(buffer);
 
       // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

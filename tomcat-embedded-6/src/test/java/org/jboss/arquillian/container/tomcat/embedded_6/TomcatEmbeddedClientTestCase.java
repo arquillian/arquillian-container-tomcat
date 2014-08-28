@@ -68,14 +68,9 @@ public class TomcatEmbeddedClientTestCase
             .create(WebArchive.class, "test.war")
             .addClass(MyServlet.class)
             .setWebXML(
-                    new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5")
-                            .createServlet()
-                                .servletClass(MyServlet.class.getName())
-                                .servletName("MyServlet").up()
-                            .createServletMapping()
-                                .servletName("MyServlet")
-                                .urlPattern("/" + TEST_SERVLET).up()
-                          .exportAsString()));
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
+                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
+                        .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
    }
 
    // -------------------------------------------------------------------------------------||

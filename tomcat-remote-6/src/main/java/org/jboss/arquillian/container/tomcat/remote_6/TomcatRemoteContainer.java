@@ -123,7 +123,8 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
          throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
       }
 
-      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(configuration);
+      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(
+            configuration);
       return parser.retrieveContextServletInfo(archiveName);
    }
 

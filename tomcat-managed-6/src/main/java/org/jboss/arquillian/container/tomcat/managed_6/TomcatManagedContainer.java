@@ -32,10 +32,12 @@ import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedContaine
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
-public class TomcatManagedContainer extends CommonTomcatManagedContainer {
+public class TomcatManagedContainer extends CommonTomcatManagedContainer
+{
 
-    public ProtocolDescription getDefaultProtocol() {
-        return new ProtocolDescription("Servlet 2.5");
-    }
+   public ProtocolDescription getDefaultProtocol()
+   {
+      return new ProtocolDescription("Servlet 2.5");
+   }
 
 }

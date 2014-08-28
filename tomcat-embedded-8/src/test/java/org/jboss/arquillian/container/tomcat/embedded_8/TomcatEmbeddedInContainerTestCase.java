@@ -69,14 +69,9 @@ public class TomcatEmbeddedInContainerTestCase
             .create(WebArchive.class, "ROOT.war")
             .addClasses(MyServlet.class, MyBean.class)
             .addAsLibraries(
-                    Maven.configureResolver()
-                    .workOffline()
-                    .loadPomFromFile("pom.xml")
-                    .resolve("org.jboss.weld.servlet:weld-servlet")
-                    .withTransitivity()
-                    .asFile())
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-            .setWebXML("in-container-web.xml");
+                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
+                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
    }
 
    // -------------------------------------------------------------------------------------||
