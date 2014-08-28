@@ -25,7 +25,6 @@ import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.deployment.Validate;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
-import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
@@ -123,7 +122,8 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
          throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
       }
 
-      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(configuration);
+      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(
+            configuration);
       return parser.retrieveContextServletInfo(archiveName);
    }
 
