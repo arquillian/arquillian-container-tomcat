@@ -49,6 +49,8 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
 
    private int jmxPort = 8089;
 
+   private int jmxServerPort = 0;
+
    private String jmxVirtualHost = "localhost";
 
    private String urlCharset = "ISO-8859-1";
@@ -67,20 +69,11 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
       Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
             + "[, but was " + jmxPort);
+      Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + ","
+            + MAX_PORT + "[, but was " + jmxServerPort);
 
-      try
-      {
-         this.setJmxUri(createJmxUri());
-         this.setManagerUrl(createManagerUrl());
-      }
-      catch (URISyntaxException ex)
-      {
-         throw new ConfigurationException("JMX URI is not valid, please provide ", ex);
-      }
-      catch (MalformedURLException e)
-      {
-         throw new ConfigurationException("JMX URI is not valid", e);
-      }
+      this.jmxUri = createJmxUri();
+      this.managerUrl = createManagerUrl();
    }
 
    public String getBindAddress()
@@ -88,7 +81,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return bindAddress;
    }
 
-   public void setBindAddress(String bindAddress)
+   public void setBindAddress(final String bindAddress)
    {
       this.bindAddress = bindAddress;
    }
@@ -101,9 +94,9 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * Set the HTTP bind port.
     *
-    * @param httpBindPort HTTP bind port
+    * @param bindHttpPort HTTP bind port
     */
-   public void setBindHttpPort(int bindHttpPort)
+   public void setBindHttpPort(final int bindHttpPort)
    {
       this.bindHttpPort = bindHttpPort;
    }
@@ -113,7 +106,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return user;
    }
 
-   public void setUser(String user)
+   public void setUser(final String user)
    {
       this.user = user;
    }
@@ -123,7 +116,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return pass;
    }
 
-   public void setPass(String pass)
+   public void setPass(final String pass)
    {
       this.pass = pass;
    }
@@ -133,9 +126,19 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return jmxPort;
    }
 
-   public void setJmxPort(int jmxPort)
+   public void setJmxPort(final int jmxPort)
    {
       this.jmxPort = jmxPort;
+   }
+
+   public int getJmxServerPort()
+   {
+      return jmxServerPort;
+   }
+
+   public void setJmxServerPort(final int jmxServerPort)
+   {
+      this.jmxServerPort = jmxServerPort;
    }
 
    public String getAppBase()
@@ -146,7 +149,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
     */
-   public void setAppBase(String appBase)
+   public void setAppBase(final String appBase)
    {
       this.appBase = appBase;
    }
@@ -163,9 +166,9 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
     * CDI support in a servlet environment.
     *
-    * @param a switch indicating whether the WAR should be unpacked
+    * @param unpackArchive a switch indicating whether the WAR should be unpacked
     */
-   public void setUnpackArchive(boolean unpackArchive)
+   public void setUnpackArchive(final boolean unpackArchive)
    {
       this.unpackArchive = unpackArchive;
    }
@@ -173,7 +176,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param urlCharset the urlCharset to set
     */
-   public void setUrlCharset(String urlCharset)
+   public void setUrlCharset(final String urlCharset)
    {
       this.urlCharset = urlCharset;
    }
@@ -189,7 +192,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param jmxVirtualHost the jmxVirtualHost to set
     */
-   public void setJmxVirtualHost(String jmxVirtualHost)
+   public void setJmxVirtualHost(final String jmxVirtualHost)
    {
       this.jmxVirtualHost = jmxVirtualHost;
    }
@@ -203,27 +206,11 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    }
 
    /**
-    * @param jmxUri the jmxUri to set
-    */
-   public void setJmxUri(URI jmxUri)
-   {
-      this.jmxUri = jmxUri;
-   }
-
-   /**
     * @return the jmxUri
     */
    public URI getJmxUri()
    {
       return jmxUri;
-   }
-
-   /**
-    * @param managerUrl the managerUrl to set
-    */
-   public void setManagerUrl(URL managerUrl)
-   {
-      this.managerUrl = managerUrl;
    }
 
    /**
@@ -234,18 +221,46 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return managerUrl;
    }
 
-   protected URI createJmxUri() throws URISyntaxException
+   protected URI createJmxUri()
    {
-      final String template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
+      try
+      {
+         final String uriString;
+         final String template;
 
-      return new URI(String.format(template, bindAddress, jmxPort));
+         if (jmxServerPort != 0)
+         {
+            template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
+            uriString = String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort);
+         }
+         else
+         {
+            template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
+            uriString = String.format(template, bindAddress, jmxPort);
+         }
+
+         return new URI(uriString);
+      }
+      catch (final URISyntaxException e)
+      {
+         throw new ConfigurationException("JMX URI is not valid, please provide ", e);
+      }
    }
 
-   protected URL createManagerUrl() throws MalformedURLException
+   protected URL createManagerUrl()
    {
-      final String template = "http://%s:%d/manager";
+      try
+      {
+         final String template = "http://%s:%d/manager";
 
-      return new URL(String.format(template, bindAddress, bindHttpPort));
+         final String urlString = String.format(template, bindAddress, bindHttpPort);
+
+         return new URL(urlString);
+      }
+      catch (final MalformedURLException e)
+      {
+         throw new ConfigurationException("Manager URL is not valid, please provide ", e);
+      }
    }
 
 }

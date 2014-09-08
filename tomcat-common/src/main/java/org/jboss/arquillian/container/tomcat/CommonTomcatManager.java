@@ -1,26 +1,20 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
  * JBoss, Home of Professional Open Source
- * Copyright 2011, Red Hat Middleware LLC, and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
+ * Copyright 2011 Red Hat Inc. and/or its affiliates and other contributors
+ * as indicated by the @authors tag. All rights reserved.
+ * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
- *
- * Copyright 2002, 2004 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.jboss.arquillian.container.tomcat;
 
 import java.io.BufferedInputStream;
@@ -56,35 +50,35 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
    // encoding of manager web app
    protected static final String MANAGER_CHARSET = "utf-8";
 
-   private C configuration;
+   private final C configuration;
 
    /**
     * Creates a Tomcat manager abstraction
     *
     * @param configuration the configuration
     */
-   public CommonTomcatManager(C configuration)
+   public CommonTomcatManager(final C configuration)
    {
       this.configuration = configuration;
    }
 
-   public void deploy(String name, URL content) throws IOException, DeploymentException
+   public void deploy(final String name, final URL content) throws IOException, DeploymentException
    {
       final String contentType = "application/octet-stream";
       Validate.notNullOrEmpty(name, "Name must not be null or empty");
       Validate.notNull(content, "Content to be deployed must not be null");
 
-      URLConnection conn = content.openConnection();
-      int contentLength = conn.getContentLength();
-      InputStream stream = new BufferedInputStream(conn.getInputStream());
+      final URLConnection conn = content.openConnection();
+      final int contentLength = conn.getContentLength();
+      final InputStream stream = new BufferedInputStream(conn.getInputStream());
 
       // Building URL
-      StringBuilder command = new StringBuilder(getDeployCommand());
+      final StringBuilder command = new StringBuilder(getDeployCommand());
       try
       {
          command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
       }
-      catch (UnsupportedEncodingException e)
+      catch (final UnsupportedEncodingException e)
       {
          throw new DeploymentException("Unable to construct path for Tomcat manager", e);
       }
@@ -92,17 +86,17 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       execute(command.toString(), stream, contentType, contentLength);
    }
 
-   public void undeploy(String name) throws IOException, DeploymentException
+   public void undeploy(final String name) throws IOException, DeploymentException
    {
       Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
 
       // Building URL
-      StringBuilder command = new StringBuilder(getUndeployCommand());
+      final StringBuilder command = new StringBuilder(getUndeployCommand());
       try
       {
          command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
       }
-      catch (UnsupportedEncodingException e)
+      catch (final UnsupportedEncodingException e)
       {
          throw new DeploymentException("Unable to construct path for Tomcat manager", e);
       }
@@ -122,13 +116,13 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
          list();
          return true;
       }
-      catch (IOException e)
+      catch (final IOException e)
       {
          return false;
       }
    }
 
-   public String normalizeArchiveName(String name)
+   public String normalizeArchiveName(final String name)
    {
       Validate.notNull(name, "Archive name must not be empty");
 
@@ -172,16 +166,16 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
     * @throws MalformedURLException
     * @throws DeploymentException
     */
-   protected void execute(String command, InputStream istream, String contentType, int contentLength)
-         throws IOException
+   protected void execute(final String command, final InputStream istream, final String contentType,
+         final int contentLength) throws IOException
    {
 
       URLConnection conn = null;
       try
       {
          // Create a connection for this command
-         conn = (new URL(configuration.getManagerUrl() + command)).openConnection();
-         HttpURLConnection hconn = (HttpURLConnection) conn;
+         conn = new URL(configuration.getManagerUrl() + command).openConnection();
+         final HttpURLConnection hconn = (HttpURLConnection) conn;
 
          // Set up standard connection characteristics
          hconn.setAllowUserInteraction(false);
@@ -221,7 +215,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
          // Send the request data (if any)
          if (istream != null)
          {
-            BufferedOutputStream ostream = new BufferedOutputStream(hconn.getOutputStream(), 1024);
+            final BufferedOutputStream ostream = new BufferedOutputStream(hconn.getOutputStream(), 1024);
             IOUtil.copy(istream, ostream);
             ostream.flush();
             ostream.close();
@@ -236,9 +230,9 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       }
    }
 
-   protected void processResponse(String command, HttpURLConnection hconn) throws IOException
+   protected void processResponse(final String command, final HttpURLConnection hconn) throws IOException
    {
-      int httpResponseCode = hconn.getResponseCode();
+      final int httpResponseCode = hconn.getResponseCode();
       // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
       if (httpResponseCode >= 400 && httpResponseCode < 500)
       {
@@ -294,14 +288,14 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
    protected String constructHttpBasicAuthHeader()
    {
       // Set up an authorization header with our credentials
-      String credentials = configuration.getUser() + ":" + configuration.getPass();
+      final String credentials = configuration.getUser() + ":" + configuration.getPass();
       // Encodes the user:password pair as a sequence of ISO-8859-1 bytes.
       // We'll return the Base64 encoded form of this ISO-8859-1 byte sequence.
       try
       {
          return "Basic " + Base64Coder.encodeString_IOS_8859_1(credentials);
       }
-      catch (UnsupportedEncodingException e)
+      catch (final UnsupportedEncodingException e)
       {
          throw new RuntimeException(e);
       }
