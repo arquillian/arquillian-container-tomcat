@@ -34,6 +34,7 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaD
 import org.jboss.arquillian.container.tomcat.AdditionalJavaOptionsParser;
 import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
+import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
 import org.jboss.arquillian.container.tomcat.Validate;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;

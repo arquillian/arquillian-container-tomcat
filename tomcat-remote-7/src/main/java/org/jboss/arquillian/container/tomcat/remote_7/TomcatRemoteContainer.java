@@ -26,6 +26,7 @@ import org.jboss.arquillian.container.spi.client.deployment.Validate;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
+import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
@@ -48,18 +49,20 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
 
    private Tomcat7Manager manager;
 
+   @Override
    public Class<TomcatRemoteConfiguration> getConfigurationClass()
    {
       return TomcatRemoteConfiguration.class;
    }
 
+   @Override
    public ProtocolDescription getDefaultProtocol()
    {
       return new ProtocolDescription("Servlet 3.0");
    }
 
    @Override
-   public void setup(TomcatRemoteConfiguration configuration)
+   public void setup(final TomcatRemoteConfiguration configuration)
    {
       this.configuration = configuration;
       this.manager = new Tomcat7Manager(configuration);
@@ -83,7 +86,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
    @Override
-   public void deploy(Descriptor descriptor) throws DeploymentException
+   public void deploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
    }
@@ -94,7 +97,7 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
    @Override
-   public void undeploy(Descriptor descriptor) throws DeploymentException
+   public void undeploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
    }
@@ -107,22 +110,22 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
     * @throws DeploymentException
     */
    @Override
-   public ProtocolMetaData deploy(Archive<?> archive) throws DeploymentException
+   public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
    {
       Validate.notNull(archive, "Archive must not be null");
 
-      String archiveName = manager.normalizeArchiveName(archive.getName());
-      URL archiveURL = ShrinkWrapUtil.toURL(archive);
+      final String archiveName = manager.normalizeArchiveName(archive.getName());
+      final URL archiveURL = ShrinkWrapUtil.toURL(archive);
       try
       {
          manager.deploy("/" + archiveName, archiveURL);
       }
-      catch (IOException e)
+      catch (final IOException e)
       {
          throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
       }
 
-      ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(
+      final ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(
             configuration);
       return parser.retrieveContextServletInfo(archiveName);
    }
@@ -132,12 +135,12 @@ public class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteCo
    {
       Validate.notNull(archive, "Archive must not be null");
 
-      String archiveName = manager.normalizeArchiveName(archive.getName());
+      final String archiveName = manager.normalizeArchiveName(archive.getName());
       try
       {
          manager.undeploy("/" + archiveName);
       }
-      catch (IOException e)
+      catch (final IOException e)
       {
          throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
       }

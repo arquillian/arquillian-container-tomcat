@@ -1,3 +1,19 @@
+/*
+ * JBoss, Home of Professional Open Source
+ * Copyright 2011, Red Hat Middleware LLC, and individual contributors
+ * by the @authors tag. See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.jboss.arquillian.container.tomcat;
 
 import java.util.ArrayList;
@@ -25,16 +41,16 @@ public class AdditionalJavaOptionsParser
     * @param additionaOptions - options to parse
     * @return List of parsed options, returns empty list rather that null value
     */
-   public static List<String> parse(String additionalOptions)
+   public static List<String> parse(final String additionalOptions)
    {
-      List<String> options = new ArrayList<String>();
+      final List<String> options = new ArrayList<String>();
       if (additionalOptions != null)
       {
-         Pattern p = Pattern.compile(OPTION, Pattern.DOTALL);
-         Matcher m = p.matcher(additionalOptions);
+         final Pattern p = Pattern.compile(OPTION, Pattern.DOTALL);
+         final Matcher m = p.matcher(additionalOptions);
          while (m.find())
          {
-            if (!(m.group().trim().equals("")))
+            if (!m.group().trim().equals(""))
             {
                options.add(Pattern.compile(QUOTED_CONTENT, Pattern.DOTALL).matcher(m.group().trim()).replaceAll("$1"));
             }
