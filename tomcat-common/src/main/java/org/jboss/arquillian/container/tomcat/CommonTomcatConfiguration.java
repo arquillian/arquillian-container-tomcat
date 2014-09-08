@@ -69,8 +69,8 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
       Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
             + "[, but was " + jmxPort);
-      Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + "," + MAX_PORT
-            + "[, but was " + jmxServerPort);
+      Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + ","
+            + MAX_PORT + "[, but was " + jmxServerPort);
 
       this.jmxUri = createJmxUri();
       this.managerUrl = createManagerUrl();
@@ -81,7 +81,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return bindAddress;
    }
 
-   public void setBindAddress(String bindAddress)
+   public void setBindAddress(final String bindAddress)
    {
       this.bindAddress = bindAddress;
    }
@@ -96,7 +96,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
     *
     * @param bindHttpPort HTTP bind port
     */
-   public void setBindHttpPort(int bindHttpPort)
+   public void setBindHttpPort(final int bindHttpPort)
    {
       this.bindHttpPort = bindHttpPort;
    }
@@ -106,7 +106,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return user;
    }
 
-   public void setUser(String user)
+   public void setUser(final String user)
    {
       this.user = user;
    }
@@ -116,7 +116,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return pass;
    }
 
-   public void setPass(String pass)
+   public void setPass(final String pass)
    {
       this.pass = pass;
    }
@@ -126,16 +126,18 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return jmxPort;
    }
 
-   public void setJmxPort(int jmxPort)
+   public void setJmxPort(final int jmxPort)
    {
       this.jmxPort = jmxPort;
    }
 
-   public int getJmxServerPort() {
+   public int getJmxServerPort()
+   {
       return jmxServerPort;
    }
 
-   public void setJmxServerPort(int jmxServerPort) {
+   public void setJmxServerPort(final int jmxServerPort)
+   {
       this.jmxServerPort = jmxServerPort;
    }
 
@@ -147,7 +149,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
     */
-   public void setAppBase(String appBase)
+   public void setAppBase(final String appBase)
    {
       this.appBase = appBase;
    }
@@ -166,7 +168,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
     *
     * @param unpackArchive a switch indicating whether the WAR should be unpacked
     */
-   public void setUnpackArchive(boolean unpackArchive)
+   public void setUnpackArchive(final boolean unpackArchive)
    {
       this.unpackArchive = unpackArchive;
    }
@@ -174,7 +176,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param urlCharset the urlCharset to set
     */
-   public void setUrlCharset(String urlCharset)
+   public void setUrlCharset(final String urlCharset)
    {
       this.urlCharset = urlCharset;
    }
@@ -190,7 +192,7 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
    /**
     * @param jmxVirtualHost the jmxVirtualHost to set
     */
-   public void setJmxVirtualHost(String jmxVirtualHost)
+   public void setJmxVirtualHost(final String jmxVirtualHost)
    {
       this.jmxVirtualHost = jmxVirtualHost;
    }
@@ -219,29 +221,46 @@ public class CommonTomcatConfiguration implements ContainerConfiguration
       return managerUrl;
    }
 
-   protected URI createJmxUri() {
-       try {
-           if (jmxServerPort != 0) {
-               final String template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
-               return new URI(String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort));
-           } else {
-               final String template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
+   protected URI createJmxUri()
+   {
+      try
+      {
+         final String uriString;
+         final String template;
 
-               return new URI(String.format(template, bindAddress, jmxPort));
-           }
-       } catch (URISyntaxException e) {
-           throw new ConfigurationException("JMX URI is not valid, please provide ", e);
-       }
+         if (jmxServerPort != 0)
+         {
+            template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
+            uriString = String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort);
+         }
+         else
+         {
+            template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
+            uriString = String.format(template, bindAddress, jmxPort);
+         }
+
+         return new URI(uriString);
+      }
+      catch (final URISyntaxException e)
+      {
+         throw new ConfigurationException("JMX URI is not valid, please provide ", e);
+      }
    }
 
-   protected URL createManagerUrl() {
-       try {
-           final String template = "http://%s:%d/manager";
+   protected URL createManagerUrl()
+   {
+      try
+      {
+         final String template = "http://%s:%d/manager";
 
-           return new URL(String.format(template, bindAddress, bindHttpPort));
-       } catch (MalformedURLException e) {
-           throw new ConfigurationException("Manager URL is not valid, please provide ", e);
-       }
+         final String urlString = String.format(template, bindAddress, bindHttpPort);
+
+         return new URL(urlString);
+      }
+      catch (final MalformedURLException e)
+      {
+         throw new ConfigurationException("Manager URL is not valid, please provide ", e);
+      }
    }
 
 }
