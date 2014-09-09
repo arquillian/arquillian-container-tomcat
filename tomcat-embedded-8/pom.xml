@@ -24,6 +24,17 @@
 
    <dependencies>
 
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-embedded-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
       <!-- org.jboss.arquillian -->
       <dependency>
          <groupId>org.jboss.arquillian.core</groupId>

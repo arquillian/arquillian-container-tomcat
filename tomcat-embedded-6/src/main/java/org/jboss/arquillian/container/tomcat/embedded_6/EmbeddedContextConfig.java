@@ -105,7 +105,7 @@ public class EmbeddedContextConfig extends ContextConfig
    }
 
    /**
-    * Overridde to assign an internal field that will trigger the removal
+    * Override to assign an internal field that will trigger the removal
     * of the unpacked WAR when the context is closed.
     */
    @Override
@@ -118,5 +118,4 @@ public class EmbeddedContextConfig extends ContextConfig
       // least for an embedded container.
       originalDocBase = context.getDocBase();
    }
-
 }

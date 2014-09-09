@@ -1,10 +1,10 @@
-package org.jboss.arquillian.container.tomcat.embedded_7;
+package org.jboss.arquillian.container.tomcat.embedded.common;
 
-class SystemPropertiesUtil
+public class SystemPropertiesUtil
 {
    private static final String ENV_VAR = "${env.";
 
-   String substituteEvironmentVariable(final String original)
+   public String substituteEvironmentVariable(final String original)
    {
       if (original.startsWith(ENV_VAR))
       {

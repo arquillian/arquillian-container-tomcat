@@ -34,6 +34,7 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
+import org.jboss.arquillian.container.tomcat.embedded.common.SystemPropertiesUtil;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
@@ -89,6 +90,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#getConfigurationClass()
     */
+   @Override
    public Class<TomcatConfiguration> getConfigurationClass()
    {
       return TomcatConfiguration.class;
@@ -97,6 +99,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#getDefaultProtocol()
     */
+   @Override
    public ProtocolDescription getDefaultProtocol()
    {
       return new ProtocolDescription("Servlet 3.0");
@@ -105,7 +108,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#setup(org.jboss.arquillian.container.spi.client.container.ContainerConfiguration)
     */
-   public void setup(TomcatConfiguration configuration)
+   @Override
+   public void setup(final TomcatConfiguration configuration)
    {
       this.configuration = configuration;
    }
@@ -113,6 +117,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#start()
     */
+   @Override
    public void start() throws LifecycleException
    {
       /*
@@ -169,7 +174,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          tomcat.start();
          wasStarted = true;
       }
-      catch (Exception e)
+      catch (final Exception e)
       {
          throw new LifecycleException("Failed to start embedded Tomcat", e);
       }
@@ -178,6 +183,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#stop()
     */
+   @Override
    public void stop() throws LifecycleException
    {
       if (wasStarted)
@@ -187,7 +193,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
             tomcat.stop();
             tomcat.destroy();
          }
-         catch (org.apache.catalina.LifecycleException e)
+         catch (final org.apache.catalina.LifecycleException e)
          {
             throw new LifecycleException("Failed to stop Tomcat", e);
          }
@@ -197,6 +203,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.api.Archive)
     */
+   @Override
    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
    {
       try
@@ -216,14 +223,14 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
          final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(),
                configuration.getBindHttpPort());
 
-         for (String mapping : standardContext.findServletMappings())
+         for (final String mapping : standardContext.findServletMappings())
          {
             httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextName.getPath()));
          }
 
          return new ProtocolMetaData().addContext(httpContext);
       }
-      catch (Exception e)
+      catch (final Exception e)
       {
          throw new DeploymentException("Failed to deploy " + archive.getName(), e);
       }
@@ -232,6 +239,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.api.Archive)
     */
+   @Override
    public void undeploy(final Archive<?> archive) throws DeploymentException
    {
       try
@@ -240,7 +248,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
          deleteWar(archive);
       }
-      catch (Exception e)
+      catch (final Exception e)
       {
          throw new DeploymentException("Failed to undeploy " + archive.getName(), e);
       }
@@ -249,7 +257,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
-   public void deploy(Descriptor descriptor) throws DeploymentException
+   @Override
+   public void deploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
    }
@@ -257,7 +266,8 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /* (non-Javadoc)
     * @see org.jboss.arquillian.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
     */
-   public void undeploy(Descriptor descriptor) throws DeploymentException
+   @Override
+   public void undeploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
    }
@@ -275,7 +285,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    private File getTomcatHomeFile() throws LifecycleException
    {
       // TODO this needs to be a lot more robust
-      String tomcatHome = configuration.getTomcatHome();
+      final String tomcatHome = configuration.getTomcatHome();
       File tomcatHomeFile;
 
       if (tomcatHome != null)
@@ -303,7 +313,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
             tomcatHomeFile.deleteOnExit();
             return tomcatHomeFile;
          }
-         catch (IOException e)
+         catch (final IOException e)
          {
             throw new LifecycleException("Unable to create temporary home directory for Tomcat", e);
          }

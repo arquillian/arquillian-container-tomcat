@@ -1,8 +1,8 @@
-package org.jboss.arquillian.container.tomcat.embedded_8;
+package org.jboss.arquillian.container.tomcat.embedded.common;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jboss.arquillian.container.tomcat.embedded_8.SystemPropertiesUtil;
+import org.jboss.arquillian.container.tomcat.embedded.common.SystemPropertiesUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

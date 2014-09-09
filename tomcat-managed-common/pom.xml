@@ -52,7 +52,6 @@
       </dependency>
    </dependencies>
 
-   <!-- testing purposes -->
    <build>
       <plugins>
          <plugin>
