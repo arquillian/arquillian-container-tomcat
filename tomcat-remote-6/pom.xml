@@ -19,10 +19,9 @@
       <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
       <version.jersey>1.5</version.jersey>
 
-      <test.jmx.port>9876</test.jmx.port>
       <test.manager.username>admin</test.manager.username>
       <test.manager.password>admin</test.manager.password>
-      
+
    </properties>
 
    <dependencies>
@@ -142,30 +141,24 @@
             <filtering>true</filtering>
          </testResource>
       </testResources>
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-failsafe-plugin</artifactId>
-               <version>2.17</version>
-            </plugin>
-            <plugin>
-               <groupId>org.codehaus.cargo</groupId>
-               <artifactId>cargo-maven2-plugin</artifactId>
-               <version>1.4.9</version>
-            </plugin>
-         </plugins>
-      </pluginManagement>
       <plugins>
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
             <executions>
                <execution>
+                  <id>reserve-network-port</id>
                   <goals>
-                     <goal>integration-test</goal>
-                     <goal>verify</goal>
+                     <goal>reserve-network-port</goal>
                   </goals>
+                  <phase>initialize</phase>
+                  <configuration>
+                     <portNames>
+                        <portName>test.jmx.port</portName>
+                        <portName>test.http.port</portName>
+                        <portName>test.ajp.port</portName>
+                     </portNames>
+                  </configuration>
                </execution>
             </executions>
          </plugin>
@@ -197,6 +190,10 @@
                   </systemProperties>
                </container>
                <configuration>
+                  <properties>
+                     <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                     <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                  </properties>
                   <configfiles>
                      <configfile>
                         <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
@@ -205,6 +202,17 @@
                   </configfiles>
                </configuration>
             </configuration>
+         </plugin>
+         <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>integration-test</goal>
+                     <goal>verify</goal>
+                  </goals>
+               </execution>
+            </executions>
          </plugin>
       </plugins>
    </build>

@@ -5,7 +5,7 @@
    <container qualifier="tomcat" default="true">
       <configuration>
          <property name="jmxPort">${test.jmx.port}</property>
-         <property name="httpPort">8080</property>
+         <property name="httpPort">${test.http.port}</property>
          <property name="user">${test.manager.username}</property>
          <property name="pass">${test.manager.password}</property>
       </configuration>
