@@ -30,18 +30,20 @@ import java.util.logging.Logger;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
+import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.tomcat.AdditionalJavaOptionsParser;
 import org.jboss.arquillian.container.tomcat.CommonTomcatManager;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
+import org.jboss.arquillian.container.tomcat.TomcatManagerCommandSpec;
 import org.jboss.arquillian.container.tomcat.Validate;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
- * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an 
+ * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an
  * Managed Tomcat server; responsible for both lifecycle and deployment operations.
  * </p>
  *
@@ -49,11 +51,16 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  * @version $Revision: $
  */
 public abstract class CommonTomcatManagedContainer implements DeployableContainer<CommonTomcatManagedConfiguration>
 {
    private static final Logger log = Logger.getLogger(CommonTomcatManagedContainer.class.getName());
+
+   private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
+
+   private final ProtocolDescription protocolDescription;
 
    /**
     * Tomcat container configuration
@@ -66,17 +73,33 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
 
    private Process startupProcess;
 
+   public CommonTomcatManagedContainer(final ProtocolDescription protocolDescription,
+         final TomcatManagerCommandSpec tomcatManagerCommandSpec)
+   {
+      this.protocolDescription = protocolDescription;
+      this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
+   }
+
+   @Override
    public Class<CommonTomcatManagedConfiguration> getConfigurationClass()
    {
       return CommonTomcatManagedConfiguration.class;
    }
 
-   public void setup(CommonTomcatManagedConfiguration configuration)
+   @Override
+   public ProtocolDescription getDefaultProtocol()
    {
-      this.configuration = configuration;
-      this.manager = new CommonTomcatManager<CommonTomcatManagedConfiguration>(configuration);
+      return protocolDescription;
    }
 
+   @Override
+   public void setup(final CommonTomcatManagedConfiguration configuration)
+   {
+      this.configuration = configuration;
+      this.manager = new CommonTomcatManager<CommonTomcatManagedConfiguration>(configuration, tomcatManagerCommandSpec);
+   }
+
+   @Override
    public void start() throws LifecycleException
    {
 
@@ -102,7 +125,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          final String javaCommand = getJavaCommand();
 
          // construct a command to execute
-         List<String> cmd = new ArrayList<String>();
+         final List<String> cmd = new ArrayList<String>();
 
          cmd.add(javaCommand);
 
@@ -131,7 +154,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          cmd.add("start");
 
          // execute command
-         ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
+         final ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
          startupProcessBuilder.redirectErrorStream(true);
          startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
          log.info("Starting Tomcat with: " + cmd.toString());
@@ -142,6 +165,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          shutdownThread = new Thread(new Runnable()
          {
 
+            @Override
             public void run()
             {
                if (proc != null)
@@ -151,7 +175,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
                   {
                      proc.waitFor();
                   }
-                  catch (InterruptedException e)
+                  catch (final InterruptedException e)
                   {
                      throw new RuntimeException(e);
                   }
@@ -160,7 +184,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          });
          Runtime.getRuntime().addShutdownHook(shutdownThread);
 
-         long startupTimeout = configuration.getStartupTimeoutInSeconds();
+         final long startupTimeout = configuration.getStartupTimeoutInSeconds();
          long timeout = startupTimeout * 1000;
          boolean serverAvailable = false;
          while (timeout > 0 && serverAvailable == false)
@@ -179,7 +203,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
          }
 
       }
-      catch (Exception ex)
+      catch (final Exception ex)
       {
 
          throw new LifecycleException("Could not start container", ex);
@@ -187,6 +211,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
 
    }
 
+   @Override
    public void stop() throws LifecycleException
    {
 
@@ -204,7 +229,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
             startupProcess = null;
          }
       }
-      catch (Exception e)
+      catch (final Exception e)
       {
          throw new LifecycleException("Could not stop container", e);
       }
@@ -217,49 +242,53 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
     * @return
     * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
     */
-   public ProtocolMetaData deploy(Archive<?> archive) throws DeploymentException
+   @Override
+   public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
    {
       Validate.notNull(archive, "Archive must not be null");
 
-      String archiveName = manager.normalizeArchiveName(archive.getName());
-      URL archiveURL = ShrinkWrapUtil.toURL(archive);
+      final String archiveName = manager.normalizeArchiveName(archive.getName());
+      final URL archiveURL = ShrinkWrapUtil.toURL(archive);
       try
       {
          manager.deploy("/" + archiveName, archiveURL);
       }
-      catch (IOException e)
+      catch (final IOException e)
       {
          throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
       }
 
-      ProtocolMetadataParser<CommonTomcatManagedConfiguration> parser = new ProtocolMetadataParser<CommonTomcatManagedConfiguration>(
+      final ProtocolMetadataParser<CommonTomcatManagedConfiguration> parser = new ProtocolMetadataParser<CommonTomcatManagedConfiguration>(
             configuration);
       return parser.retrieveContextServletInfo(archiveName);
    }
 
-   public void undeploy(Archive<?> archive) throws DeploymentException
+   @Override
+   public void undeploy(final Archive<?> archive) throws DeploymentException
    {
       Validate.notNull(archive, "Archive must not be null");
 
-      String archiveName = manager.normalizeArchiveName(archive.getName());
+      final String archiveName = manager.normalizeArchiveName(archive.getName());
       try
       {
          manager.undeploy("/" + archiveName);
       }
-      catch (IOException e)
+      catch (final IOException e)
       {
          throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
       }
    }
 
-   public void deploy(Descriptor descriptor) throws DeploymentException
+   @Override
+   public void deploy(final Descriptor descriptor) throws DeploymentException
    {
 
       throw new UnsupportedOperationException("Not implemented");
 
    }
 
-   public void undeploy(Descriptor descriptor) throws DeploymentException
+   @Override
+   public void undeploy(final Descriptor descriptor) throws DeploymentException
    {
 
       throw new UnsupportedOperationException("Not implemented");
@@ -277,11 +306,12 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
 
       private final boolean writeOutput;
 
-      ConsoleConsumer(boolean writeOutput)
+      ConsoleConsumer(final boolean writeOutput)
       {
          this.writeOutput = writeOutput;
       }
 
+      @Override
       public void run()
       {
          final InputStream stream = startupProcess.getInputStream();
@@ -297,7 +327,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
                }
             }
          }
-         catch (IOException e)
+         catch (final IOException e)
          {
          }
       }
@@ -313,7 +343,7 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
       {
          return startupProcess.waitFor();
       }
-      catch (InterruptedException e)
+      catch (final InterruptedException e)
       {
          throw new RuntimeException(e);
       }
@@ -321,7 +351,8 @@ public abstract class CommonTomcatManagedContainer implements DeployableContaine
 
    protected String getJavaCommand()
    {
-      if (configuration == null) {
+      if (configuration == null)
+      {
          throw new IllegalStateException("setup not called");
       }
 

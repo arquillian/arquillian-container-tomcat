@@ -14,29 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.remote_7;
-
-import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
-import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
-import org.jboss.arquillian.container.tomcat.remote.common.CommonTomcatRemoteContainer;
+package org.jboss.arquillian.container.tomcat;
 
 /**
- * <p>
- * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment operations.
- * </p>
+ * Commands known to work for Tomcat 5.5.x through 6.x.
  *
- *
- * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
- * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  *
- * @version $Revision: $
+ * @see <a href="http://tomcat.apache.org/tomcat-5.5-doc/manager-howto.html">Tomcat 5.5 Manager App HOW-TO</a>
+ * @see <a href="http://tomcat.apache.org/tomcat-6.0-doc/manager-howto.html">Tomcat 6.0 Manager App HOW-TO</a>
  */
-public class TomcatRemoteContainer extends CommonTomcatRemoteContainer
+public class Tomcat55ManagerCommandSpec implements TomcatManagerCommandSpec
 {
-   public TomcatRemoteContainer()
+
+   @Override
+   public String getListCommand()
    {
-      super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
+      return "/list";
+   }
+
+   @Override
+   public String getDeployCommand()
+   {
+      return "/deploy?path=";
+   }
+
+   @Override
+   public String getUndeployCommand()
+   {
+      return "/undeploy?path=";
    }
 }

@@ -19,6 +19,7 @@ package org.jboss.arquillian.container.tomcat.managed_6;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
+import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
 import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedContainer;
 
 /**
@@ -35,9 +36,8 @@ import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedContaine
 public class TomcatManagedContainer extends CommonTomcatManagedContainer
 {
 
-   public ProtocolDescription getDefaultProtocol()
+   public TomcatManagedContainer()
    {
-      return new ProtocolDescription("Servlet 2.5");
+      super(new ProtocolDescription("Servlet 2.5"), new Tomcat55ManagerCommandSpec());
    }
-
 }

@@ -52,14 +52,17 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
 
    private final C configuration;
 
+   private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
+
    /**
     * Creates a Tomcat manager abstraction
     *
     * @param configuration the configuration
     */
-   public CommonTomcatManager(final C configuration)
+   public CommonTomcatManager(final C configuration, final TomcatManagerCommandSpec tomcatManagerCommandSpec)
    {
       this.configuration = configuration;
+      this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
    }
 
    public void deploy(final String name, final URL content) throws IOException, DeploymentException
@@ -73,7 +76,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       final InputStream stream = new BufferedInputStream(conn.getInputStream());
 
       // Building URL
-      final StringBuilder command = new StringBuilder(getDeployCommand());
+      final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getDeployCommand());
       try
       {
          command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
@@ -91,7 +94,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
 
       // Building URL
-      final StringBuilder command = new StringBuilder(getUndeployCommand());
+      final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getUndeployCommand());
       try
       {
          command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
@@ -106,7 +109,7 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
 
    public void list() throws IOException
    {
-      execute(getListCommand(), null, null, -1);
+      execute(tomcatManagerCommandSpec.getListCommand(), null, null, -1);
    }
 
    public boolean isRunning()
@@ -137,21 +140,6 @@ public class CommonTomcatManager<C extends CommonTomcatConfiguration>
       }
 
       return name;
-   }
-
-   protected String getDeployCommand()
-   {
-      return "/deploy?path=";
-   }
-
-   protected String getUndeployCommand()
-   {
-      return "/undeploy?path=";
-   }
-
-   protected String getListCommand()
-   {
-      return "/list";
    }
 
    /**

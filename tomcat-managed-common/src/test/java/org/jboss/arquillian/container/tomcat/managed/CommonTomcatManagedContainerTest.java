@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
+import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,8 @@ public class CommonTomcatManagedContainerTest
    @Before
    public void setUp()
    {
-      commonTomcatManagedContainer = new CommonTomcatManagedContainer()
+      commonTomcatManagedContainer = new CommonTomcatManagedContainer(new ProtocolDescription("Servlet 3.0"),
+            new Tomcat7ManagerCommandSpec())
       {
          @Override
          public ProtocolDescription getDefaultProtocol()

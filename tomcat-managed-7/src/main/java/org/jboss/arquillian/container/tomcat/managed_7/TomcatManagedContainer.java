@@ -1,7 +1,8 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2014, Red Hat Middleware LLC, and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
+ * Copyright 2014 Red Hat Inc. and/or its affiliates and other contributors
+ * as indicated by the @authors tag. All rights reserved.
+ * See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +19,7 @@ package org.jboss.arquillian.container.tomcat.managed_7;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedConfiguration;
+import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
 import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedContainer;
 
 /**
@@ -35,17 +36,8 @@ import org.jboss.arquillian.container.tomcat.managed.CommonTomcatManagedContaine
 public class TomcatManagedContainer extends CommonTomcatManagedContainer
 {
 
-   @Override
-   public ProtocolDescription getDefaultProtocol()
+   public TomcatManagedContainer()
    {
-      return new ProtocolDescription("Servlet 3.0");
+      super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
    }
-
-   @Override
-   public void setup(CommonTomcatManagedConfiguration configuration)
-   {
-      this.configuration = configuration;
-      this.manager = new TomcatManager(configuration);
-   }
-
 }
