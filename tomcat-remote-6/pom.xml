@@ -16,7 +16,13 @@
    <description>Tomcat 6.x Remote container integration for the Arquillian Project</description>
 
    <properties>
+      <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
       <version.jersey>1.5</version.jersey>
+
+      <test.jmx.port>9876</test.jmx.port>
+      <test.manager.username>admin</test.manager.username>
+      <test.manager.password>admin</test.manager.password>
+      
    </properties>
 
    <dependencies>
@@ -130,13 +136,74 @@
    </dependencies>
 
    <build>
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+         </testResource>
+      </testResources>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <version>2.17</version>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.cargo</groupId>
+               <artifactId>cargo-maven2-plugin</artifactId>
+               <version>1.4.9</version>
+            </plugin>
+         </plugins>
+      </pluginManagement>
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>integration-test</goal>
+                     <goal>verify</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>start-container</id>
+                  <phase>pre-integration-test</phase>
+                  <goals>
+                     <goal>start</goal>
+                  </goals>
+                  <configuration>
+                  </configuration>
+               </execution>
+            </executions>
             <configuration>
-               <!-- enable tests when GlassFish is setup on Hudson server -->
-               <skip>true</skip>
+               <container>
+                  <containerId>tomcat6x</containerId>
+                  <zipUrlInstaller>
+                     <url>http://archive.apache.org/dist/tomcat/tomcat-6/v${version.org.apache.tomcat}/bin/apache-tomcat-${version.org.apache.tomcat}.zip</url>
+                  </zipUrlInstaller>
+                  <systemProperties>
+                     <java.rmi.server.hostname>127.0.0.1</java.rmi.server.hostname>
+                     <com.sun.management.jmxremote.port>${test.jmx.port}</com.sun.management.jmxremote.port>
+                     <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+                     <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+                  </systemProperties>
+               </container>
+               <configuration>
+                  <configfiles>
+                     <configfile>
+                        <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                        <toDir>conf</toDir>
+                     </configfile>
+                  </configfiles>
+               </configuration>
             </configuration>
          </plugin>
       </plugins>

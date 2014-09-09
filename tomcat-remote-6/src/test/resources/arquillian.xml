@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<arquillian 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://jboss.org/schema/arquillian"
-    xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jboss.org/schema/arquillian"
+   xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-    <container qualifier="tomcat" default="true">
-        <configuration>
-            <property name="jmxPort">9876</property>
-            <property name="httpPort">8080</property>
-            <property name="user">admin</property>
-            <property name="pass">admin</property>
-        </configuration>
-    </container>
+   <container qualifier="tomcat" default="true">
+      <configuration>
+         <property name="jmxPort">${test.jmx.port}</property>
+         <property name="httpPort">8080</property>
+         <property name="user">${test.manager.username}</property>
+         <property name="pass">${test.manager.password}</property>
+      </configuration>
+   </container>
 </arquillian>

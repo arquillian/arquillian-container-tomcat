@@ -42,9 +42,9 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class TomcatRemoteInContainerTestCase
+public class TomcatRemoteInContainerIT
 {
-   private static final Logger log = Logger.getLogger(TomcatRemoteInContainerTestCase.class.getName());
+   private static final Logger log = Logger.getLogger(TomcatRemoteInContainerIT.class.getName());
 
    /**
     * Define the deployment
