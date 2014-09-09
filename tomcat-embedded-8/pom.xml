@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
 
    <parent>
       <groupId>org.jboss.arquillian.container</groupId>
@@ -9,8 +11,6 @@
       <relativePath>../pom.xml</relativePath>
    </parent>
 
-   <modelVersion>4.0.0</modelVersion>
-
    <artifactId>arquillian-tomcat-embedded-8</artifactId>
    <name>Arquillian Container Tomcat Embedded 8.x</name>
    <description>Tomcat 8.x Embedded container integration for the Arquillian Project</description>
@@ -18,7 +18,7 @@
    <properties>
 
       <version.org.apache.tomcat>8.0.1</version.org.apache.tomcat>
-      <version.org.eclipse.jdt.core.compiler>3.7</version.org.eclipse.jdt.core.compiler>
+      <version.org.eclipse.jdt.core.compiler>4.3.1</version.org.eclipse.jdt.core.compiler>
 
    </properties>
 
@@ -26,8 +26,24 @@
 
       <!-- org.jboss.arquillian -->
       <dependency>
+         <groupId>org.jboss.arquillian.core</groupId>
+         <artifactId>arquillian-core-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.core</groupId>
+         <artifactId>arquillian-core-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.test</groupId>
+         <artifactId>arquillian-test-api</artifactId>
+      </dependency>
+      <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-test-api</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
@@ -48,6 +64,16 @@
       <dependency>
          <groupId>org.jboss.arquillian.testenricher</groupId>
          <artifactId>arquillian-testenricher-initialcontext</artifactId>
+      </dependency>
+
+      <!-- org.jboss.shrinkwrap -->
+      <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
 
       <!-- org.apache.tomcat -->
@@ -79,6 +105,11 @@
       <!-- testing -->
       <dependency>
          <groupId>org.jboss.arquillian.junit</groupId>
+         <artifactId>arquillian-junit-core</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.junit</groupId>
          <artifactId>arquillian-junit-container</artifactId>
          <scope>test</scope>
       </dependency>
@@ -89,7 +120,17 @@
       </dependency>
       <dependency>
          <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
          <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.resolver</groupId>
+         <artifactId>shrinkwrap-resolver-api-maven</artifactId>
          <scope>test</scope>
       </dependency>
 

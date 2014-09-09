@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-   <!-- Parent -->
+   <modelVersion>4.0.0</modelVersion>
+
    <parent>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-parent</artifactId>
@@ -10,10 +11,6 @@
       <relativePath />
    </parent>
 
-   <!-- Model Version -->
-   <modelVersion>4.0.0</modelVersion>
-
-   <!-- Artifact Configuration -->
    <groupId>org.jboss.arquillian.container</groupId>
    <artifactId>arquillian-parent-tomcat</artifactId>
    <version>1.0.0.Final-SNAPSHOT</version>
@@ -28,10 +25,8 @@
       <tag>HEAD</tag>
    </scm>
 
-   <!-- Properties -->
    <properties>
 
-      <!-- Versioning -->
       <version.arquillian_core>1.1.5.Final</version.arquillian_core>
 
       <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
@@ -68,7 +63,7 @@
             <version>${version.shrinkwrap_tomcat}</version>
          </dependency>
 
-         <!-- test dependecies -->
+         <!-- testing -->
          <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
@@ -171,14 +166,15 @@
    </profiles>
    <modules>
       <module>tomcat-common</module>
+      <module>tomcat-embedded-6</module>
+      <module>tomcat-embedded-7</module>
+      <module>tomcat-embedded-8</module>
       <module>tomcat-managed-common</module>
       <module>tomcat-managed-5.5</module>
-      <module>tomcat-embedded-6</module>
-      <module>tomcat-remote-6</module>
       <module>tomcat-managed-6</module>
-      <module>tomcat-embedded-7</module>
       <module>tomcat-managed-7</module>
+      <module>tomcat-remote-common</module>
+      <module>tomcat-remote-6</module>
       <module>tomcat-remote-7</module>
-      <module>tomcat-embedded-8</module>
    </modules>
 </project>

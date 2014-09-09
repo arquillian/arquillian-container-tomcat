@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.remote_6;
+package org.jboss.arquillian.container.tomcat.remote.common;
 
 import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.tomcat.CommonTomcatConfiguration;
@@ -28,6 +28,7 @@ import org.jboss.arquillian.container.tomcat.CommonTomcatConfiguration;
  */
 public class TomcatRemoteConfiguration extends CommonTomcatConfiguration
 {
+
    /*
     * (non-Javadoc)
     *

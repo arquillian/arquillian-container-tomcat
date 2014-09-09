@@ -1,7 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
    <modelVersion>4.0.0</modelVersion>
+
    <parent>
       <artifactId>arquillian-parent-tomcat</artifactId>
       <groupId>org.jboss.arquillian.container</groupId>
@@ -10,7 +12,7 @@
 
    <artifactId>arquillian-tomcat-managed-6</artifactId>
    <name>Arquillian Container Tomcat Managed 6.x</name>
-   <url>http://maven.apache.org</url>
+   <description>Tomcat 6.x Managed container integration for the Arquillian Project</description>
 
    <properties>
       <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
@@ -18,6 +20,7 @@
    </properties>
 
    <dependencies>
+
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-tomcat-common</artifactId>
@@ -28,17 +31,19 @@
          <artifactId>arquillian-tomcat-managed-common</artifactId>
          <version>${project.version}</version>
       </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-managed-common</artifactId>
-         <type>test-jar</type>
-         <version>${project.version}</version>
-      </dependency>
 
       <!-- org.jboss.arquillian -->
       <dependency>
+         <groupId>org.jboss.arquillian.core</groupId>
+         <artifactId>arquillian-core-spi</artifactId>
+      </dependency>
+      <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-test-api</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
@@ -47,6 +52,10 @@
       <dependency>
          <groupId>org.jboss.arquillian.protocol</groupId>
          <artifactId>arquillian-protocol-servlet</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.test</groupId>
+         <artifactId>arquillian-test-api</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.testenricher</groupId>
@@ -60,15 +69,54 @@
          <groupId>org.jboss.arquillian.testenricher</groupId>
          <artifactId>arquillian-testenricher-initialcontext</artifactId>
       </dependency>
+
+      <!-- org.jboss.shrinkwrap -->
+     <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-api</artifactId>
+      </dependency>
+     <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
+      </dependency>
+
       <!-- testing -->
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-managed-common</artifactId>
+         <version>${project.version}</version>
+         <type>test-jar</type>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.junit</groupId>
+         <artifactId>arquillian-junit-core</artifactId>
+         <scope>test</scope>
+      </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.junit</groupId>
          <artifactId>arquillian-junit-container</artifactId>
          <scope>test</scope>
       </dependency>
       <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-impl-base</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.resolver</groupId>
+         <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
          <groupId>org.jboss.shrinkwrap.resolver</groupId>
          <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -95,7 +143,6 @@
       </dependency>
    </dependencies>
 
-   <!-- testing purposes -->
    <build>
       <plugins>
          <plugin>
@@ -111,6 +158,8 @@
                            dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
                         <unzip src="${project.build.directory}/downloads/apache-tomcat-${version.org.apache.tomcat}.zip"
                            dest="${project.build.directory}" />
+                        <!-- Remove the default ROOT webapp so it won't collide with tests -->
+                        <delete dir="${project.build.directory}/apache-tomcat-${version.org.apache.tomcat}/webapps/ROOT" />
                      </tasks>
                   </configuration>
                   <goals>

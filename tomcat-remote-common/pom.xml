@@ -5,27 +5,26 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <artifactId>arquillian-parent-tomcat</artifactId>
       <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-parent-tomcat</artifactId>
       <version>1.0.0.Final-SNAPSHOT</version>
    </parent>
 
-   <artifactId>arquillian-tomcat-common</artifactId>
-   <name>Arquillian Container Tomcat Common</name>
+   <artifactId>arquillian-tomcat-remote-common</artifactId>
+   <name>Arquillian Container Tomcat Remote Common</name>
+   <description>Common Tomcat Remote container integration for the Arquillian Project</description>
 
    <dependencies>
 
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap</groupId>
-         <artifactId>shrinkwrap-api</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
 
       <!-- testing -->

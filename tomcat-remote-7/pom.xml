@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
 
    <parent>
       <groupId>org.jboss.arquillian.container</groupId>
@@ -8,8 +10,6 @@
       <version>1.0.0.Final-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
-
-   <modelVersion>4.0.0</modelVersion>
 
    <artifactId>arquillian-tomcat-remote-7</artifactId>
    <name>Arquillian Container Tomcat Remote 7.x</name>
@@ -26,11 +26,20 @@
          <artifactId>arquillian-tomcat-common</artifactId>
          <version>${project.version}</version>
       </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-remote-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
 
       <!-- org.jboss.arquillian -->
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.core</groupId>
+         <artifactId>arquillian-core-spi</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
@@ -51,6 +60,16 @@
       <dependency>
          <groupId>org.jboss.arquillian.testenricher</groupId>
          <artifactId>arquillian-testenricher-initialcontext</artifactId>
+      </dependency>
+
+      <!-- org.jboss.shrinkwrap -->
+      <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
 
       <!-- testing -->
