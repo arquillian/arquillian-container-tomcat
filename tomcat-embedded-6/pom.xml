@@ -33,10 +33,6 @@
          <artifactId>arquillian-core-spi</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.jboss.arquillian.test</groupId>
-         <artifactId>arquillian-test-api</artifactId>
-      </dependency>
-      <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
       </dependency>
@@ -51,6 +47,10 @@
       <dependency>
          <groupId>org.jboss.arquillian.protocol</groupId>
          <artifactId>arquillian-protocol-servlet</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.test</groupId>
+         <artifactId>arquillian-test-api</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jboss.arquillian.testenricher</groupId>

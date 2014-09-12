@@ -71,11 +71,11 @@
       </dependency>
 
       <!-- org.jboss.shrinkwrap -->
-     <dependency>
+      <dependency>
          <groupId>org.jboss.shrinkwrap</groupId>
          <artifactId>shrinkwrap-api</artifactId>
       </dependency>
-     <dependency>
+      <dependency>
          <groupId>org.jboss.shrinkwrap.descriptors</groupId>
          <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
