@@ -63,6 +63,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  */
 public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 {
+   private final SystemPropertiesUtil systemPropertiesUtil = new SystemPropertiesUtil();
+
    /**
     * Tomcat container configuration
     */
@@ -85,94 +87,30 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    @DeploymentScoped
    private InstanceProducer<StandardContext> standardContextProducer;
 
-   private final SystemPropertiesUtil systemPropertiesUtil = new SystemPropertiesUtil();
-
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#getConfigurationClass()
-    */
    @Override
    public Class<TomcatConfiguration> getConfigurationClass()
    {
       return TomcatConfiguration.class;
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#getDefaultProtocol()
-    */
    @Override
    public ProtocolDescription getDefaultProtocol()
    {
       return new ProtocolDescription("Servlet 3.0");
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#setup(org.jboss.arquillian.container.spi.client.container.ContainerConfiguration)
-    */
    @Override
    public void setup(final TomcatConfiguration configuration)
    {
       this.configuration = configuration;
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#start()
-    */
    @Override
    public void start() throws LifecycleException
    {
-      /*
-       * Derived from setUp() in
-       * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/test/org/apache/catalina/startup/TomcatBaseTest.java.
-       */
-
       try
       {
-         final File tempDir = getTomcatHomeFile();
-
-         System.setProperty("catalina.base", tempDir.getAbsolutePath());
-         // Trigger loading of catalina.properties.
-         CatalinaProperties.getProperty("foo");
-
-         appBase = new File(tempDir, "webapps");
-         if (!appBase.exists() && !appBase.mkdirs())
-         {
-            throw new LifecycleException("Unable to create appBase " + appBase.getAbsolutePath() + " for Tomcat");
-         }
-
-         tomcat = new Tomcat();
-         tomcat.getService().setName(configuration.getServerName());
-         final String hostname = configuration.getBindAddress();
-         tomcat.setHostname(hostname);
-         tomcat.setPort(configuration.getBindHttpPort());
-         tomcat.setBaseDir(tempDir.getAbsolutePath());
-
-         // Enable JNDI - it is disabled by default.
-         tomcat.enableNaming();
-
-         tomcat.getEngine().setName(configuration.getServerName());
-
-         // Instead of Tomcat.getHost() we create our own.  Otherwise getHost() immediately adds the Host to
-         // the Engine, which in turn calls Host.start(), and we don't want to start the host before we've had a
-         // chance to add our own EmbeddedHostConfig as a LifecycleListener.
-         host = new StandardHost();
-         host.setName(hostname);
-         host.setAppBase(appBase.getAbsolutePath());
-
-         // We only want to deploy apps in accord with our DeployableContainer life cycle.
-         host.setDeployOnStartup(false);
-         host.setAutoDeploy(false);
-
-         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
-
-         embeddedHostConfig = new EmbeddedHostConfig();
-         embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
-
-         host.addLifecycleListener(embeddedHostConfig);
-
-         tomcat.getEngine().addChild(host);
-
-         tomcat.start();
-         wasStarted = true;
+         startTomcatEmbedded();
       }
       catch (final Exception e)
       {
@@ -180,9 +118,6 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#stop()
-    */
    @Override
    public void stop() throws LifecycleException
    {
@@ -190,8 +125,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       {
          try
          {
-            tomcat.stop();
-            tomcat.destroy();
+            stopTomcatEmbedded();
          }
          catch (final org.apache.catalina.LifecycleException e)
          {
@@ -200,9 +134,6 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.api.Archive)
-    */
    @Override
    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
    {
@@ -236,9 +167,6 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.container.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.api.Archive)
-    */
    @Override
    public void undeploy(final Archive<?> archive) throws DeploymentException
    {
@@ -254,22 +182,100 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
       }
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#deploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
-    */
    @Override
    public void deploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
    }
 
-   /* (non-Javadoc)
-    * @see org.jboss.arquillian.spi.client.container.DeployableContainer#undeploy(org.jboss.shrinkwrap.descriptor.api.Descriptor)
-    */
    @Override
    public void undeploy(final Descriptor descriptor) throws DeploymentException
    {
       throw new UnsupportedOperationException("Not implemented");
+   }
+
+   protected void startTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException
+   {
+      /*
+       * Derived from setUp() in
+       * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/test/org/apache/catalina/startup/TomcatBaseTest.java.
+       */
+      final File tempDir = getTomcatHomeFile();
+
+      System.setProperty("catalina.base", tempDir.getAbsolutePath());
+      // Trigger loading of catalina.properties.
+      CatalinaProperties.getProperty("foo");
+
+      appBase = new File(tempDir, "webapps");
+      if (!appBase.exists() && !appBase.mkdirs())
+      {
+         throw new LifecycleException("Unable to create appBase " + appBase.getAbsolutePath() + " for Tomcat");
+      }
+
+      tomcat = new Tomcat();
+      tomcat.getService().setName(configuration.getServerName());
+      final String hostname = configuration.getBindAddress();
+      tomcat.setHostname(hostname);
+      tomcat.setPort(configuration.getBindHttpPort());
+      tomcat.setBaseDir(tempDir.getAbsolutePath());
+
+      // Enable JNDI - it is disabled by default.
+      tomcat.enableNaming();
+
+      tomcat.getEngine().setName(configuration.getServerName());
+
+      // Instead of Tomcat.getHost() we create our own.  Otherwise getHost() immediately adds the Host to
+      // the Engine, which in turn calls Host.start(), and we don't want to start the host before we've had a
+      // chance to add our own EmbeddedHostConfig as a LifecycleListener.
+      host = new StandardHost();
+      host.setName(hostname);
+      host.setAppBase(appBase.getAbsolutePath());
+
+      // We only want to deploy apps in accord with our DeployableContainer life cycle.
+      host.setDeployOnStartup(false);
+      host.setAutoDeploy(false);
+
+      host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
+
+      embeddedHostConfig = new EmbeddedHostConfig();
+      embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
+
+      host.addLifecycleListener(embeddedHostConfig);
+
+      tomcat.getEngine().addChild(host);
+
+      tomcat.start();
+      wasStarted = true;
+   }
+
+   protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException
+   {
+      tomcat.stop();
+      tomcat.destroy();
+   }
+
+   /**
+    * Make sure the WAR file and unpacked directory (if applicable) are not left behind.
+    *
+    * @see {@link TomcatConfiguration#isUnpackArchive()}
+    */
+   private void deleteWar(final Archive<?> archive)
+   {
+      if (configuration.isUnpackArchive())
+      {
+         final ContextName contextName = getContextName(archive);
+         final File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
+         if (unpackDir.exists())
+         {
+            ExpandWar.deleteDir(unpackDir);
+         }
+      }
+
+      final File warFile = new File(host.getAppBase(), archive.getName());
+      if (warFile.exists())
+      {
+         warFile.delete();
+      }
    }
 
    /**
@@ -329,29 +335,5 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    private ContextName getContextName(final Archive<?> archive)
    {
       return new ContextName(archive.getName(), true);
-   }
-
-   /**
-    * Make sure the WAR file and unpacked directory (if applicable) are not left behind.
-    *
-    * @see {@link TomcatConfiguration#isUnpackArchive()}
-    */
-   private void deleteWar(final Archive<?> archive)
-   {
-      if (configuration.isUnpackArchive())
-      {
-         final ContextName contextName = getContextName(archive);
-         final File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
-         if (unpackDir.exists())
-         {
-            ExpandWar.deleteDir(unpackDir);
-         }
-      }
-
-      final File warFile = new File(host.getAppBase(), archive.getName());
-      if (warFile.exists())
-      {
-         warFile.delete();
-      }
    }
 }
