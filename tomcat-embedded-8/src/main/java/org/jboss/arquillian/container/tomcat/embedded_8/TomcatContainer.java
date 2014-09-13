@@ -34,7 +34,8 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
-import org.jboss.arquillian.container.tomcat.embedded.common.SystemPropertiesUtil;
+import org.jboss.arquillian.container.tomcat.embedded.SystemPropertiesUtil;
+import org.jboss.arquillian.container.tomcat.embedded.TomcatEmbeddedConfiguration;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
@@ -61,14 +62,14 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  *
  * @version $Revision: $
  */
-public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
+public class TomcatContainer implements DeployableContainer<TomcatEmbeddedConfiguration>
 {
    private final SystemPropertiesUtil systemPropertiesUtil = new SystemPropertiesUtil();
 
    /**
     * Tomcat container configuration
     */
-   private TomcatConfiguration configuration;
+   private TomcatEmbeddedConfiguration configuration;
 
    /**
     * Tomcat embedded
@@ -88,9 +89,9 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    private InstanceProducer<StandardContext> standardContextProducer;
 
    @Override
-   public Class<TomcatConfiguration> getConfigurationClass()
+   public Class<TomcatEmbeddedConfiguration> getConfigurationClass()
    {
-      return TomcatConfiguration.class;
+      return TomcatEmbeddedConfiguration.class;
    }
 
    @Override
@@ -100,8 +101,15 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    }
 
    @Override
-   public void setup(final TomcatConfiguration configuration)
+   public void setup(final TomcatEmbeddedConfiguration configuration)
    {
+      final String serverName = configuration.getServerName();
+
+      if (serverName == null || "".equals(serverName))
+      {
+         configuration.setServerName("arquillian-tomcat-embedded-8");
+      }
+
       this.configuration = configuration;
    }
 
@@ -257,7 +265,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /**
     * Make sure the WAR file and unpacked directory (if applicable) are not left behind.
     *
-    * @see {@link TomcatConfiguration#isUnpackArchive()}
+    * @see {@link TomcatEmbeddedConfiguration#isUnpackArchive()}
     */
    private void deleteWar(final Archive<?> archive)
    {
@@ -280,7 +288,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
 
    /**
     * Get the abstract pathname for the Tomcat home directory.  The path will
-    * either be as specified by {@link TomcatConfiguration#getTomcatHome()},
+    * either be as specified by {@link TomcatEmbeddedConfiguration#getTomcatHome()},
     * or if <code>null</code> a temporary path will be returned.  Either
     * underlying directory will be created with parents if necessary, and if
     * created it will also be set to {@link File#deleteOnExit()}.

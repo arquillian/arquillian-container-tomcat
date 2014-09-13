@@ -28,12 +28,12 @@ import org.junit.Test;
 
 public class CommonTomcatConfigurationTest
 {
-   private CommonTomcatConfiguration commonTomcatConfiguration;
+   private TomcatConfiguration commonTomcatConfiguration;
 
    @Before
    public void setUp()
    {
-      commonTomcatConfiguration = new CommonTomcatConfiguration();
+      commonTomcatConfiguration = new TomcatConfiguration();
    }
 
    @Test

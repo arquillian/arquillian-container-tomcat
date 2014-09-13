@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_8;
+package org.jboss.arquillian.container.tomcat.remote;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -36,20 +37,14 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- *
+ * 
  * @author Dan Allen
- * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class TomcatEmbeddedInContainerTestCase
+public class TomcatRemoteInContainerIT
 {
-   private static final String HELLO_WORLD_URL = "http://localhost:8888/Test";
-
-   /**
-    * Logger
-    */
-   private static final Logger log = Logger.getLogger(TomcatEmbeddedInContainerTestCase.class.getName());
+   private static final Logger log = Logger.getLogger(TomcatRemoteInContainerIT.class.getName());
 
    /**
     * Define the deployment
@@ -57,44 +52,49 @@ public class TomcatEmbeddedInContainerTestCase
    @Deployment
    public static WebArchive createTestArchive()
    {
-      return ShrinkWrap
-            .create(WebArchive.class, "ROOT.war")
+      WebArchive war = ShrinkWrap
+            .create(WebArchive.class, "test2.war")
             .addClasses(MyServlet.class, MyBean.class)
             .addAsLibraries(
                   Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                         .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
+      /// DEBUG - see what's 
+      //war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
+      return war;
    }
 
-   @Resource(name = "name")
-   String name;
+   // -------------------------------------------------------------------------------------||
+   // Tests -------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
-   @Inject
-   MyBean testBean;
+   @Resource(name = "resourceInjectionTestName")
+   private String resourceInjectionTestValue;
 
    /**
     * Ensures the {@link HelloWorldServlet} returns the expected response
     */
    @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass()
+   public void shouldBeAbleToInjectMembersIntoTestClass(MyBean testBean)
    {
-      log.info("Name: " + name);
-      Assert.assertEquals("Tomcat", name);
+      log.info("Name: " + this.resourceInjectionTestValue);
+      Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
       Assert.assertNotNull(testBean);
-      Assert.assertEquals("Tomcat", testBean.getName());
+      Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
    }
 
    @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   @RunAsClient
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
    {
       // Define the input and expected outcome
       final String expected = "hello";
 
-      final URL url = new URL(HELLO_WORLD_URL);
-      final InputStream in = url.openConnection().getInputStream();
+      URL url = new URL(contextRoot, "Test");
+      InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
+      byte[] buffer = new byte[10000];
+      int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
       {

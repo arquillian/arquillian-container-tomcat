@@ -14,21 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_7;
+package org.jboss.arquillian.container.tomcat.remote;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.descriptor.api.Descriptors;
+import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,70 +35,64 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the
  * Arquillian lifecycle
- *
+ * 
+ * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
- * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  * @version $Revision: $
+ * 
  */
 @RunWith(Arquillian.class)
-public class TomcatEmbeddedInContainerTestCase
+public class TomcatRemoteClientIT
 {
-   private static final String HELLO_WORLD_URL = "http://localhost:8888/Test";
+   // -------------------------------------------------------------------------------------||
+   // Class Members -----------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
    /**
     * Logger
     */
-   private static final Logger log = Logger.getLogger(TomcatEmbeddedInContainerTestCase.class.getName());
+   private static final Logger log = Logger.getLogger(TomcatRemoteClientIT.class.getName());
+
+   // -------------------------------------------------------------------------------------||
+   // Instance Members --------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
    /**
     * Define the deployment
     */
-   @Deployment
-   public static WebArchive createTestArchive()
+   @Deployment(testable = false)
+   public static WebArchive createDeployment()
    {
       return ShrinkWrap
-            .create(WebArchive.class, "ROOT.war")
-            .addClasses(MyServlet.class, MyBean.class)
-            .addAsLibraries(
-                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
-                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
+            .create(WebArchive.class, "test.war")
+            .addClass(MyServlet.class)
+            .setWebXML(
+                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
+                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
+                        .servletName("MyServlet").urlPattern("/Test").up().exportAsString()));
    }
 
-   @Resource(name = "name")
-   String name;
-
-   @Inject
-   MyBean testBean;
+   // -------------------------------------------------------------------------------------||
+   // Tests -------------------------------------------------------------------------------||
+   // -------------------------------------------------------------------------------------||
 
    /**
     * Ensures the {@link HelloWorldServlet} returns the expected response
     */
    @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass()
-   {
-      log.info("Name: " + name);
-      Assert.assertEquals("Tomcat", name);
-      Assert.assertNotNull(testBean);
-      Assert.assertEquals("Tomcat", testBean.getName());
-   }
-
-   @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
    {
       // Define the input and expected outcome
       final String expected = "hello";
 
-      URL url = new URL(HELLO_WORLD_URL);
+      URL url = new URL(contextRoot, "Test");
       InputStream in = url.openConnection().getInputStream();
 
       byte[] buffer = new byte[10000];
       int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
-      {
          httpResponse += (char) buffer[q];
-      }
 
       // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);

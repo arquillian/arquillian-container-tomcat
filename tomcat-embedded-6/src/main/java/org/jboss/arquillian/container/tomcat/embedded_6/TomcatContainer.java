@@ -43,6 +43,7 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
+import org.jboss.arquillian.container.tomcat.embedded.TomcatEmbeddedConfiguration;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
@@ -64,7 +65,7 @@ import org.jboss.shrinkwrap.tomcat_6.api.ShrinkWrapStandardContext;
  * @author Dan Allen
  * @version $Revision: $
  */
-public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
+public class TomcatContainer implements DeployableContainer<TomcatEmbeddedConfiguration>
 {
    private static final Logger log = Logger.getLogger(TomcatContainer.class.getName());
 
@@ -75,7 +76,7 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    /**
     * Tomcat container configuration
     */
-   private TomcatConfiguration configuration;
+   private TomcatEmbeddedConfiguration configuration;
 
    /**
     * Tomcat embedded
@@ -95,9 +96,9 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    private InstanceProducer<StandardContext> standardContextProducer;
 
    @Override
-   public Class<TomcatConfiguration> getConfigurationClass()
+   public Class<TomcatEmbeddedConfiguration> getConfigurationClass()
    {
-      return TomcatConfiguration.class;
+      return TomcatEmbeddedConfiguration.class;
    }
 
    @Override
@@ -107,8 +108,15 @@ public class TomcatContainer implements DeployableContainer<TomcatConfiguration>
    }
 
    @Override
-   public void setup(final TomcatConfiguration configuration)
+   public void setup(final TomcatEmbeddedConfiguration configuration)
    {
+      final String serverName = configuration.getServerName();
+
+      if (serverName == null || "".equals(serverName))
+      {
+         configuration.setServerName("arquillian-tomcat-embedded-6");
+      }
+
       this.configuration = configuration;
    }
 

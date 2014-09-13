@@ -45,10 +45,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   // -------------------------------------------------------------------------------------||
-   // Class Members -----------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
    private static final String ROOT_CONTEXT = "ROOT";
 
    private static final String TEST_CONTEXT = "test";
@@ -56,10 +52,6 @@ public class TomcatEmbeddedClientTestCase
    private static final String TEST_SERVLET = "Test";
 
    private static final String TEST_WELCOME_FILE = "index.jsp";
-
-   // -------------------------------------------------------------------------------------||
-   // Instance Members --------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
 
    /**
     * Define the root context deployment
@@ -96,21 +88,17 @@ public class TomcatEmbeddedClientTestCase
                         .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
    }
 
-   // -------------------------------------------------------------------------------------||
-   // Tests -------------------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
    /**
     * Ensures the Test Servlet returns the expected response.
     */
    @Test
    @OperateOnDeployment(TEST_CONTEXT)
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
    {
       final String expected = "hello";
 
-      URL servletUrl = new URL(contextURL, TEST_SERVLET);
-      String httpResponse = getHttpResponse(servletUrl);
+      final URL servletUrl = new URL(contextURL, TEST_SERVLET);
+      final String httpResponse = getHttpResponse(servletUrl);
 
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
    }
@@ -120,21 +108,21 @@ public class TomcatEmbeddedClientTestCase
     */
    @Test
    @OperateOnDeployment(ROOT_CONTEXT)
-   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
    {
       final String expected = "welcome";
 
-      String httpResponse = getHttpResponse(contextURL);
+      final String httpResponse = getHttpResponse(contextURL);
 
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
    }
 
-   private String getHttpResponse(URL servletUrl) throws IOException
+   private String getHttpResponse(final URL servletUrl) throws IOException
    {
-      InputStream in = servletUrl.openConnection().getInputStream();
+      final InputStream in = servletUrl.openConnection().getInputStream();
 
-      byte[] buffer = new byte[10000];
-      int len = in.read(buffer);
+      final byte[] buffer = new byte[10000];
+      final int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
          httpResponse += (char) buffer[q];

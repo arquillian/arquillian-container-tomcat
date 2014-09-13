@@ -39,7 +39,7 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
  * @author <a href="kpiwko@redhat.com>Karel Piwko</a>
  *
  */
-public class ProtocolMetadataParser<C extends CommonTomcatConfiguration>
+public class ProtocolMetadataParser<C extends TomcatConfiguration>
 {
    private static final Logger log = Logger.getLogger(ProtocolMetaData.class.getName());
 

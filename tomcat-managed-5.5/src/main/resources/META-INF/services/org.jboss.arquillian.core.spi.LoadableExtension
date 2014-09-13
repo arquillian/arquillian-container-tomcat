@@ -1,1 +1,1 @@
-org.jboss.arquillian.container.tomcat.managed_5_5.TomcatManagedExtension
+org.jboss.arquillian.container.tomcat.managed.Tomcat55ManagedExtension

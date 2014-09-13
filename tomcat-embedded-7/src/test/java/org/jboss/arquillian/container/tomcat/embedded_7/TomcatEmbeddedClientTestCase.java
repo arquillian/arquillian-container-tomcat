@@ -45,10 +45,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   // -------------------------------------------------------------------------------------||
-   // Class Members -----------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
    private static final String ROOT_CONTEXT = "ROOT";
 
    private static final String TEST_CONTEXT = "test";
@@ -56,10 +52,6 @@ public class TomcatEmbeddedClientTestCase
    private static final String TEST_SERVLET = "Test";
 
    private static final String TEST_WELCOME_FILE = "index.jsp";
-
-   // -------------------------------------------------------------------------------------||
-   // Instance Members --------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
 
    /**
     * Define the root context deployment
@@ -95,10 +87,6 @@ public class TomcatEmbeddedClientTestCase
                         .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
                         .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
    }
-
-   // -------------------------------------------------------------------------------------||
-   // Tests -------------------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
 
    /**
     * Ensures the Test Servlet returns the expected response.

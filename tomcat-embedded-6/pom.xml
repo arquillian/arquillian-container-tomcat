@@ -16,12 +16,21 @@
    <description>Tomcat 6.x Embedded container integration for the Arquillian Project</description>
 
    <properties>
-
       <version.org.apache.tomcat>6.0.32</version.org.apache.tomcat>
-
    </properties>
 
    <dependencies>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-embedded-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
 
       <!-- org.jboss.arquillian -->
       <dependency>
