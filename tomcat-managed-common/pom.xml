@@ -11,10 +11,11 @@
    </parent>
 
    <artifactId>arquillian-tomcat-managed-common</artifactId>
-   <name>Arquillian Container Tomcat Managed Common</name>
-   <description>Common Tomcat Managed container integration for the Arquillian Project</description>
+   <name>Arquillian Tomcat Managed Container Common</name>
 
    <dependencies>
+
+      <!-- Compile Scope -->
 
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
@@ -22,7 +23,11 @@
          <version>${project.version}</version>
       </dependency>
 
-      <!-- org.jboss.shrinkwrap -->
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-spi</artifactId>
+      </dependency>
+
       <dependency>
          <groupId>org.jboss.shrinkwrap</groupId>
          <artifactId>shrinkwrap-api</artifactId>
@@ -32,24 +37,15 @@
          <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
 
-      <!-- org.jboss.arquillian -->
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-container-spi</artifactId>
-      </dependency>
+      <!-- Test Scope -->
 
-      <!-- testing -->
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>servlet-api</artifactId>
          <version>2.4</version>
          <scope>test</scope>
       </dependency>
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
+
    </dependencies>
 
    <build>

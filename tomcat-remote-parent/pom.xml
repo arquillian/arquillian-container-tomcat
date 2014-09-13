@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-container-parent</artifactId>
+      <version>1.0.0.Final-SNAPSHOT</version>
+      <relativePath>../tomcat-container-parent/pom.xml</relativePath>
+   </parent>
+
+   <artifactId>arquillian-tomcat-remote-parent</artifactId>
+   <packaging>pom</packaging>
+   <name>Arquillian Tomcat Remote Container Parent</name>
+
+   <properties>
+      <test.manager.username>admin</test.manager.username>
+      <test.manager.password>admin</test.manager.password>
+   </properties>
+
+   <dependencies>
+
+      <!-- Compile Scope -->
+
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-remote-common</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+         <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
+      </dependency>
+
+      <!-- Test Scope -->
+
+      <dependency>
+         <groupId>org.jboss.weld.servlet</groupId>
+         <artifactId>weld-servlet</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.spec.javax.servlet</groupId>
+         <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+            <filtering>true</filtering>
+         </testResource>
+      </testResources>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>build-helper-maven-plugin</artifactId>
+               <executions>
+                  <execution>
+                     <id>reserve-network-port</id>
+                     <goals>
+                        <goal>reserve-network-port</goal>
+                     </goals>
+                     <phase>initialize</phase>
+                     <configuration>
+                        <portNames>
+                           <portName>test.ajp.port</portName>
+                           <portName>test.http.port</portName>
+                           <portName>test.jmx.port</portName>
+                           <portName>test.rmi.port</portName>
+                        </portNames>
+                     </configuration>
+                  </execution>
+               </executions>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.cargo</groupId>
+               <artifactId>cargo-maven2-plugin</artifactId>
+               <executions>
+                  <execution>
+                     <id>start-container</id>
+                     <phase>pre-integration-test</phase>
+                     <goals>
+                        <goal>start</goal>
+                     </goals>
+                     <configuration>
+                     </configuration>
+                  </execution>
+               </executions>
+               <configuration>
+                  <container>
+                     <systemProperties>
+                        <java.rmi.server.hostname>127.0.0.1</java.rmi.server.hostname>
+                        <com.sun.management.jmxremote.port>${test.jmx.port}</com.sun.management.jmxremote.port>
+                        <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+                        <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+                     </systemProperties>
+                  </container>
+                  <configuration>
+                     <properties>
+                        <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                        <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                        <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
+                     </properties>
+                     <configfiles>
+                        <configfile>
+                           <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                           <toDir>conf</toDir>
+                        </configfile>
+                     </configfiles>
+                  </configuration>
+               </configuration>
+            </plugin>
+            <plugin>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <executions>
+                  <execution>
+                     <goals>
+                        <goal>integration-test</goal>
+                        <goal>verify</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
+
+</project>

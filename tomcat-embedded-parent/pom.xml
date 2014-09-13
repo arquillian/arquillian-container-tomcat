@@ -6,33 +6,36 @@
 
    <parent>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-parent-tomcat</artifactId>
+      <artifactId>arquillian-tomcat-container-parent</artifactId>
       <version>1.0.0.Final-SNAPSHOT</version>
+      <relativePath>../tomcat-container-parent/pom.xml</relativePath>
    </parent>
 
-   <artifactId>arquillian-tomcat-remote-common</artifactId>
-   <name>Arquillian Tomcat Remote Container Common</name>
+   <artifactId>arquillian-tomcat-embedded-parent</artifactId>
+   <packaging>pom</packaging>
+   <name>Arquillian Tomcat Embedded Container Parent</name>
 
    <dependencies>
 
+      <!-- Compile Scope -->
+
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-common</artifactId>
+         <artifactId>arquillian-tomcat-embedded-common</artifactId>
          <version>${project.version}</version>
       </dependency>
 
       <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-container-spi</artifactId>
+         <groupId>org.jboss.arquillian.core</groupId>
+         <artifactId>arquillian-core-api</artifactId>
       </dependency>
 
+      <!-- Test Scope -->
+
       <dependency>
-         <groupId>org.jboss.shrinkwrap</groupId>
-         <artifactId>shrinkwrap-api</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
+         <groupId>org.jboss.weld.servlet</groupId>
+         <artifactId>weld-servlet</artifactId>
+         <scope>test</scope>
       </dependency>
 
    </dependencies>

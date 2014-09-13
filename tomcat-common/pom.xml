@@ -5,16 +5,17 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <artifactId>arquillian-parent-tomcat</artifactId>
       <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-parent-tomcat</artifactId>
       <version>1.0.0.Final-SNAPSHOT</version>
    </parent>
 
    <artifactId>arquillian-tomcat-common</artifactId>
-   <name>Arquillian Container Tomcat Common</name>
+   <name>Arquillian Tomcat Container Common</name>
 
    <dependencies>
 
+      <!-- Compile Scope -->
       <dependency>
          <groupId>org.jboss.arquillian.container</groupId>
          <artifactId>arquillian-container-spi</artifactId>
@@ -28,12 +29,6 @@
          <artifactId>shrinkwrap-descriptors-api-base</artifactId>
       </dependency>
 
-      <!-- testing -->
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
    </dependencies>
 
 </project>

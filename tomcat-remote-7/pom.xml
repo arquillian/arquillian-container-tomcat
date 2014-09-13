@@ -6,116 +6,39 @@
 
    <parent>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-parent-tomcat</artifactId>
+      <artifactId>arquillian-tomcat-remote-parent</artifactId>
       <version>1.0.0.Final-SNAPSHOT</version>
-      <relativePath>../pom.xml</relativePath>
+      <relativePath>../tomcat-remote-parent/pom.xml</relativePath>
    </parent>
 
    <artifactId>arquillian-tomcat-remote-7</artifactId>
-   <name>Arquillian Container Tomcat Remote 7.x</name>
-   <description>Tomcat 7.x Remote container integration for the Arquillian Project</description>
+   <name>Arquillian Tomcat Remote 7.x Container</name>
 
    <properties>
-      <version.jersey>1.5</version.jersey>
+      <tomcat.major.version>7</tomcat.major.version>
+      <tomcat.version>${tomcat.major.version}.0.20</tomcat.version>
    </properties>
-
-   <dependencies>
-
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-common</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-remote-common</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-
-      <!-- org.jboss.arquillian -->
-      <dependency>
-         <groupId>org.jboss.arquillian.core</groupId>
-         <artifactId>arquillian-core-spi</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-container-spi</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-container-test-spi</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.protocol</groupId>
-         <artifactId>arquillian-protocol-servlet</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.testenricher</groupId>
-         <artifactId>arquillian-testenricher-cdi</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.testenricher</groupId>
-         <artifactId>arquillian-testenricher-resource</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.testenricher</groupId>
-         <artifactId>arquillian-testenricher-initialcontext</artifactId>
-      </dependency>
-
-      <!-- org.jboss.shrinkwrap -->
-      <dependency>
-         <groupId>org.jboss.shrinkwrap</groupId>
-         <artifactId>shrinkwrap-api</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-         <artifactId>shrinkwrap-descriptors-api-base</artifactId>
-      </dependency>
-
-      <!-- testing -->
-      <dependency>
-         <groupId>org.jboss.arquillian.junit</groupId>
-         <artifactId>arquillian-junit-container</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap.resolver</groupId>
-         <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-         <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
-
-      <!-- org.jboss.weld.resources.ManagerObjectFactory -->
-      <dependency>
-         <groupId>org.jboss.weld.servlet</groupId>
-         <artifactId>weld-servlet</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.spec.javax.servlet</groupId>
-         <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-         <scope>test</scope>
-      </dependency>
-   </dependencies>
 
    <build>
       <plugins>
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
-               <!-- enable tests when GlassFish is setup on Hudson server -->
-               <skip>true</skip>
+               <container>
+                  <containerId>tomcat${tomcat.major.version}x</containerId>
+                  <zipUrlInstaller>
+                     <url>http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                  </zipUrlInstaller>
+               </container>
             </configuration>
+         </plugin>
+         <plugin>
+            <artifactId>maven-failsafe-plugin</artifactId>
          </plugin>
       </plugins>
    </build>

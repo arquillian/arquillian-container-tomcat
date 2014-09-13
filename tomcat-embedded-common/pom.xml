@@ -11,8 +11,7 @@
    </parent>
 
    <artifactId>arquillian-tomcat-embedded-common</artifactId>
-   <name>Arquillian Container Tomcat Embedded Common</name>
-   <description>Common Tomcat Embedded container integration for the Arquillian Project</description>
+   <name>Arquillian Tomcat Embedded Container Common</name>
 
    <dependencies>
 
@@ -22,11 +21,10 @@
          <version>${project.version}</version>
       </dependency>
 
-      <!-- testing -->
       <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-container-spi</artifactId>
       </dependency>
+
    </dependencies>
 </project>

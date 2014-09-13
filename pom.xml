@@ -15,7 +15,8 @@
    <artifactId>arquillian-parent-tomcat</artifactId>
    <version>1.0.0.Final-SNAPSHOT</version>
    <packaging>pom</packaging>
-   <name>Arquillian Container Parent Tomcat</name>
+
+   <name>Arquillian Tomcat Container Parent</name>
    <description>Tomcat Container integrations for the Arquillian Project</description>
 
    <scm>
@@ -28,9 +29,7 @@
    <properties>
 
       <version.arquillian_core>1.1.5.Final</version.arquillian_core>
-
       <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
-
       <version.jboss_spec>1.0.0.Final</version.jboss_spec>
       <version.weld_servlet>1.1.8.Final</version.weld_servlet>
 
@@ -45,6 +44,8 @@
 
    <dependencyManagement>
       <dependencies>
+
+         <!-- Import Scope -->
          <dependency>
             <groupId>org.jboss.arquillian</groupId>
             <artifactId>arquillian-bom</artifactId>
@@ -60,13 +61,14 @@
             <scope>import</scope>
          </dependency>
 
+         <!-- Compile Scope -->
          <dependency>
             <groupId>org.jboss.shrinkwrap.container</groupId>
             <artifactId>shrinkwrap-container-tomcat-60</artifactId>
             <version>${version.shrinkwrap_tomcat}</version>
          </dependency>
 
-         <!-- testing -->
+         <!-- Test Scope -->
          <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
@@ -79,8 +81,20 @@
             <version>${version.jboss_spec}</version>
             <scope>test</scope>
          </dependency>
+
       </dependencies>
    </dependencyManagement>
+
+   <dependencies>
+
+      <!-- Test Scope -->
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
 
    <build>
       <plugins>
@@ -131,7 +145,7 @@
                <artifactId>cargo-maven2-plugin</artifactId>
                <version>1.4.9</version>
             </plugin>
-            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
                build itself. -->
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
@@ -183,7 +197,7 @@
          <id>build-server</id>
          <build>
             <plugins>
-               <!-- surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the 
+               <!-- surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the
                   MavenResolver used in the test cases can read from the same local repo. -->
                <plugin>
                   <artifactId>maven-surefire-plugin</artifactId>
@@ -199,15 +213,19 @@
    </profiles>
    <modules>
       <module>tomcat-common</module>
+      <module>tomcat-container-parent</module>
       <module>tomcat-embedded-common</module>
+      <module>tomcat-embedded-parent</module>
       <module>tomcat-embedded-6</module>
       <module>tomcat-embedded-7</module>
       <module>tomcat-embedded-8</module>
       <module>tomcat-managed-common</module>
+      <module>tomcat-managed-parent</module>
       <module>tomcat-managed-5.5</module>
       <module>tomcat-managed-6</module>
       <module>tomcat-managed-7</module>
       <module>tomcat-remote-common</module>
+      <module>tomcat-remote-parent</module>
       <module>tomcat-remote-6</module>
       <module>tomcat-remote-7</module>
    </modules>
