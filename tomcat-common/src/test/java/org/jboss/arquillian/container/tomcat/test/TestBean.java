@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_8;
+package org.jboss.arquillian.container.tomcat.test;
 
 import javax.annotation.Resource;
 
 /**
  * @author Dan Allen
  */
-public class MyBean
+public class TestBean
 {
-   @Resource(name = "name")
+   @Resource(name = "resourceInjectionTestName")
    private String name;
 
    public String getName()

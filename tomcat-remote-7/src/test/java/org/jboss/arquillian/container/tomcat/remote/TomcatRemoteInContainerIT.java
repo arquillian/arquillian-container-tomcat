@@ -18,12 +18,13 @@ package org.jboss.arquillian.container.tomcat.remote;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.container.tomcat.test.TestBean;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -44,17 +45,15 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteInContainerIT
 {
-   private static final Logger log = Logger.getLogger(TomcatRemoteInContainerIT.class.getName());
+   @Resource(name = "resourceInjectionTestName")
+   private String resourceInjectionTestValue;
 
-   /**
-    * Define the deployment
-    */
    @Deployment
    public static WebArchive createTestArchive()
    {
       final WebArchive war = ShrinkWrap
             .create(WebArchive.class, "test2.war")
-            .addClasses(MyServlet.class, MyBean.class)
+            .addClasses(TestServlet.class, TestBean.class)
             .addAsLibraries(
                   Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                         .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
@@ -63,16 +62,9 @@ public class TomcatRemoteInContainerIT
       return war;
    }
 
-   @Resource(name = "resourceInjectionTestName")
-   private String resourceInjectionTestValue;
-
-   /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
-    */
    @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass(final MyBean testBean)
+   public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
    {
-      log.info("Name: " + this.resourceInjectionTestValue);
       Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
       Assert.assertNotNull(testBean);
       Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
@@ -82,7 +74,6 @@ public class TomcatRemoteInContainerIT
    @RunAsClient
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
       final URL url = new URL(contextRoot, "Test");
@@ -96,8 +87,6 @@ public class TomcatRemoteInContainerIT
          httpResponse += (char) buffer[q];
       }
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

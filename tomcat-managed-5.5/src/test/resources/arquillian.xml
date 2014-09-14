@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jboss.org/schema/arquillian"
-    xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
-    <container qualifier="tomcat" default="true">
-        <configuration>
-            <property name="catalinaHome">${CATALINA_HOME:target/apache-tomcat-5.5.33}</property>
-            <property name="javaVmArguments">-Xmx1024m
+   xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+   <container qualifier="tomcat" default="true">
+      <configuration>
+         <property name="catalinaHome">${CATALINA_HOME:target/apache-tomcat-5.5.33}</property>
+         <property name="javaVmArguments">-Xmx1024m
             -XX:MaxPermSize=512m</property>
-            <property name="jmxPort">8089</property>
-            <property name="bindHttpPort">8080</property>
-            <!-- [ARQ-630]. We'll use credentials with ISO-8859-1 characters for testing. 
+         <property name="jmxPort">8089</property>
+         <property name="bindHttpPort">8080</property>
+            <!-- [ARQ-630]. We'll use credentials with ISO-8859-1 characters for testing.
                 This also tests for US-ASCII support as the G0 subset overlaps with US-ASCII. -->
-            <property name="user">Schröder</property>
-            <property name="pass">Contraseña</property>
-            <property name="serverConfig">server.xml</property>
-        </configuration>
-    </container>
+         <property name="user">Schröder</property>
+         <property name="pass">Contraseña</property>
+         <property name="serverConfig">server.xml</property>
+      </configuration>
+   </container>
 </arquillian>

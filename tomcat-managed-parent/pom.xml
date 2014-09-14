@@ -35,12 +35,6 @@
          <scope>test</scope>
       </dependency>
 
-      <dependency>
-         <groupId>org.jboss.shrinkwrap</groupId>
-         <artifactId>shrinkwrap-impl-base</artifactId>
-         <scope>test</scope>
-      </dependency>
-
    </dependencies>
 
    <build>
@@ -76,6 +70,17 @@
                   <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
                   <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
                </configuration>
+            </plugin>
+            <plugin>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <executions>
+                  <execution>
+                     <goals>
+                        <goal>integration-test</goal>
+                        <goal>verify</goal>
+                     </goals>
+                  </execution>
+               </executions>
             </plugin>
          </plugins>
       </pluginManagement>

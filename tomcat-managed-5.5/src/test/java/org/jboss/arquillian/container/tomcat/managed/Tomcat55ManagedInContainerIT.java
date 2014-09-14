@@ -18,12 +18,12 @@ package org.jboss.arquillian.container.tomcat.managed;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
+
 import javax.annotation.Resource;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.container.tomcat.managed.MyServlet;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -41,55 +41,38 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedInContainerTestCase
+public class Tomcat55ManagedInContainerIT
 {
-   private static final Logger log = Logger.getLogger(Tomcat55ManagedInContainerTestCase.class.getName());
-
-   /**
-    * Define the deployment
-    */
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(MyServlet.class)
-            .setWebXML("in-container-web.xml");
-      // / DEBUG - see what's
-      // war.as(ZipExporter.class).exportTo( new File("/tmp/arq.zip"), true );
-      return war;
-   }
-
-   // -------------------------------------------------------------------------------------||
-   // Tests -------------------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
    @Resource(name = "resourceInjectionTestName")
    private String resourceInjectionTestValue;
 
-   /**
-    * Ensures the resource injection returns the expected response
-    */
+   @Deployment
+   public static WebArchive createTestArchive()
+   {
+      final WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(TestServlet.class)
+            .setWebXML("in-container-web.xml");
+
+      return war;
+   }
+
    @Test
    public void shouldBeAbleToInjectMembersIntoTestClass()
    {
-      log.info("Name: " + this.resourceInjectionTestValue);
       Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
    }
 
    @Test
    @RunAsClient
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextRoot) throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
-      URL url = new URL(contextRoot, "Test");
-      InputStream in = url.openConnection().getInputStream();
+      final URL url = new URL(contextRoot, "Test");
+      final InputStream in = url.openConnection().getInputStream();
 
-      byte[] buffer = IOUtilDelegator.asByteArray(in);
-      String httpResponse = new String(buffer);
+      final byte[] buffer = IOUtilDelegator.asByteArray(in);
+      final String httpResponse = new String(buffer);
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

@@ -18,9 +18,9 @@ package org.jboss.arquillian.container.tomcat.embedded_6;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -45,58 +45,33 @@ public class TomcatEmbeddedClientTestCase
 {
    private static final String TEST_SERVLET = "Test";
 
-   // -------------------------------------------------------------------------------------||
-   // Class Members -----------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
-   /**
-    * Logger
-    */
-   private static final Logger log = Logger.getLogger(TomcatEmbeddedClientTestCase.class.getName());
-
-   // -------------------------------------------------------------------------------------||
-   // Instance Members --------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
-   /**
-    * Define the deployment
-    */
    @Deployment(testable = false)
    public static WebArchive createDeployment()
    {
       return ShrinkWrap
             .create(WebArchive.class, "test.war")
-            .addClass(MyServlet.class)
+            .addClass(TestServlet.class)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
-                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
-                        .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
+                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                        .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
+                        .exportAsString()));
    }
 
-   // -------------------------------------------------------------------------------------||
-   // Tests -------------------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
-   /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
-    */
    @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
-      URL servletUrl = new URL(contextURL, TEST_SERVLET);
-      InputStream in = servletUrl.openConnection().getInputStream();
+      final URL servletUrl = new URL(contextURL, TEST_SERVLET);
+      final InputStream in = servletUrl.openConnection().getInputStream();
 
-      byte[] buffer = new byte[10000];
-      int len = in.read(buffer);
+      final byte[] buffer = new byte[10000];
+      final int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
          httpResponse += (char) buffer[q];
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

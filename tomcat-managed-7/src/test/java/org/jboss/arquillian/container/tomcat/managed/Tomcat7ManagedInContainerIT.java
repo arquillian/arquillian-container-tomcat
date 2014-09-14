@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -16,31 +16,28 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
-import java.io.IOException;
+import static org.jboss.arquillian.container.tomcat.managed.TestDeploymentFactory.*;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.runner.RunWith;
 
 /**
- * TestServlet
+ * Tests that Tomcat deployments into the Tomcat server work through the
+ * Arquillian lifecycle
  *
- * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
+ * @author Dan Allen
  * @version $Revision: $
  */
-public class MyServlet extends HttpServlet
+@RunWith(Arquillian.class)
+public class Tomcat7ManagedInContainerIT extends TomcatManagedInContainerITBase
 {
-   private static final long serialVersionUID = 1L;
-
-   public static final String URL_PATTERN = "/Test";
-
-   public static final String MESSAGE = "hello";
-
-   @Override
-   protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-         IOException
+   @Deployment
+   public static WebArchive createTestArchive()
    {
-      response.getWriter().append(MESSAGE);
+      final WebArchive war = TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_3_0);
+
+      return war;
    }
 }

@@ -14,7 +14,7 @@
 
    <servlet>
       <servlet-name>TestServlet</servlet-name>
-      <servlet-class>org.jboss.arquillian.container.tomcat.remote.MyServlet</servlet-class>
+      <servlet-class>org.jboss.arquillian.container.tomcat.test.TestServlet</servlet-class>
    </servlet>
 
    <servlet-mapping>

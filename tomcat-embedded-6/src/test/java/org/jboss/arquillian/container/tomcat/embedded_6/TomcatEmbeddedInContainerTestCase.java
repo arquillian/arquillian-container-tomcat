@@ -18,12 +18,13 @@ package org.jboss.arquillian.container.tomcat.embedded_6;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.tomcat.test.TestBean;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -45,52 +46,28 @@ public class TomcatEmbeddedInContainerTestCase
 {
    private static final String HELLO_WORLD_URL = "http://localhost:8888/test2/Test";
 
-   // -------------------------------------------------------------------------------------||
-   // Class Members -----------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
+   @Resource(name = "resourceInjectionTestName")
+   private String resourceInjectionTestValue;
 
-   /**
-    * Logger
-    */
-   private static final Logger log = Logger.getLogger(TomcatEmbeddedInContainerTestCase.class.getName());
+   @Inject
+   TestBean testBean;
 
-   // -------------------------------------------------------------------------------------||
-   // Instance Members --------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
-   /**
-    * Define the deployment
-    */
    @Deployment
    public static WebArchive createTestArchive()
    {
       return ShrinkWrap
             .create(WebArchive.class, "test2.war")
-            .addClasses(MyServlet.class, MyBean.class)
+            .addClasses(TestServlet.class, TestBean.class)
             .addAsLibraries(
                   Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                         .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
    }
 
-   // -------------------------------------------------------------------------------------||
-   // Tests -------------------------------------------------------------------------------||
-   // -------------------------------------------------------------------------------------||
-
-   @Resource(name = "name")
-   String name;
-
-   @Inject
-   MyBean testBean;
-
-   /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
-    */
    @Test
    public void shouldBeAbleToInjectMembersIntoTestClass()
    {
-      log.info("Name: " + name);
-      Assert.assertEquals("Tomcat", name);
+      Assert.assertEquals("Tomcat", resourceInjectionTestValue);
       Assert.assertNotNull(testBean);
       Assert.assertEquals("Tomcat", testBean.getName());
    }
@@ -98,22 +75,19 @@ public class TomcatEmbeddedInContainerTestCase
    @Test
    public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
-      URL url = new URL(HELLO_WORLD_URL);
-      InputStream in = url.openConnection().getInputStream();
+      final URL url = new URL(HELLO_WORLD_URL);
+      final InputStream in = url.openConnection().getInputStream();
 
-      byte[] buffer = new byte[10000];
-      int len = in.read(buffer);
+      final byte[] buffer = new byte[10000];
+      final int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
       {
          httpResponse += (char) buffer[q];
       }
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

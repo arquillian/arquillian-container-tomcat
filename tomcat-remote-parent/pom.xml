@@ -38,6 +38,14 @@
       <!-- Test Scope -->
 
       <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-remote-common</artifactId>
+         <version>${project.version}</version>
+         <type>test-jar</type>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
          <groupId>org.jboss.weld.servlet</groupId>
          <artifactId>weld-servlet</artifactId>
          <scope>test</scope>
@@ -85,8 +93,6 @@
                      <goals>
                         <goal>start</goal>
                      </goals>
-                     <configuration>
-                     </configuration>
                   </execution>
                </executions>
                <configuration>

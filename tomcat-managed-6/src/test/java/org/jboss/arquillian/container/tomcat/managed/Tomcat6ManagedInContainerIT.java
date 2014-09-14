@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -16,18 +16,28 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
-import javax.annotation.Resource;
+import static org.jboss.arquillian.container.tomcat.managed.TestDeploymentFactory.*;
+
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.runner.RunWith;
 
 /**
+ * Tests that Tomcat deployments into the Tomcat server work through the
+ * Arquillian lifecycle
+ *
  * @author Dan Allen
+ * @version $Revision: $
  */
-public class MyBean
+@RunWith(Arquillian.class)
+public class Tomcat6ManagedInContainerIT extends TomcatManagedInContainerITBase
 {
-   @Resource(name = "resourceInjectionTestName")
-   private String name;
-
-   public String getName()
+   @Deployment
+   public static WebArchive createTestArchive()
    {
-      return name;
+      final WebArchive war = TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_3_0);
+
+      return war;
    }
 }

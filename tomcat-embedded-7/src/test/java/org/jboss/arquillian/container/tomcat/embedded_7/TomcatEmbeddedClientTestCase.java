@@ -22,6 +22,7 @@ import java.net.URL;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -53,18 +54,12 @@ public class TomcatEmbeddedClientTestCase
 
    private static final String TEST_WELCOME_FILE = "index.jsp";
 
-   /**
-    * Define the root context deployment
-    */
    @Deployment(name = ROOT_CONTEXT, testable = false)
    public static WebArchive createRootDeployment()
    {
       return createDeployment(getWarName(ROOT_CONTEXT));
    }
 
-   /**
-    * Define the test context deployment
-    */
    @Deployment(name = TEST_CONTEXT, testable = false)
    public static WebArchive createTestDeployment()
    {
@@ -80,49 +75,44 @@ public class TomcatEmbeddedClientTestCase
    {
       return ShrinkWrap
             .create(WebArchive.class, archiveName)
-            .addClass(MyServlet.class)
+            .addClass(TestServlet.class)
             .addAsWebResource(TEST_WELCOME_FILE)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").createServlet()
-                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
-                        .servletName("MyServlet").urlPattern("/" + TEST_SERVLET).up().exportAsString()));
+                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                        .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
+                        .exportAsString()));
    }
 
-   /**
-    * Ensures the Test Servlet returns the expected response.
-    */
    @Test
    @OperateOnDeployment(TEST_CONTEXT)
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
    {
       final String expected = "hello";
 
-      URL servletUrl = new URL(contextURL, TEST_SERVLET);
-      String httpResponse = getHttpResponse(servletUrl);
+      final URL servletUrl = new URL(contextURL, TEST_SERVLET);
+      final String httpResponse = getHttpResponse(servletUrl);
 
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
    }
 
-   /**
-    * Ensures the JSP welcome file returns the expected response.
-    */
    @Test
    @OperateOnDeployment(ROOT_CONTEXT)
-   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource URL contextURL) throws Exception
+   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
    {
       final String expected = "welcome";
 
-      String httpResponse = getHttpResponse(contextURL);
+      final String httpResponse = getHttpResponse(contextURL);
 
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
    }
 
-   private String getHttpResponse(URL servletUrl) throws IOException
+   private String getHttpResponse(final URL servletUrl) throws IOException
    {
-      InputStream in = servletUrl.openConnection().getInputStream();
+      final InputStream in = servletUrl.openConnection().getInputStream();
 
-      byte[] buffer = new byte[10000];
-      int len = in.read(buffer);
+      final byte[] buffer = new byte[10000];
+      final int len = in.read(buffer);
       String httpResponse = "";
       for (int q = 0; q < len; q++)
          httpResponse += (char) buffer[q];

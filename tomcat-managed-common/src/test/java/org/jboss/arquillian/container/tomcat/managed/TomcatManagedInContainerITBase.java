@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2014, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -14,53 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.remote;
+package org.jboss.arquillian.container.tomcat.managed;
 
 import java.io.InputStream;
 import java.net.URL;
 
 import javax.annotation.Resource;
 
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.container.tomcat.test.TestBean;
-import org.jboss.arquillian.container.tomcat.test.TestServlet;
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.api.asset.IOUtilDelegator;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-/**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
- *
- * @author Dan Allen
- * @version $Revision: $
- */
-@RunWith(Arquillian.class)
-public class TomcatRemoteInContainerIT
+public class TomcatManagedInContainerITBase
 {
+   protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
+
    @Resource(name = "resourceInjectionTestName")
-   private String resourceInjectionTestValue;
-
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      final WebArchive war = ShrinkWrap
-            .create(WebArchive.class, "test2.war")
-            .addClasses(TestServlet.class, TestBean.class)
-            .addAsLibraries(
-                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
-                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
-
-      return war;
-   }
+   protected String resourceInjectionTestValue;
 
    @Test
    public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
@@ -79,14 +52,10 @@ public class TomcatRemoteInContainerIT
       final URL url = new URL(contextRoot, "Test");
       final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-      {
-         httpResponse += (char) buffer[q];
-      }
+      final byte[] buffer = IOUtilDelegator.asByteArray(in);
+      final String httpResponse = new String(buffer);
 
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
    }
+
 }

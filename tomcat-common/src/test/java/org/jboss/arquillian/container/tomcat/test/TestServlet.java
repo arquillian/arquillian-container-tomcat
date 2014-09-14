@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded_7;
+package org.jboss.arquillian.container.tomcat.test;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public class MyServlet extends HttpServlet
+public class TestServlet extends HttpServlet
 {
    private static final long serialVersionUID = 1L;
 

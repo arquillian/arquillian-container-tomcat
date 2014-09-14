@@ -18,9 +18,9 @@ package org.jboss.arquillian.container.tomcat.remote;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Logger;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.tomcat.test.TestServlet;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -44,30 +44,21 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteClientIT
 {
-   private static final Logger log = Logger.getLogger(TomcatRemoteClientIT.class.getName());
-
-   /**
-    * Define the deployment
-    */
    @Deployment(testable = false)
    public static WebArchive createDeployment()
    {
       return ShrinkWrap
             .create(WebArchive.class, "test.war")
-            .addClass(MyServlet.class)
+            .addClass(TestServlet.class)
             .setWebXML(
                   new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
-                        .servletClass(MyServlet.class.getName()).servletName("MyServlet").up().createServletMapping()
-                        .servletName("MyServlet").urlPattern("/Test").up().exportAsString()));
+                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                        .createServletMapping().servletName("TestServlet").urlPattern("/Test").up().exportAsString()));
    }
 
-   /**
-    * Ensures the {@link HelloWorldServlet} returns the expected response
-    */
    @Test
    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
    {
-      // Define the input and expected outcome
       final String expected = "hello";
 
       final URL url = new URL(contextRoot, "Test");
@@ -79,8 +70,6 @@ public class TomcatRemoteClientIT
       for (int q = 0; q < len; q++)
          httpResponse += (char) buffer[q];
 
-      // Test
       Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-      log.info("Got expected result from Http Servlet: " + httpResponse);
    }
 }

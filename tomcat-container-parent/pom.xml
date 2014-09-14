@@ -72,6 +72,14 @@
       <!-- Test Scope -->
 
       <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-common</artifactId>
+         <version>${project.version}</version>
+         <type>test-jar</type>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
          <groupId>org.jboss.arquillian.junit</groupId>
          <artifactId>arquillian-junit-core</artifactId>
          <scope>test</scope>
