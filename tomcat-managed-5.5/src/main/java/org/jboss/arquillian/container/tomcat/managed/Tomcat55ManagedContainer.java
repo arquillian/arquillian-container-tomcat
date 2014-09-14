@@ -20,7 +20,6 @@ package org.jboss.arquillian.container.tomcat.managed;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
-import org.jboss.arquillian.container.tomcat.managed.TomcatManagedContainer;
 
 /**
  * <p>

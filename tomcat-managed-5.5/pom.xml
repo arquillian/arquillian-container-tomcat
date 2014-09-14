@@ -22,14 +22,6 @@
 
    <dependencies>
 
-      <!-- Tomcat 5.5 specific tests, Weld is not compatible, testing @Resource injection -->
-      <dependency>
-         <groupId>javax.annotation</groupId>
-         <artifactId>jsr250-api</artifactId>
-         <version>1.0</version>
-         <scope>test</scope>
-      </dependency>
-
       <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>servlet-api</artifactId>
@@ -37,6 +29,13 @@
          <scope>test</scope>
       </dependency>
 
+      <!-- Tomcat 5.5 specific tests, Weld is not compatible, testing @Resource injection -->
+      <dependency>
+         <groupId>javax.annotation</groupId>
+         <artifactId>jsr250-api</artifactId>
+         <version>1.0</version>
+         <scope>test</scope>
+      </dependency>
    </dependencies>
 
    <build>

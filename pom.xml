@@ -29,8 +29,6 @@
    <properties>
 
       <version.arquillian_core>1.1.5.Final</version.arquillian_core>
-      <version.shrinkwrap_tomcat>1.0.0-beta-1</version.shrinkwrap_tomcat>
-      <version.jboss_spec>1.0.0.Final</version.jboss_spec>
       <version.weld_servlet>1.1.8.Final</version.weld_servlet>
 
       <!-- override from parent -->
@@ -61,24 +59,11 @@
             <scope>import</scope>
          </dependency>
 
-         <!-- Compile Scope -->
-         <dependency>
-            <groupId>org.jboss.shrinkwrap.container</groupId>
-            <artifactId>shrinkwrap-container-tomcat-60</artifactId>
-            <version>${version.shrinkwrap_tomcat}</version>
-         </dependency>
-
          <!-- Test Scope -->
          <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
             <version>${version.weld_servlet}</version>
-            <scope>test</scope>
-         </dependency>
-         <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-            <version>${version.jboss_spec}</version>
             <scope>test</scope>
          </dependency>
 

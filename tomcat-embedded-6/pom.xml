@@ -23,6 +23,7 @@
       <dependency>
          <groupId>org.jboss.shrinkwrap.container</groupId>
          <artifactId>shrinkwrap-container-tomcat-60</artifactId>
+         <version>1.0.0-beta-1</version>
       </dependency>
 
       <dependency>

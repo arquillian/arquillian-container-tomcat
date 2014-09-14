@@ -19,6 +19,17 @@
       <tomcat.version>${tomcat.major.version}.0.20</tomcat.version>
    </properties>
 
+   <dependencies>
+
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>javax.servlet-api</artifactId>
+         <version>3.0.1</version>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
    <build>
       <plugins>
          <plugin>
