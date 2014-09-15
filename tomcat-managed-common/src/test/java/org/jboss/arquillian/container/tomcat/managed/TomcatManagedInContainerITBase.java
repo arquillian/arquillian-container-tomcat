@@ -30,32 +30,32 @@ import org.junit.Test;
 
 public class TomcatManagedInContainerITBase
 {
-   protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
+    protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
 
-   @Resource(name = "resourceInjectionTestName")
-   protected String resourceInjectionTestValue;
+    @Resource(name = "resourceInjectionTestName")
+    protected String resourceInjectionTestValue;
 
-   @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
-   {
-      Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
-      Assert.assertNotNull(testBean);
-      Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
-   }
+    @Test
+    public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
+    {
+        Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
+        Assert.assertNotNull(testBean);
+        Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
+    }
 
-   @Test
-   @RunAsClient
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    @RunAsClient
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(contextRoot, "Test");
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(contextRoot, "Test");
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = IOUtilDelegator.asByteArray(in);
-      final String httpResponse = new String(buffer);
+        final byte[] buffer = IOUtilDelegator.asByteArray(in);
+        final String httpResponse = new String(buffer);
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 
 }

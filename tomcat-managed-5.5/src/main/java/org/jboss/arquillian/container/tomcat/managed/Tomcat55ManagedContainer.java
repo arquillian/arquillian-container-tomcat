@@ -23,7 +23,8 @@ import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
 
 /**
  * <p>
- * Arquillian {@link DeployableContainer} implementation for an Managed Tomcat server; responsible for both lifecycle and deployment operations.
+ * Arquillian {@link DeployableContainer} implementation for an Managed Tomcat server; responsible for both lifecycle and
+ * deployment operations.
  * </p>
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
@@ -34,8 +35,8 @@ import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
 public class Tomcat55ManagedContainer extends TomcatManagedContainer
 {
 
-   public Tomcat55ManagedContainer()
-   {
-      super(new ProtocolDescription("Servlet 2.5"), new Tomcat55ManagerCommandSpec());
-   }
+    public Tomcat55ManagedContainer()
+    {
+        super(new ProtocolDescription("Servlet 2.5"), new Tomcat55ManagerCommandSpec());
+    }
 }

@@ -1,89 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-   <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-container-parent</artifactId>
-      <version>1.0.0.Final-SNAPSHOT</version>
-      <relativePath>../tomcat-container-parent/pom.xml</relativePath>
-   </parent>
+    <parent>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-tomcat-container-parent</artifactId>
+        <version>1.0.0.Final-SNAPSHOT</version>
+        <relativePath>../tomcat-container-parent/pom.xml</relativePath>
+    </parent>
 
-   <artifactId>arquillian-tomcat-managed-parent</artifactId>
-   <packaging>pom</packaging>
-   <name>Arquillian Tomcat Managed Container Parent</name>
+    <artifactId>arquillian-tomcat-managed-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Arquillian Tomcat Managed Container Parent</name>
 
-   <dependencies>
+    <dependencies>
 
       <!-- Compile Scope -->
 
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-managed-common</artifactId>
-         <version>${project.version}</version>
-      </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-managed-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
       <!-- Test Scope -->
 
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-managed-common</artifactId>
-         <version>${project.version}</version>
-         <type>test-jar</type>
-         <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-managed-common</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
-   </dependencies>
+    </dependencies>
 
-   <build>
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <artifactId>maven-resources-plugin</artifactId>
-               <executions>
-                  <execution>
-                     <id>copy-resources</id>
-                     <phase>process-test-resources</phase>
-                     <goals>
-                        <goal>copy-resources</goal>
-                     </goals>
-                     <configuration>
-                        <outputDirectory>${tomcat.home}/conf</outputDirectory>
-                        <overwrite>true</overwrite>
-                        <resources>
-                           <resource>
-                              <directory>${basedir}/src/test/resources/container</directory>
-                           </resource>
-                        </resources>
-                     </configuration>
-                  </execution>
-               </executions>
-            </plugin>
-            <plugin>
-               <artifactId>maven-surefire-plugin</artifactId>
-               <configuration>
-                  <environmentVariables>
-                     <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
-                  </environmentVariables>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-resources</id>
+                            <phase>process-test-resources</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${tomcat.home}/conf</outputDirectory>
+                                <overwrite>true</overwrite>
+                                <resources>
+                                    <resource>
+                                        <directory>${basedir}/src/test/resources/container</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <environmentVariables>
+                            <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
+                        </environmentVariables>
                   <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
-                  <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
-               </configuration>
-            </plugin>
-            <plugin>
-               <artifactId>maven-failsafe-plugin</artifactId>
-               <executions>
-                  <execution>
-                     <goals>
-                        <goal>integration-test</goal>
-                        <goal>verify</goal>
-                     </goals>
-                  </execution>
-               </executions>
-            </plugin>
-         </plugins>
-      </pluginManagement>
-   </build>
+                        <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

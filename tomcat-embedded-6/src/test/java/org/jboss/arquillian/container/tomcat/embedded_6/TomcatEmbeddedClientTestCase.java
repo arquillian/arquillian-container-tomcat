@@ -33,8 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
@@ -43,35 +42,35 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   private static final String TEST_SERVLET = "Test";
+    private static final String TEST_SERVLET = "Test";
 
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
-   {
-      return ShrinkWrap
+    @Deployment(testable = false)
+    public static WebArchive createDeployment()
+    {
+        return ShrinkWrap
             .create(WebArchive.class, "test.war")
             .addClass(TestServlet.class)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
-                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
-                        .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
-                        .exportAsString()));
-   }
+                new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
+                    .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                    .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
+                    .exportAsString()));
+    }
 
-   @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL servletUrl = new URL(contextURL, TEST_SERVLET);
-      final InputStream in = servletUrl.openConnection().getInputStream();
+        final URL servletUrl = new URL(contextURL, TEST_SERVLET);
+        final InputStream in = servletUrl.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-         httpResponse += (char) buffer[q];
+        final byte[] buffer = new byte[10000];
+        final int len = in.read(buffer);
+        String httpResponse = "";
+        for (int q = 0; q < len; q++)
+            httpResponse += (char) buffer[q];
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse.replaceAll("\\s+", ""));
+    }
 }

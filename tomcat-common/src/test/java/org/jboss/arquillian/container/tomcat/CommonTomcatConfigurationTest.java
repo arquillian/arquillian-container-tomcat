@@ -28,89 +28,89 @@ import org.junit.Test;
 
 public class CommonTomcatConfigurationTest
 {
-   private TomcatConfiguration commonTomcatConfiguration;
+    private TomcatConfiguration commonTomcatConfiguration;
 
-   @Before
-   public void setUp()
-   {
-      commonTomcatConfiguration = new TomcatConfiguration();
-   }
+    @Before
+    public void setUp()
+    {
+        commonTomcatConfiguration = new TomcatConfiguration();
+    }
 
-   @Test
-   public void testCreateJmxUriForDefaultBindAddressAndJmxServerPort()
-   {
-      final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
+    @Test
+    public void testCreateJmxUriForDefaultBindAddressAndJmxServerPort()
+    {
+        final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
 
-      final String actualJmxUriString = actualJmxUri.toString();
+        final String actualJmxUriString = actualJmxUri.toString();
 
-      final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://localhost:8089/jmxrmi";
+        final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://localhost:8089/jmxrmi";
 
-      assertEquals(expectedJmxUriString, actualJmxUriString);
-   }
+        assertEquals(expectedJmxUriString, actualJmxUriString);
+    }
 
-   @Test
-   public void testCreateJmxUriForSetBindAddressAndJmxServerPort()
-   {
-      final int testJmxServerPort = 5;
-      final String testBindAddress = "somewhere";
+    @Test
+    public void testCreateJmxUriForSetBindAddressAndJmxServerPort()
+    {
+        final int testJmxServerPort = 5;
+        final String testBindAddress = "somewhere";
 
-      commonTomcatConfiguration.setBindAddress(testBindAddress);
-      commonTomcatConfiguration.setJmxPort(testJmxServerPort);
+        commonTomcatConfiguration.setBindAddress(testBindAddress);
+        commonTomcatConfiguration.setJmxPort(testJmxServerPort);
 
-      final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
+        final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
 
-      final String actualJmxUriString = actualJmxUri.toString();
+        final String actualJmxUriString = actualJmxUri.toString();
 
-      final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort
+        final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort
             + "/jmxrmi";
 
-      assertEquals(expectedJmxUriString, actualJmxUriString);
-   }
+        assertEquals(expectedJmxUriString, actualJmxUriString);
+    }
 
-   @Test(expected = ConfigurationException.class)
-   public void testCreateJmxUriForInvalidUri()
-   {
-      commonTomcatConfiguration.setBindAddress("^");
+    @Test(expected = ConfigurationException.class)
+    public void testCreateJmxUriForInvalidUri()
+    {
+        commonTomcatConfiguration.setBindAddress("^");
 
-      commonTomcatConfiguration.createJmxUri();
-   }
+        commonTomcatConfiguration.createJmxUri();
+    }
 
-   @Test
-   public void testCreateManagerUrlForDefaultHostAndPort()
-   {
-      final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
+    @Test
+    public void testCreateManagerUrlForDefaultHostAndPort()
+    {
+        final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
 
-      final String actualManagerUrlString = actualManagerUrl.toString();
+        final String actualManagerUrlString = actualManagerUrl.toString();
 
-      final String expectedManagerUrlString = "http://localhost:8080/manager";
+        final String expectedManagerUrlString = "http://localhost:8080/manager";
 
-      assertEquals(expectedManagerUrlString, actualManagerUrlString);
-   }
+        assertEquals(expectedManagerUrlString, actualManagerUrlString);
+    }
 
-   @Test
-   public void testCreateManagerUrlForSetHostAndPort()
-   {
-      final String testBindAddress = "somewhere";
-      final int testBindHttpPort = 5;
+    @Test
+    public void testCreateManagerUrlForSetHostAndPort()
+    {
+        final String testBindAddress = "somewhere";
+        final int testBindHttpPort = 5;
 
-      commonTomcatConfiguration.setBindAddress(testBindAddress);
-      commonTomcatConfiguration.setBindHttpPort(testBindHttpPort);
+        commonTomcatConfiguration.setBindAddress(testBindAddress);
+        commonTomcatConfiguration.setBindHttpPort(testBindHttpPort);
 
-      final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
+        final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
 
-      final String actualManagerUrlString = actualManagerUrl.toString();
+        final String actualManagerUrlString = actualManagerUrl.toString();
 
-      final String expectedManagerUrlString = "http://" + testBindAddress + ":" + testBindHttpPort + "/manager";
+        final String expectedManagerUrlString = "http://" + testBindAddress + ":" + testBindHttpPort + "/manager";
 
-      assertEquals(expectedManagerUrlString, actualManagerUrlString);
-   }
+        assertEquals(expectedManagerUrlString, actualManagerUrlString);
+    }
 
-   @Test(expected = ConfigurationException.class)
-   public void testCreateManagerUrlForInvalidUrl()
-   {
-      commonTomcatConfiguration.setBindAddress(":");
+    @Test(expected = ConfigurationException.class)
+    public void testCreateManagerUrlForInvalidUrl()
+    {
+        commonTomcatConfiguration.setBindAddress(":");
 
-      commonTomcatConfiguration.createManagerUrl();
-   }
+        commonTomcatConfiguration.createManagerUrl();
+    }
 
 }

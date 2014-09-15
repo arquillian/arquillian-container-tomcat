@@ -24,8 +24,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author Dan Allen
  * @version $Revision: $
@@ -33,11 +32,11 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class Tomcat6ManagedInContainerIT extends TomcatManagedInContainerITBase
 {
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      final WebArchive war = TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_3_0);
+    @Deployment
+    public static WebArchive createTestArchive()
+    {
+        final WebArchive war = TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_3_0);
 
-      return war;
-   }
+        return war;
+    }
 }

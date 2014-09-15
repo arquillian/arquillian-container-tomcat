@@ -36,8 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author Dan Allen
  * @version $Revision: $
@@ -45,48 +44,48 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteInContainerIT
 {
-   @Resource(name = "resourceInjectionTestName")
-   private String resourceInjectionTestValue;
+    @Resource(name = "resourceInjectionTestName")
+    private String resourceInjectionTestValue;
 
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      final WebArchive war = ShrinkWrap
+    @Deployment
+    public static WebArchive createTestArchive()
+    {
+        final WebArchive war = ShrinkWrap
             .create(WebArchive.class, "test2.war")
             .addClasses(TestServlet.class, TestBean.class)
             .addAsLibraries(
-                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
-                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
+                Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
+                    .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
 
-      return war;
-   }
+        return war;
+    }
 
-   @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
-   {
-      Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
-      Assert.assertNotNull(testBean);
-      Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
-   }
+    @Test
+    public void shouldBeAbleToInjectMembersIntoTestClass(final TestBean testBean)
+    {
+        Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
+        Assert.assertNotNull(testBean);
+        Assert.assertEquals("Hello World from an evn-entry", testBean.getName());
+    }
 
-   @Test
-   @RunAsClient
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    @RunAsClient
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(contextRoot, "Test");
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(contextRoot, "Test");
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-      {
-         httpResponse += (char) buffer[q];
-      }
+        final byte[] buffer = new byte[10000];
+        final int len = in.read(buffer);
+        String httpResponse = "";
+        for (int q = 0; q < len; q++)
+        {
+            httpResponse += (char) buffer[q];
+        }
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 }

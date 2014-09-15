@@ -25,16 +25,17 @@ import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
 
 /**
- * A custom {@link ContextConfig} for use in the Embedded Tomcat
- * container integration for Arquillian.
+ * A custom {@link ContextConfig} for use in the Embedded Tomcat container integration for Arquillian.
  *
- * <p>This configuration disables processing of a default web.xml
- * (typically "$CATALINA_BASE/conf/web.xml"), as we don't have one.  Instead
- * we leverage {@link Tomcat#initWebappDefaults(org.apache.catalina.Context)}
- * to apply the equivalent configuration prior to context start.</p>
+ * <p>
+ * This configuration disables processing of a default web.xml (typically "$CATALINA_BASE/conf/web.xml"), as we don't have one.
+ * Instead we leverage {@link Tomcat#initWebappDefaults(org.apache.catalina.Context)} to apply the equivalent configuration
+ * prior to context start.
+ * </p>
  *
- * <p>This implementation also marks an unpacked WAR for deletion when
- * the context is stopped.</p>
+ * <p>
+ * This implementation also marks an unpacked WAR for deletion when the context is stopped.
+ * </p>
  *
  * @author Dan Allen
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
@@ -42,43 +43,40 @@ import org.apache.catalina.startup.Tomcat;
 public class EmbeddedContextConfig extends ContextConfig
 {
 
-   /**
-    * Initialize the context config so to disable processing of the default
-    * global web.xml.  As an embedded container we lack the stock config file
-    * compliment.
-    */
-   public EmbeddedContextConfig()
-   {
-      super();
+    /**
+     * Initialize the context config so to disable processing of the default global web.xml. As an embedded container we lack
+     * the stock config file compliment.
+     */
+    public EmbeddedContextConfig()
+    {
+        super();
 
-      setDefaultWebXml(Constants.NoDefaultWebXml);
-   }
+        setDefaultWebXml(Constants.NoDefaultWebXml);
+    }
 
-   /**
-    * Override to apply the equivalent of the stock
-    * "$CATALINA_BASE/conf/web.xml" to contexts programmatically.
-    */
-   @Override
-   protected synchronized void beforeStart()
-   {
-      super.beforeStart();
+    /**
+     * Override to apply the equivalent of the stock "$CATALINA_BASE/conf/web.xml" to contexts programmatically.
+     */
+    @Override
+    protected synchronized void beforeStart()
+    {
+        super.beforeStart();
 
-      ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
-      Tomcat.initWebappDefaults(context);
-   };
+        ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
+        Tomcat.initWebappDefaults(context);
+    };
 
-   /**
-    * Override to assign an internal field that will trigger the removal
-    * of the unpacked WAR when the context is closed.
-    */
-   @Override
-   protected void fixDocBase() throws IOException
-   {
-      super.fixDocBase();
-      // If this field is not null, the unpacked WAR is removed when
-      // the context is closed. This is normally used by the antiLocking
-      // feature, though it should have been the normal behavior, at
-      // least for an embedded container.
-      originalDocBase = context.getDocBase();
-   }
+    /**
+     * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.
+     */
+    @Override
+    protected void fixDocBase() throws IOException
+    {
+        super.fixDocBase();
+        // If this field is not null, the unpacked WAR is removed when
+        // the context is closed. This is normally used by the antiLocking
+        // feature, though it should have been the normal behavior, at
+        // least for an embedded container.
+        originalDocBase = context.getDocBase();
+    }
 }

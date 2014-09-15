@@ -35,8 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author Dan Allen
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
@@ -45,50 +44,50 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedInContainerTestCase
 {
-   private static final String HELLO_WORLD_URL = "http://localhost:8888/Test";
+    private static final String HELLO_WORLD_URL = "http://localhost:8888/Test";
 
-   @Resource(name = "resourceInjectionTestName")
-   private String resourceInjectionTestValue;
+    @Resource(name = "resourceInjectionTestName")
+    private String resourceInjectionTestValue;
 
-   @Inject
-   TestBean testBean;
+    @Inject
+    TestBean testBean;
 
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      return ShrinkWrap
+    @Deployment
+    public static WebArchive createTestArchive()
+    {
+        return ShrinkWrap
             .create(WebArchive.class, "ROOT.war")
             .addClasses(TestServlet.class, TestBean.class)
             .addAsLibraries(
-                  Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
-                        .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
+                Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
+                    .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web.xml");
-   }
+    }
 
-   @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass()
-   {
-      Assert.assertEquals("Tomcat", resourceInjectionTestValue);
-      Assert.assertNotNull(testBean);
-      Assert.assertEquals("Tomcat", testBean.getName());
-   }
+    @Test
+    public void shouldBeAbleToInjectMembersIntoTestClass()
+    {
+        Assert.assertEquals("Tomcat", resourceInjectionTestValue);
+        Assert.assertNotNull(testBean);
+        Assert.assertEquals("Tomcat", testBean.getName());
+    }
 
-   @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    public void shouldBeAbleToInvokeServletInDeployedWebApp() throws Exception
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(HELLO_WORLD_URL);
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(HELLO_WORLD_URL);
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-      {
-         httpResponse += (char) buffer[q];
-      }
+        final byte[] buffer = new byte[10000];
+        final int len = in.read(buffer);
+        String httpResponse = "";
+        for (int q = 0; q < len; q++)
+        {
+            httpResponse += (char) buffer[q];
+        }
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 }

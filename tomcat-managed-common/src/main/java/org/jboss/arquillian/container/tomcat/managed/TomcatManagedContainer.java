@@ -43,8 +43,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
- * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an
- * Managed Tomcat server; responsible for both lifecycle and deployment operations.
+ * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an Managed
+ * Tomcat server; responsible for both lifecycle and deployment operations.
  * </p>
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
@@ -55,302 +55,296 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  */
 abstract class TomcatManagedContainer implements DeployableContainer<TomcatManagedConfiguration>
 {
-   private static final Logger log = Logger.getLogger(TomcatManagedContainer.class.getName());
+    private static final Logger log = Logger.getLogger(TomcatManagedContainer.class.getName());
 
-   private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
+    private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
 
-   private final ProtocolDescription protocolDescription;
+    private final ProtocolDescription protocolDescription;
 
-   /**
-    * Tomcat container configuration
-    */
-   private TomcatManagedConfiguration configuration;
+    /**
+     * Tomcat container configuration
+     */
+    private TomcatManagedConfiguration configuration;
 
-   private TomcatManager<? extends TomcatManagedConfiguration> manager;
+    private TomcatManager<? extends TomcatManagedConfiguration> manager;
 
-   private Thread shutdownThread;
+    private Thread shutdownThread;
 
-   private Process startupProcess;
+    private Process startupProcess;
 
-   TomcatManagedContainer(final ProtocolDescription protocolDescription,
-         final TomcatManagerCommandSpec tomcatManagerCommandSpec)
-   {
-      this.protocolDescription = protocolDescription;
-      this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
-   }
+    TomcatManagedContainer(final ProtocolDescription protocolDescription,
+        final TomcatManagerCommandSpec tomcatManagerCommandSpec)
+    {
+        this.protocolDescription = protocolDescription;
+        this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
+    }
 
-   @Override
-   public Class<TomcatManagedConfiguration> getConfigurationClass()
-   {
-      return TomcatManagedConfiguration.class;
-   }
+    @Override
+    public Class<TomcatManagedConfiguration> getConfigurationClass()
+    {
+        return TomcatManagedConfiguration.class;
+    }
 
-   @Override
-   public ProtocolDescription getDefaultProtocol()
-   {
-      return protocolDescription;
-   }
+    @Override
+    public ProtocolDescription getDefaultProtocol()
+    {
+        return protocolDescription;
+    }
 
-   @Override
-   public void setup(final TomcatManagedConfiguration configuration)
-   {
-      this.configuration = configuration;
-      this.manager = new TomcatManager<TomcatManagedConfiguration>(configuration, tomcatManagerCommandSpec);
-   }
+    @Override
+    public void setup(final TomcatManagedConfiguration configuration)
+    {
+        this.configuration = configuration;
+        this.manager = new TomcatManager<TomcatManagedConfiguration>(configuration, tomcatManagerCommandSpec);
+    }
 
-   @Override
-   public void start() throws LifecycleException
-   {
+    @Override
+    public void start() throws LifecycleException
+    {
 
-      if (manager.isRunning())
-      {
-         throw new LifecycleException("The server is already running! "
-               + "Managed containers does not support connecting to running server instances due to the "
-               + "possible harmful effect of connecting to the wrong server. Please stop server before running or "
-               + "change to another type of container.\n"
-               + "To disable this check and allow Arquillian to connect to a running server, "
-               + "set allowConnectingToRunningServer to true in the container configuration");
-      }
+        if (manager.isRunning())
+        {
+            throw new LifecycleException("The server is already running! "
+                + "Managed containers does not support connecting to running server instances due to the "
+                + "possible harmful effect of connecting to the wrong server. Please stop server before running or "
+                + "change to another type of container.\n"
+                + "To disable this check and allow Arquillian to connect to a running server, "
+                + "set allowConnectingToRunningServer to true in the container configuration");
+        }
 
-      try
-      {
-         final String CATALINA_HOME = configuration.getCatalinaHome();
-         final String CATALINA_BASE = configuration.getCatalinaBase();
-         final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
+        try
+        {
+            final String CATALINA_HOME = configuration.getCatalinaHome();
+            final String CATALINA_BASE = configuration.getCatalinaBase();
+            final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
 
-         final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
-         final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();
+            final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
+            final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();
 
-         final String javaCommand = getJavaCommand();
+            final String javaCommand = getJavaCommand();
 
-         // construct a command to execute
-         final List<String> cmd = new ArrayList<String>();
+            // construct a command to execute
+            final List<String> cmd = new ArrayList<String>();
 
-         cmd.add(javaCommand);
+            cmd.add(javaCommand);
 
-         cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/"
-               + configuration.getLoggingProperties());
-         cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
+            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/"
+                + configuration.getLoggingProperties());
+            cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
-         cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
-         cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
-         cmd.add("-Dcom.sun.management.jmxremote.authenticate=false");
+            cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
+            cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
+            cmd.add("-Dcom.sun.management.jmxremote.authenticate=false");
 
-         cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
+            cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
-         String CLASS_PATH = absoluteCatalinaHomePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-         CLASS_PATH += absoluteCatalinaHomePath + "/bin/tomcat-juli.jar";
+            String CLASS_PATH = absoluteCatalinaHomePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
+            CLASS_PATH += absoluteCatalinaHomePath + "/bin/tomcat-juli.jar";
 
-         cmd.add("-classpath");
-         cmd.add(CLASS_PATH);
-         cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + "/endorsed");
-         cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
-         cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
-         cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + "/temp");
-         cmd.add("org.apache.catalina.startup.Bootstrap");
-         cmd.add("-config");
-         cmd.add(absoluteCatalinaBasePath + "/conf/" + configuration.getServerConfig());
-         cmd.add("start");
+            cmd.add("-classpath");
+            cmd.add(CLASS_PATH);
+            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + "/endorsed");
+            cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
+            cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
+            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + "/temp");
+            cmd.add("org.apache.catalina.startup.Bootstrap");
+            cmd.add("-config");
+            cmd.add(absoluteCatalinaBasePath + "/conf/" + configuration.getServerConfig());
+            cmd.add("start");
 
-         // execute command
-         final ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
-         startupProcessBuilder.redirectErrorStream(true);
-         startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
-         log.info("Starting Tomcat with: " + cmd.toString());
-         startupProcess = startupProcessBuilder.start();
-         new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
-         final Process proc = startupProcess;
+            // execute command
+            final ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
+            startupProcessBuilder.redirectErrorStream(true);
+            startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
+            log.info("Starting Tomcat with: " + cmd.toString());
+            startupProcess = startupProcessBuilder.start();
+            new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
+            final Process proc = startupProcess;
 
-         shutdownThread = new Thread(new Runnable()
-         {
-
-            @Override
-            public void run()
+            shutdownThread = new Thread(new Runnable()
             {
-               if (proc != null)
-               {
-                  proc.destroy();
-                  try
-                  {
-                     proc.waitFor();
-                  }
-                  catch (final InterruptedException e)
-                  {
-                     throw new RuntimeException(e);
-                  }
-               }
-            }
-         });
-         Runtime.getRuntime().addShutdownHook(shutdownThread);
 
-         final long startupTimeout = configuration.getStartupTimeoutInSeconds();
-         long timeout = startupTimeout * 1000;
-         boolean serverAvailable = false;
-         while (timeout > 0 && serverAvailable == false)
-         {
-            serverAvailable = manager.isRunning();
+                @Override
+                public void run()
+                {
+                    if (proc != null)
+                    {
+                        proc.destroy();
+                        try
+                        {
+                            proc.waitFor();
+                        }
+                        catch (final InterruptedException e)
+                        {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
+            Runtime.getRuntime().addShutdownHook(shutdownThread);
+
+            final long startupTimeout = configuration.getStartupTimeoutInSeconds();
+            long timeout = startupTimeout * 1000;
+            boolean serverAvailable = false;
+            while (timeout > 0 && serverAvailable == false)
+            {
+                serverAvailable = manager.isRunning();
+                if (!serverAvailable)
+                {
+                    Thread.sleep(100);
+                    timeout -= 100;
+                }
+            }
             if (!serverAvailable)
             {
-               Thread.sleep(100);
-               timeout -= 100;
+                destroystartupProcess();
+                throw new TimeoutException(String.format("Managed server was not started within [%d] s", startupTimeout));
             }
-         }
-         if (!serverAvailable)
-         {
-            destroystartupProcess();
-            throw new TimeoutException(String.format("Managed server was not started within [%d] s", startupTimeout));
-         }
 
-      }
-      catch (final Exception ex)
-      {
+        } catch (final Exception ex)
+        {
 
-         throw new LifecycleException("Could not start container", ex);
-      }
+            throw new LifecycleException("Could not start container", ex);
+        }
 
-   }
+    }
 
-   @Override
-   public void stop() throws LifecycleException
-   {
+    @Override
+    public void stop() throws LifecycleException
+    {
 
-      if (shutdownThread != null)
-      {
-         Runtime.getRuntime().removeShutdownHook(shutdownThread);
-         shutdownThread = null;
-      }
-      try
-      {
-         if (startupProcess != null)
-         {
-            startupProcess.destroy();
-            startupProcess.waitFor();
-            startupProcess = null;
-         }
-      }
-      catch (final Exception e)
-      {
-         throw new LifecycleException("Could not stop container", e);
-      }
-   }
-
-   /**
-    * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
-    *
-    * @param archive
-    * @return
-    * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
-    */
-   @Override
-   public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
-   {
-      Validate.notNull(archive, "Archive must not be null");
-
-      final String archiveName = manager.normalizeArchiveName(archive.getName());
-      final URL archiveURL = ShrinkWrapUtil.toURL(archive);
-      try
-      {
-         manager.deploy("/" + archiveName, archiveURL);
-      }
-      catch (final IOException e)
-      {
-         throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
-      }
-
-      final ProtocolMetadataParser<TomcatManagedConfiguration> parser = new ProtocolMetadataParser<TomcatManagedConfiguration>(
-            configuration);
-      return parser.retrieveContextServletInfo(archiveName);
-   }
-
-   @Override
-   public void undeploy(final Archive<?> archive) throws DeploymentException
-   {
-      Validate.notNull(archive, "Archive must not be null");
-
-      final String archiveName = manager.normalizeArchiveName(archive.getName());
-      try
-      {
-         manager.undeploy("/" + archiveName);
-      }
-      catch (final IOException e)
-      {
-         throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
-      }
-   }
-
-   @Override
-   public void deploy(final Descriptor descriptor) throws DeploymentException
-   {
-      throw new UnsupportedOperationException("Not implemented");
-   }
-
-   @Override
-   public void undeploy(final Descriptor descriptor) throws DeploymentException
-   {
-      throw new UnsupportedOperationException("Not implemented");
-   }
-
-   /**
-    * Runnable that consumes the output of the startupProcess. If nothing consumes the output the AS will hang on some
-    * platforms
-    *
-    * @author Stuart Douglas
-    */
-   private class ConsoleConsumer implements Runnable
-   {
-
-      private final boolean writeOutput;
-
-      ConsoleConsumer(final boolean writeOutput)
-      {
-         this.writeOutput = writeOutput;
-      }
-
-      @Override
-      public void run()
-      {
-         final InputStream stream = startupProcess.getInputStream();
-         final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-         String line = null;
-         try
-         {
-            while ((line = reader.readLine()) != null)
+        if (shutdownThread != null)
+        {
+            Runtime.getRuntime().removeShutdownHook(shutdownThread);
+            shutdownThread = null;
+        }
+        try
+        {
+            if (startupProcess != null)
             {
-               if (writeOutput)
-               {
-                  System.out.println(line);
-               }
+                startupProcess.destroy();
+                startupProcess.waitFor();
+                startupProcess = null;
             }
-         }
-         catch (final IOException e)
-         {
-         }
-      }
+        } catch (final Exception e)
+        {
+            throw new LifecycleException("Could not stop container", e);
+        }
+    }
 
-   }
+    /**
+     * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
+     *
+     * @param archive
+     * @return
+     * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
+     */
+    @Override
+    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
+    {
+        Validate.notNull(archive, "Archive must not be null");
 
-   private int destroystartupProcess()
-   {
-      if (startupProcess == null)
-         return 0;
-      startupProcess.destroy();
-      try
-      {
-         return startupProcess.waitFor();
-      }
-      catch (final InterruptedException e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
+        final String archiveName = manager.normalizeArchiveName(archive.getName());
+        final URL archiveURL = ShrinkWrapUtil.toURL(archive);
+        try
+        {
+            manager.deploy("/" + archiveName, archiveURL);
+        } catch (final IOException e)
+        {
+            throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
+        }
 
-   String getJavaCommand()
-   {
-      if (configuration == null)
-      {
-         throw new IllegalStateException("setup not called");
-      }
+        final ProtocolMetadataParser<TomcatManagedConfiguration> parser = new ProtocolMetadataParser<TomcatManagedConfiguration>(
+            configuration);
+        return parser.retrieveContextServletInfo(archiveName);
+    }
 
-      return configuration.getJavaHome() + File.separator + "bin" + File.separator + "java";
-   }
+    @Override
+    public void undeploy(final Archive<?> archive) throws DeploymentException
+    {
+        Validate.notNull(archive, "Archive must not be null");
+
+        final String archiveName = manager.normalizeArchiveName(archive.getName());
+        try
+        {
+            manager.undeploy("/" + archiveName);
+        } catch (final IOException e)
+        {
+            throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
+        }
+    }
+
+    @Override
+    public void deploy(final Descriptor descriptor) throws DeploymentException
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void undeploy(final Descriptor descriptor) throws DeploymentException
+    {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    /**
+     * Runnable that consumes the output of the startupProcess. If nothing consumes the output the AS will hang on some
+     * platforms
+     *
+     * @author Stuart Douglas
+     */
+    private class ConsoleConsumer implements Runnable
+    {
+
+        private final boolean writeOutput;
+
+        ConsoleConsumer(final boolean writeOutput)
+        {
+            this.writeOutput = writeOutput;
+        }
+
+        @Override
+        public void run()
+        {
+            final InputStream stream = startupProcess.getInputStream();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String line = null;
+            try
+            {
+                while ((line = reader.readLine()) != null)
+                {
+                    if (writeOutput)
+                    {
+                        System.out.println(line);
+                    }
+                }
+            } catch (final IOException e)
+            {
+            }
+        }
+
+    }
+
+    private int destroystartupProcess()
+    {
+        if (startupProcess == null)
+            return 0;
+        startupProcess.destroy();
+        try
+        {
+            return startupProcess.waitFor();
+        } catch (final InterruptedException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    String getJavaCommand()
+    {
+        if (configuration == null)
+        {
+            throw new IllegalStateException("setup not called");
+        }
+
+        return configuration.getJavaHome() + File.separator + "bin" + File.separator + "java";
+    }
 }

@@ -28,51 +28,54 @@ import org.jboss.arquillian.container.tomcat.TomcatConfiguration;
  */
 public class TomcatRemoteConfiguration extends TomcatConfiguration
 {
-   @Override
-   public void validate() throws ConfigurationException
-   {
-      super.validate();
-   }
+    @Override
+    public void validate() throws ConfigurationException
+    {
+        super.validate();
+    }
 
-   /**
-    * Use {@link TomcatRemoteConfiguration#getBindAddress()} instead
-    *
-    * @return
-    */
-   @Deprecated
-   public String getHost()
-   {
-      return getBindAddress();
-   }
+    /**
+     * Use {@link TomcatRemoteConfiguration#getBindAddress()} instead
+     *
+     * @return
+     */
+    @Deprecated
+    public String getHost()
+    {
+        return getBindAddress();
+    }
 
-   /**
-    * Use {@link TomcatRemoteConfiguration#setBindHttpPort(int)} instead
-    * @param httpPort
-    */
-   @Deprecated
-   public void setHttpPort(final int httpPort)
-   {
-      setBindHttpPort(httpPort);
-   }
+    /**
+     * Use {@link TomcatRemoteConfiguration#setBindHttpPort(int)} instead
+     * 
+     * @param httpPort
+     */
+    @Deprecated
+    public void setHttpPort(final int httpPort)
+    {
+        setBindHttpPort(httpPort);
+    }
 
-   /**
-    * Use {@link TomcatRemoteConfiguration#getBindPort()} instead
-    * @return httpPort
-    */
-   @Deprecated
-   public int getHttpPort()
-   {
-      return getBindHttpPort();
-   }
+    /**
+     * Use {@link TomcatRemoteConfiguration#getBindPort()} instead
+     * 
+     * @return httpPort
+     */
+    @Deprecated
+    public int getHttpPort()
+    {
+        return getBindHttpPort();
+    }
 
-   /**
-    * Use {@link TomcatRemoteConfiguration#setBindAddress(String)} instead
-    * @param host the http host
-    */
-   @Deprecated
-   public void setHost(final String host)
-   {
-      setBindAddress(host);
-   }
+    /**
+     * Use {@link TomcatRemoteConfiguration#setBindAddress(String)} instead
+     * 
+     * @param host the http host
+     */
+    @Deprecated
+    public void setHost(final String host)
+    {
+        setBindAddress(host);
+    }
 
 }

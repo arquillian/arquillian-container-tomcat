@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-   <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-managed-parent</artifactId>
-      <version>1.0.0.Final-SNAPSHOT</version>
-      <relativePath>../tomcat-managed-parent/pom.xml</relativePath>
-   </parent>
+    <parent>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-tomcat-managed-parent</artifactId>
+        <version>1.0.0.Final-SNAPSHOT</version>
+        <relativePath>../tomcat-managed-parent/pom.xml</relativePath>
+    </parent>
 
-   <artifactId>arquillian-tomcat-managed-7</artifactId>
-   <name>Arquillian Tomcat Managed 7.x Container</name>
+    <artifactId>arquillian-tomcat-managed-7</artifactId>
+    <name>Arquillian Tomcat Managed 7.x Container</name>
 
-   <properties>
-      <tomcat.major.version>7</tomcat.major.version>
-      <tomcat.version>${tomcat.major.version}.0.20</tomcat.version>
-      <tomcat.home>${project.build.directory}/apache-tomcat-${tomcat.version}</tomcat.home>
-   </properties>
+    <properties>
+        <tomcat.major.version>7</tomcat.major.version>
+        <tomcat.version>${tomcat.major.version}.0.20</tomcat.version>
+        <tomcat.home>${project.build.directory}/apache-tomcat-${tomcat.version}</tomcat.home>
+    </properties>
 
-   <dependencies>
+    <dependencies>
 
-      <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>javax.servlet-api</artifactId>
-         <version>3.0.1</version>
-         <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
 
-      <dependency>
-         <groupId>org.jboss.weld.servlet</groupId>
-         <artifactId>weld-servlet</artifactId>
-         <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-   </dependencies>
+    </dependencies>
 
-   <build>
-      <plugins>
-         <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-               <execution>
-                  <phase>generate-test-resources</phase>
-                  <configuration>
-                     <tasks>
-                        <mkdir dir="${project.build.directory}/downloads" />
-                        <get
-                           src="http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip"
-                           dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
-                        <unzip src="${project.build.directory}/downloads/apache-tomcat-${tomcat.version}.zip"
-                           dest="${project.build.directory}" />
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.build.directory}/downloads" />
+                                <get
+                                    src="http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip"
+                                    dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
+                                <unzip src="${project.build.directory}/downloads/apache-tomcat-${tomcat.version}.zip"
+                                    dest="${project.build.directory}" />
                         <!-- Remove the default ROOT webapp so it won't collide with tests -->
-                        <delete dir="${project.build.directory}/apache-tomcat-${tomcat.version}/webapps/ROOT" />
-                     </tasks>
-                  </configuration>
-                  <goals>
-                     <goal>run</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-         <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-         </plugin>
-      </plugins>
-   </build>
+                                <delete dir="${project.build.directory}/apache-tomcat-${tomcat.version}/webapps/ROOT" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

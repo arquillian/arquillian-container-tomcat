@@ -31,83 +31,83 @@ import org.junit.Test;
 public class AdditionalJavaOptionsParserTest
 {
 
-   @Test
-   public void parseNull()
-   {
-      final String additionalProperties = null;
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseNull()
+    {
+        final String additionalProperties = null;
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(0, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(0, props.size());
+    }
 
-   @Test
-   public void parseEmpty()
-   {
-      final String additionalProperties = "";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseEmpty()
+    {
+        final String additionalProperties = "";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(0, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(0, props.size());
+    }
 
-   @Test
-   public void parseOnlyWhiteSpaces()
-   {
-      final String additionalProperties = "  \t\n\t   ";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseOnlyWhiteSpaces()
+    {
+        final String additionalProperties = "  \t\n\t   ";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(0, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(0, props.size());
+    }
 
-   @Test
-   public void parseDelimitedByWhitespaces()
-   {
-      final String additionalProperties = "p0 p1\tp2\np3  p2\t\tp5\n\np6";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseDelimitedByWhitespaces()
+    {
+        final String additionalProperties = "p0 p1\tp2\np3  p2\t\tp5\n\np6";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(7, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(7, props.size());
+    }
 
-   @Test
-   public void parseDelimitedByQuotes()
-   {
-      final String additionalProperties = "p0 \"p1 with space\"\t\"p2\"\"p3\"\n\"p4\" p5";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseDelimitedByQuotes()
+    {
+        final String additionalProperties = "p0 \"p1 with space\"\t\"p2\"\"p3\"\n\"p4\" p5";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(6, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(6, props.size());
+    }
 
-   @Test
-   public void parseWindowsPaths()
-   {
-      final String additionalProperties = "p1=C:\\MyApps\\myApp.exe \"p2=C:\\Program Files\\MyApp\\myApp.exe\"";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseWindowsPaths()
+    {
+        final String additionalProperties = "p1=C:\\MyApps\\myApp.exe \"p2=C:\\Program Files\\MyApp\\myApp.exe\"";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(2, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(2, props.size());
+    }
 
-   @Test
-   public void parseIfQuoteIsInside()
-   {
-      final String additionalProperties = "p0 p1Quote\"Is\"Inside \"p2\"";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseIfQuoteIsInside()
+    {
+        final String additionalProperties = "p0 p1Quote\"Is\"Inside \"p2\"";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(3, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(3, props.size());
+    }
 
-   @Test
-   public void parseQuotesOnly()
-   {
-      final String additionalProperties = "\"p0\"\"p1\"\"p3\"\"p4\"";
-      final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
+    @Test
+    public void parseQuotesOnly()
+    {
+        final String additionalProperties = "\"p0\"\"p1\"\"p3\"\"p4\"";
+        final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
-      assertNotNull(props);
-      assertEquals(4, props.size());
-   }
+        assertNotNull(props);
+        assertEquals(4, props.size());
+    }
 }

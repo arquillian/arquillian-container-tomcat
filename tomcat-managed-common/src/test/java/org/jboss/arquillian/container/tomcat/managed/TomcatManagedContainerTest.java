@@ -12,45 +12,45 @@ import org.junit.Test;
 public class TomcatManagedContainerTest
 {
 
-   private TomcatManagedContainer commonTomcatManagedContainer;
+    private TomcatManagedContainer commonTomcatManagedContainer;
 
-   @Before
-   public void setUp()
-   {
-      commonTomcatManagedContainer = new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"),
+    @Before
+    public void setUp()
+    {
+        commonTomcatManagedContainer = new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"),
             new Tomcat7ManagerCommandSpec())
-      {
-         @Override
-         public ProtocolDescription getDefaultProtocol()
-         {
-            return null;
-         }
-      };
-   }
+        {
+            @Override
+            public ProtocolDescription getDefaultProtocol()
+            {
+                return null;
+            }
+        };
+    }
 
-   @Test
-   public void testGetJavaCommandForConfiguration()
-   {
-      final TomcatManagedConfiguration commonTomcatManagedConfiguration = new TomcatManagedConfiguration();
+    @Test
+    public void testGetJavaCommandForConfiguration()
+    {
+        final TomcatManagedConfiguration commonTomcatManagedConfiguration = new TomcatManagedConfiguration();
 
-      final String testJavaHome = File.separator + "test" + File.separator + "java" + File.separator + "home";
+        final String testJavaHome = File.separator + "test" + File.separator + "java" + File.separator + "home";
 
-      commonTomcatManagedConfiguration.setJavaHome(testJavaHome);
+        commonTomcatManagedConfiguration.setJavaHome(testJavaHome);
 
-      commonTomcatManagedContainer.setup(commonTomcatManagedConfiguration);
+        commonTomcatManagedContainer.setup(commonTomcatManagedConfiguration);
 
-      final String actualJavaCommand = commonTomcatManagedContainer.getJavaCommand();
+        final String actualJavaCommand = commonTomcatManagedContainer.getJavaCommand();
 
-      final String expectedJavaCommand = testJavaHome + File.separator + "bin" + File.separator + "java";
+        final String expectedJavaCommand = testJavaHome + File.separator + "bin" + File.separator + "java";
 
-      assertEquals(expectedJavaCommand, actualJavaCommand);
-   }
+        assertEquals(expectedJavaCommand, actualJavaCommand);
+    }
 
-   @Test(expected = IllegalStateException.class)
-   public void testGetJavaCommandForNoConfiguration()
-   {
-      // No .setup(commonTomcatManagedConfiguration)
+    @Test(expected = IllegalStateException.class)
+    public void testGetJavaCommandForNoConfiguration()
+    {
+        // No .setup(commonTomcatManagedConfiguration)
 
-      commonTomcatManagedContainer.getJavaCommand();
-   }
+        commonTomcatManagedContainer.getJavaCommand();
+    }
 }

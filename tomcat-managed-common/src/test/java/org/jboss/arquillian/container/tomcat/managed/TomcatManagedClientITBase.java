@@ -31,33 +31,33 @@ import org.junit.Test;
 
 public abstract class TomcatManagedClientITBase
 {
-   protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
+    protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
 
-   @Test
-   @OperateOnDeployment(ROOT_CONTEXT)
-   public void shouldBeAbleToInvokeServletInDeployedRootWebApp(@ArquillianResource final URL contextRoot)
-         throws Exception
-   {
-      testDeployment(contextRoot);
-   }
+    @Test
+    @OperateOnDeployment(ROOT_CONTEXT)
+    public void shouldBeAbleToInvokeServletInDeployedRootWebApp(@ArquillianResource final URL contextRoot)
+        throws Exception
+    {
+        testDeployment(contextRoot);
+    }
 
-   @Test
-   @OperateOnDeployment(TEST_CONTEXT)
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-   {
-      testDeployment(contextRoot);
-   }
+    @Test
+    @OperateOnDeployment(TEST_CONTEXT)
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
+    {
+        testDeployment(contextRoot);
+    }
 
-   private void testDeployment(final URL contextRoot) throws MalformedURLException, IOException
-   {
-      final String expected = "hello";
+    private void testDeployment(final URL contextRoot) throws MalformedURLException, IOException
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(contextRoot, "Test");
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(contextRoot, "Test");
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = IOUtilDelegator.asByteArray(in);
-      final String httpResponse = new String(buffer);
+        final byte[] buffer = IOUtilDelegator.asByteArray(in);
+        final String httpResponse = new String(buffer);
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 }

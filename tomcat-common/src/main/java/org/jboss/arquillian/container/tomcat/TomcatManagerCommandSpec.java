@@ -23,24 +23,24 @@ package org.jboss.arquillian.container.tomcat;
  */
 public interface TomcatManagerCommandSpec
 {
-   /**
-    * The list command.
-    *
-    * @return the deploy command.
-    */
-   String getListCommand();
+    /**
+     * The list command.
+     *
+     * @return the deploy command.
+     */
+    String getListCommand();
 
-   /**
-    * The deploy command.
-    *
-    * @return the deploy command.
-    */
-   String getDeployCommand();
+    /**
+     * The deploy command.
+     *
+     * @return the deploy command.
+     */
+    String getDeployCommand();
 
-   /**
-    * The undeploy command.
-    *
-    * @return the undeploy command.
-    */
-   String getUndeployCommand();
+    /**
+     * The undeploy command.
+     *
+     * @return the undeploy command.
+     */
+    String getUndeployCommand();
 }

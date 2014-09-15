@@ -35,8 +35,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
@@ -46,76 +45,76 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatEmbeddedClientTestCase
 {
-   private static final String ROOT_CONTEXT = "ROOT";
+    private static final String ROOT_CONTEXT = "ROOT";
 
-   private static final String TEST_CONTEXT = "test";
+    private static final String TEST_CONTEXT = "test";
 
-   private static final String TEST_SERVLET = "Test";
+    private static final String TEST_SERVLET = "Test";
 
-   private static final String TEST_WELCOME_FILE = "index.jsp";
+    private static final String TEST_WELCOME_FILE = "index.jsp";
 
-   @Deployment(name = ROOT_CONTEXT, testable = false)
-   public static WebArchive createRootDeployment()
-   {
-      return createDeployment(getWarName(ROOT_CONTEXT));
-   }
+    @Deployment(name = ROOT_CONTEXT, testable = false)
+    public static WebArchive createRootDeployment()
+    {
+        return createDeployment(getWarName(ROOT_CONTEXT));
+    }
 
-   @Deployment(name = TEST_CONTEXT, testable = false)
-   public static WebArchive createTestDeployment()
-   {
-      return createDeployment(getWarName(TEST_CONTEXT));
-   }
+    @Deployment(name = TEST_CONTEXT, testable = false)
+    public static WebArchive createTestDeployment()
+    {
+        return createDeployment(getWarName(TEST_CONTEXT));
+    }
 
-   private static String getWarName(final String contextName)
-   {
-      return contextName + ".war";
-   }
+    private static String getWarName(final String contextName)
+    {
+        return contextName + ".war";
+    }
 
-   private static WebArchive createDeployment(final String archiveName)
-   {
-      return ShrinkWrap
+    private static WebArchive createDeployment(final String archiveName)
+    {
+        return ShrinkWrap
             .create(WebArchive.class, archiveName)
             .addClass(TestServlet.class)
             .addAsWebResource(TEST_WELCOME_FILE)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").createServlet()
-                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
-                        .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
-                        .exportAsString()));
-   }
+                new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").createServlet()
+                    .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                    .createServletMapping().servletName("TestServlet").urlPattern("/" + TEST_SERVLET).up()
+                    .exportAsString()));
+    }
 
-   @Test
-   @OperateOnDeployment(TEST_CONTEXT)
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    @OperateOnDeployment(TEST_CONTEXT)
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL servletUrl = new URL(contextURL, TEST_SERVLET);
-      final String httpResponse = getHttpResponse(servletUrl);
+        final URL servletUrl = new URL(contextURL, TEST_SERVLET);
+        final String httpResponse = getHttpResponse(servletUrl);
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 
-   @Test
-   @OperateOnDeployment(ROOT_CONTEXT)
-   public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
-   {
-      final String expected = "welcome";
+    @Test
+    @OperateOnDeployment(ROOT_CONTEXT)
+    public void shouldBeAbleToInvokeJspInDeployedWebApp(@ArquillianResource final URL contextURL) throws Exception
+    {
+        final String expected = "welcome";
 
-      final String httpResponse = getHttpResponse(contextURL);
+        final String httpResponse = getHttpResponse(contextURL).replaceAll("\\s+", "");
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 
-   private String getHttpResponse(final URL servletUrl) throws IOException
-   {
-      final InputStream in = servletUrl.openConnection().getInputStream();
+    private String getHttpResponse(final URL servletUrl) throws IOException
+    {
+        final InputStream in = servletUrl.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-         httpResponse += (char) buffer[q];
-      return httpResponse;
-   }
+        final byte[] buffer = new byte[10000];
+        final int len = in.read(buffer);
+        String httpResponse = "";
+        for (int q = 0; q < len; q++)
+            httpResponse += (char) buffer[q];
+        return httpResponse;
+    }
 }

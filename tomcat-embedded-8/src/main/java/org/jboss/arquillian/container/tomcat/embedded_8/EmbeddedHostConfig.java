@@ -23,66 +23,63 @@ import org.apache.catalina.startup.Tomcat.DefaultWebXmlListener;
 import org.apache.catalina.util.ContextName;
 
 /**
- * A custom {@link HostConfig} for use in the Embedded Tomcat
- * container integration for Arquillian.
-
- * <p>This configuration makes the protected Tomcat WAR deployment
- * implementation (as is used by the typical standalone server) available for
- * embedded use. We do this to retain standard deployment features that are
- * notably absent from the current {@link Tomcat} deployment logic, for
- * instance:
+ * A custom {@link HostConfig} for use in the Embedded Tomcat container integration for Arquillian.
+ * 
+ * <p>
+ * This configuration makes the protected Tomcat WAR deployment implementation (as is used by the typical standalone server)
+ * available for embedded use. We do this to retain standard deployment features that are notably absent from the current
+ * {@link Tomcat} deployment logic, for instance:
  * <ul>
- *    <li>Deployment of an archive named "ROOT.war" to the default context "/".</li>
- *    <li>Proper processing of "META-INF/context.xml" if present in the WAR.</li>
+ * <li>Deployment of an archive named "ROOT.war" to the default context "/".</li>
+ * <li>Proper processing of "META-INF/context.xml" if present in the WAR.</li>
  * </ul>
  * </p>
  *
- * <p>You'll very likely want to set the {@link ContextConfig} class for the
- * associated host to an {@link EmbeddedContextConfig} via
- * <code>host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName())</code>.
- * (Note that {@link HostConfig#getConfigClass()} is not currently used.)
- * This will result in the application of context configuration normally
- * sourced from "$CATALINA_BASE/conf/web.xml".  This is typically done by
- * <code>Tomcat</code> via a {@link DefaultWebXmlListener} added to the
- * context, but <code>HostConfig</code> lacks a suitable hook to add such a
- * listener prior to the start life cycle.</p>
+ * <p>
+ * You'll very likely want to set the {@link ContextConfig} class for the associated host to an {@link EmbeddedContextConfig}
+ * via <code>host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName())</code>. (Note that
+ * {@link HostConfig#getConfigClass()} is not currently used.) This will result in the application of context configuration
+ * normally sourced from "$CATALINA_BASE/conf/web.xml". This is typically done by <code>Tomcat</code> via a
+ * {@link DefaultWebXmlListener} added to the context, but <code>HostConfig</code> lacks a suitable hook to add such a listener
+ * prior to the start life cycle.
+ * </p>
  *
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  */
 public class EmbeddedHostConfig extends HostConfig
 {
-   /**
-    * Deploy a WAR with the given file name to be found in the configured app base.
-    *
-    * @param warFileName the WAR file name, e.g. "ROOT.war".
-    */
-   public void deployWAR(final String warFileName)
-   {
-      final String contextName = getContextName(warFileName);
+    /**
+     * Deploy a WAR with the given file name to be found in the configured app base.
+     *
+     * @param warFileName the WAR file name, e.g. "ROOT.war".
+     */
+    public void deployWAR(final String warFileName)
+    {
+        final String contextName = getContextName(warFileName);
 
-      deployWARs(host.getAppBaseFile(), new String[]
-      {warFileName});
+        deployWARs(host.getAppBaseFile(), new String[]
+        { warFileName });
 
-      addServiced(contextName);
-   }
+        addServiced(contextName);
+    }
 
-   /**
-    * Undeploy a WAR with the given file name.
-    *
-    * @param warFileName the WAR file name, e.g. "ROOT.war".
-    */
-   public void undeployWAR(final String warFileName)
-   {
-      final String contextName = getContextName(warFileName);
+    /**
+     * Undeploy a WAR with the given file name.
+     *
+     * @param warFileName the WAR file name, e.g. "ROOT.war".
+     */
+    public void undeployWAR(final String warFileName)
+    {
+        final String contextName = getContextName(warFileName);
 
-      unmanageApp(contextName);
+        unmanageApp(contextName);
 
-      removeServiced(contextName);
-   }
+        removeServiced(contextName);
+    }
 
-   private String getContextName(final String warFileName)
-   {
-      final ContextName contextName = new ContextName(warFileName, true);
-      return contextName.getName();
-   }
+    private String getContextName(final String warFileName)
+    {
+        final ContextName contextName = new ContextName(warFileName, true);
+        return contextName.getName();
+    }
 }

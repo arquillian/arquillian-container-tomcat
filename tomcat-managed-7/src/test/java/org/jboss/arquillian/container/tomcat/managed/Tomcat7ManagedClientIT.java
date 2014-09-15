@@ -22,8 +22,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
@@ -33,15 +32,15 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class Tomcat7ManagedClientIT extends TomcatManagedClientITBase
 {
-   @Deployment(name = TestDeploymentFactory.ROOT_CONTEXT, testable = false)
-   public static WebArchive createRootDeployment()
-   {
-      return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.ROOT_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
-   }
+    @Deployment(name = TestDeploymentFactory.ROOT_CONTEXT, testable = false)
+    public static WebArchive createRootDeployment()
+    {
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.ROOT_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
+    }
 
-   @Deployment(name = TestDeploymentFactory.TEST_CONTEXT, testable = false)
-   public static WebArchive createTestDeployment()
-   {
-      return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.TEST_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
-   }
+    @Deployment(name = TestDeploymentFactory.TEST_CONTEXT, testable = false)
+    public static WebArchive createTestDeployment()
+    {
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.TEST_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
+    }
 }

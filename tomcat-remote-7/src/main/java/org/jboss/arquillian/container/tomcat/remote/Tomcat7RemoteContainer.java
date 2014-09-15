@@ -22,7 +22,8 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
 
 /**
  * <p>
- * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment operations.
+ * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment
+ * operations.
  * </p>
  *
  *
@@ -33,8 +34,8 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  */
 public class Tomcat7RemoteContainer extends TomcatRemoteContainer
 {
-   public Tomcat7RemoteContainer()
-   {
-      super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
-   }
+    public Tomcat7RemoteContainer()
+    {
+        super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
+    }
 }

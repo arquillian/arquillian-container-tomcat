@@ -20,7 +20,6 @@ package org.jboss.arquillian.container.tomcat.managed;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
-import org.jboss.arquillian.container.tomcat.managed.TomcatManagedContainer;
 
 /**
  * <p>
@@ -36,8 +35,8 @@ import org.jboss.arquillian.container.tomcat.managed.TomcatManagedContainer;
 public class Tomcat7ManagedContainer extends TomcatManagedContainer
 {
 
-   public Tomcat7ManagedContainer()
-   {
-      super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
-   }
+    public Tomcat7ManagedContainer()
+    {
+        super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
+    }
 }

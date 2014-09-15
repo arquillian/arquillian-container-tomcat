@@ -28,120 +28,118 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
  */
 public class TomcatEmbeddedConfiguration implements ContainerConfiguration
 {
-   private String bindAddress = "localhost";
+    private String bindAddress = "localhost";
 
-   private int bindHttpPort = 8080;
+    private int bindHttpPort = 8080;
 
-   private String tomcatHome = null;
+    private String tomcatHome = null;
 
-   private String appBase = "webapps";
+    private String appBase = "webapps";
 
-   private String workDir = null;
+    private String workDir = null;
 
-   private String serverName = "arquillian-tomcat-embedded";
+    private String serverName = "arquillian-tomcat-embedded";
 
-   private boolean unpackArchive = false;
+    private boolean unpackArchive = false;
 
-   @Override
-   public void validate() throws ConfigurationException
-   {
-   }
+    @Override
+    public void validate() throws ConfigurationException
+    {
+    }
 
-   public String getBindAddress()
-   {
-      return bindAddress;
-   }
+    public String getBindAddress()
+    {
+        return bindAddress;
+    }
 
-   public void setBindAddress(final String bindAddress)
-   {
-      this.bindAddress = bindAddress;
-   }
+    public void setBindAddress(final String bindAddress)
+    {
+        this.bindAddress = bindAddress;
+    }
 
-   public int getBindHttpPort()
-   {
-      return bindHttpPort;
-   }
+    public int getBindHttpPort()
+    {
+        return bindHttpPort;
+    }
 
-   /**
-    * Set the HTTP bind port.
-    *
-    * @param httpBindPort
-    *            HTTP bind port
-    */
-   public void setBindHttpPort(final int bindHttpPort)
-   {
-      this.bindHttpPort = bindHttpPort;
-   }
+    /**
+     * Set the HTTP bind port.
+     *
+     * @param httpBindPort HTTP bind port
+     */
+    public void setBindHttpPort(final int bindHttpPort)
+    {
+        this.bindHttpPort = bindHttpPort;
+    }
 
-   public void setTomcatHome(final String jbossHome)
-   {
-      this.tomcatHome = jbossHome;
-   }
+    public void setTomcatHome(final String jbossHome)
+    {
+        this.tomcatHome = jbossHome;
+    }
 
-   public String getTomcatHome()
-   {
-      return tomcatHome;
-   }
+    public String getTomcatHome()
+    {
+        return tomcatHome;
+    }
 
-   /**
-    * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
-    */
-   public void setAppBase(final String tomcatAppBase)
-   {
-      this.appBase = tomcatAppBase;
-   }
+    /**
+     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
+     */
+    public void setAppBase(final String tomcatAppBase)
+    {
+        this.appBase = tomcatAppBase;
+    }
 
-   public String getAppBase()
-   {
-      return appBase;
-   }
+    public String getAppBase()
+    {
+        return appBase;
+    }
 
-   /**
-    * @param workDir the directory where the compiled JSP files and session serialization data is stored
-    */
-   public void setWorkDir(final String tomcatWorkDir)
-   {
-      this.workDir = tomcatWorkDir;
-   }
+    /**
+     * @param workDir the directory where the compiled JSP files and session serialization data is stored
+     */
+    public void setWorkDir(final String tomcatWorkDir)
+    {
+        this.workDir = tomcatWorkDir;
+    }
 
-   public String getTomcatWorkDir()
-   {
-      return workDir;
-   }
+    public String getTomcatWorkDir()
+    {
+        return workDir;
+    }
 
-   /**
-    * @param serverName the serverName to set
-    */
-   public void setServerName(final String serverName)
-   {
-      this.serverName = serverName;
-   }
+    /**
+     * @param serverName the serverName to set
+     */
+    public void setServerName(final String serverName)
+    {
+        this.serverName = serverName;
+    }
 
-   /**
-    * @return the serverName
-    */
-   public String getServerName()
-   {
-      return serverName;
-   }
+    /**
+     * @return the serverName
+     */
+    public String getServerName()
+    {
+        return serverName;
+    }
 
-   /**
-    * @return a switch indicating whether the WAR should be unpacked
-    */
-   public boolean isUnpackArchive()
-   {
-      return unpackArchive;
-   }
+    /**
+     * @return a switch indicating whether the WAR should be unpacked
+     */
+    public boolean isUnpackArchive()
+    {
+        return unpackArchive;
+    }
 
-   /**
-    * Sets the WAR to be unpacked into the java.io.tmpdir when deployed.
-    * Unpacking is required if you are using Weld to provide CDI support
-    * in a servlet environment.
-    *
-    * @param a switch indicating whether the WAR should be unpacked
-    */
-   public void setUnpackArchive(final boolean unpack)
-   {
-      this.unpackArchive = unpack;
-   }
+    /**
+     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
+     * CDI support in a servlet environment.
+     *
+     * @param a switch indicating whether the WAR should be unpacked
+     */
+    public void setUnpackArchive(final boolean unpack)
+    {
+        this.unpackArchive = unpack;
+    }
 }

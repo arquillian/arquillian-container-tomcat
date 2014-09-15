@@ -28,9 +28,9 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
  */
 public class TomcatExtension implements LoadableExtension
 {
-   @Override
-   public void register(ExtensionBuilder builder)
-   {
-      builder.service(DeployableContainer.class, TomcatContainer.class);
-   }
+    @Override
+    public void register(final ExtensionBuilder builder)
+    {
+        builder.service(DeployableContainer.class, TomcatContainer.class);
+    }
 }

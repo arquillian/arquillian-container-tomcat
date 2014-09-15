@@ -10,7 +10,7 @@
  * You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,  
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -18,13 +18,13 @@
 package org.jboss.arquillian.container.tomcat.managed;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
-
 import org.jboss.arquillian.core.spi.LoadableExtension;
 
 public class Tomcat6ManagedExtension implements LoadableExtension
 {
-   public void register(ExtensionBuilder builder)
-   {
-      builder.service(DeployableContainer.class, Tomcat6ManagedContainer.class);
-   }
+    @Override
+    public void register(final ExtensionBuilder builder)
+    {
+        builder.service(DeployableContainer.class, Tomcat6ManagedContainer.class);
+    }
 }

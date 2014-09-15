@@ -41,109 +41,105 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
  */
 public class ProtocolMetadataParser<C extends TomcatConfiguration>
 {
-   private static final Logger log = Logger.getLogger(ProtocolMetaData.class.getName());
+    private static final Logger log = Logger.getLogger(ProtocolMetaData.class.getName());
 
-   private final C configuration;
+    private final C configuration;
 
-   protected String catalinaServletTemplate = "Catalina:j2eeType=Servlet,WebModule=//%s/%s,*";
+    protected String catalinaServletTemplate = "Catalina:j2eeType=Servlet,WebModule=//%s/%s,*";
 
-   public ProtocolMetadataParser(final C configuration)
-   {
-      this.configuration = configuration;
-   }
+    public ProtocolMetadataParser(final C configuration)
+    {
+        this.configuration = configuration;
+    }
 
-   /**
-    * Retrieves given context's servlets information through JMX.
-    *
-    * How it works: 1) Get the WebModule, identified as //{host}/{contextPath} 2) Get it's path attrib 3) Get it's servlets
-    * attrib, which is String[] which actually represents ObjectName[] 4) Get each of these Servlets and their mappings 5) For
-    * each of {mapping}, do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
-    *
-    * // WebModule -> ... -> Attributes // -> path == /manager // -> servlets == String[] // ->
-    * Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication =none,J2EEServer=none
-    *
-    *
-    * @param context
-    * @return
-    * @throws DeploymentException
-    */
-   public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException
-   {
-      final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
-      final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
+    /**
+     * Retrieves given context's servlets information through JMX.
+     *
+     * How it works: 1) Get the WebModule, identified as //{host}/{contextPath} 2) Get it's path attrib 3) Get it's servlets
+     * attrib, which is String[] which actually represents ObjectName[] 4) Get each of these Servlets and their mappings 5) For
+     * each of {mapping}, do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
+     *
+     * // WebModule -> ... -> Attributes // -> path == /manager // -> servlets == String[] // ->
+     * Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication =none,J2EEServer=none
+     *
+     *
+     * @param context
+     * @return
+     * @throws DeploymentException
+     */
+    public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException
+    {
+        final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
+        final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
-      JMXConnector jmxc = null;
-      try
-      {
-         jmxc = connect(configuration.getJmxUri());
-      }
-      catch (final IOException ex)
-      {
-         throw new DeploymentException("Unable to contruct metadata for archive deployment.\n" + "Can't connect to '"
-               + configuration.getJmxUri() + "'."
-               + "\n   Make sure JMX remote acces is enabled Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
-               + "\n   Example (with no authentication):" + "\n     -Dcom.sun.management.jmxremote.port="
-               + configuration.getJmxPort() + "\n     -Dcom.sun.management.jmxremote.ssl=false"
-               + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
-      }
+        JMXConnector jmxc = null;
+        try
+        {
+            jmxc = connect(configuration.getJmxUri());
+        } catch (final IOException ex)
+        {
+            throw new DeploymentException("Unable to contruct metadata for archive deployment.\n" + "Can't connect to '"
+                + configuration.getJmxUri() + "'."
+                + "\n   Make sure JMX remote acces is enabled Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
+                + "\n   Example (with no authentication):" + "\n     -Dcom.sun.management.jmxremote.port="
+                + configuration.getJmxPort() + "\n     -Dcom.sun.management.jmxremote.ssl=false"
+                + "\n     -Dcom.sun.management.jmxremote.authenticate=false", ex);
+        }
 
-      Set<ObjectInstance> servletMBeans;
-      try
-      {
-         servletMBeans = getServletMBeans(jmxc, context);
-      }
-      catch (final IOException e)
-      {
-         throw new DeploymentException("Unable to construct metadata for archive deployment", e);
-      }
+        Set<ObjectInstance> servletMBeans;
+        try
+        {
+            servletMBeans = getServletMBeans(jmxc, context);
+        } catch (final IOException e)
+        {
+            throw new DeploymentException("Unable to construct metadata for archive deployment", e);
+        }
 
-      // For each servlet MBean of the given context add the servlet info to the HTTPContext.
-      for (final ObjectInstance oi : servletMBeans)
-      {
-         final String servletName = oi.getObjectName().getKeyProperty("name");
-         httpContext.add(new Servlet(servletName, context));
-         if (log.isLoggable(Level.FINE))
-         {
-            log.fine("Added servlet " + oi.toString() + " to HttpContext for archive" + context);
-         }
-      }
+        // For each servlet MBean of the given context add the servlet info to the HTTPContext.
+        for (final ObjectInstance oi : servletMBeans)
+        {
+            final String servletName = oi.getObjectName().getKeyProperty("name");
+            httpContext.add(new Servlet(servletName, context));
+            if (log.isLoggable(Level.FINE))
+            {
+                log.fine("Added servlet " + oi.toString() + " to HttpContext for archive" + context);
+            }
+        }
 
-      protocolMetaData.addContext(httpContext);
-      return protocolMetaData;
-   }
+        protocolMetaData.addContext(httpContext);
+        return protocolMetaData;
+    }
 
-   protected JMXConnector connect(final URI jmxUri) throws IOException
-   {
-      log.info("Connecting to JMX at " + jmxUri);
-      final JMXServiceURL url = new JMXServiceURL(jmxUri.toASCIIString());
+    protected JMXConnector connect(final URI jmxUri) throws IOException
+    {
+        log.info("Connecting to JMX at " + jmxUri);
+        final JMXServiceURL url = new JMXServiceURL(jmxUri.toASCIIString());
 
-      return JMXConnectorFactory.connect(url, null);
-   }
+        return JMXConnectorFactory.connect(url, null);
+    }
 
-   protected Set<ObjectInstance> getServletMBeans(final JMXConnector jmxc, final String context) throws IOException
-   {
-      // connect to MBeanServer and get metadata
-      final MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
-      final String catalinaServlet = String.format(catalinaServletTemplate, configuration.getJmxVirtualHost(), context);
+    protected Set<ObjectInstance> getServletMBeans(final JMXConnector jmxc, final String context) throws IOException
+    {
+        // connect to MBeanServer and get metadata
+        final MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
+        final String catalinaServlet = String.format(catalinaServletTemplate, configuration.getJmxVirtualHost(), context);
 
-      ObjectName servletON;
-      try
-      {
-         servletON = ObjectName.getInstance(catalinaServlet);
-      }
-      catch (final MalformedObjectNameException e)
-      {
-         throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
-               + "Following object name is not valid: " + catalinaServlet, e);
+        ObjectName servletON;
+        try
+        {
+            servletON = ObjectName.getInstance(catalinaServlet);
+        } catch (final MalformedObjectNameException e)
+        {
+            throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
+                + "Following object name is not valid: " + catalinaServlet, e);
 
-      }
-      catch (final NullPointerException e)
-      {
-         throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
-               + "Object name must not be null", e);
-      }
+        } catch (final NullPointerException e)
+        {
+            throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
+                + "Object name must not be null", e);
+        }
 
-      // this might return empty set
-      return mbsc.queryMBeans(servletON, null);
-   }
+        // this might return empty set
+        return mbsc.queryMBeans(servletON, null);
+    }
 }

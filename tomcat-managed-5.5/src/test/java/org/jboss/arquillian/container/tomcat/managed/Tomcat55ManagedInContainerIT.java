@@ -34,8 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author Dan Allen
  * @version $Revision: $
@@ -43,36 +42,36 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class Tomcat55ManagedInContainerIT
 {
-   @Resource(name = "resourceInjectionTestName")
-   private String resourceInjectionTestValue;
+    @Resource(name = "resourceInjectionTestName")
+    private String resourceInjectionTestValue;
 
-   @Deployment
-   public static WebArchive createTestArchive()
-   {
-      final WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(TestServlet.class)
+    @Deployment
+    public static WebArchive createTestArchive()
+    {
+        final WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(TestServlet.class)
             .setWebXML("in-container-web.xml");
 
-      return war;
-   }
+        return war;
+    }
 
-   @Test
-   public void shouldBeAbleToInjectMembersIntoTestClass()
-   {
-      Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
-   }
+    @Test
+    public void shouldBeAbleToInjectMembersIntoTestClass()
+    {
+        Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
+    }
 
-   @Test
-   @RunAsClient
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    @RunAsClient
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(contextRoot, "Test");
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(contextRoot, "Test");
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = IOUtilDelegator.asByteArray(in);
-      final String httpResponse = new String(buffer);
+        final byte[] buffer = IOUtilDelegator.asByteArray(in);
+        final String httpResponse = new String(buffer);
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 }

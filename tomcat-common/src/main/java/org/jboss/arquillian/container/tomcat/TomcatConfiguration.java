@@ -35,234 +35,232 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
 public class TomcatConfiguration implements ContainerConfiguration
 {
 
-   private static final int MIN_PORT = 0;
+    private static final int MIN_PORT = 0;
 
-   private static final int MAX_PORT = 65535;
+    private static final int MAX_PORT = 65535;
 
-   private String bindAddress = "localhost";
+    private String bindAddress = "localhost";
 
-   private int bindHttpPort = 8080;
+    private int bindHttpPort = 8080;
 
-   private String user;
+    private String user;
 
-   private String pass;
+    private String pass;
 
-   private int jmxPort = 8089;
+    private int jmxPort = 8089;
 
-   private int jmxServerPort = 0;
+    private int jmxServerPort = 0;
 
-   private String jmxVirtualHost = "localhost";
+    private String jmxVirtualHost = "localhost";
 
-   private String urlCharset = "ISO-8859-1";
+    private String urlCharset = "ISO-8859-1";
 
-   private String appBase = "webapps";
+    private String appBase = "webapps";
 
-   private boolean unpackArchive = false;
+    private boolean unpackArchive = false;
 
-   private URI jmxUri;
+    private URI jmxUri;
 
-   private URL managerUrl;
+    private URL managerUrl;
 
-   @Override
-   public void validate() throws ConfigurationException
-   {
-      Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
+    @Override
+    public void validate() throws ConfigurationException
+    {
+        Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
 
-      Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
+        Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
             + "[, but was " + jmxPort);
 
-      Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + ","
+        Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + ","
             + MAX_PORT + "[, but was " + jmxServerPort);
 
-      this.jmxUri = createJmxUri();
-      this.managerUrl = createManagerUrl();
-   }
+        this.jmxUri = createJmxUri();
+        this.managerUrl = createManagerUrl();
+    }
 
-   public String getBindAddress()
-   {
-      return bindAddress;
-   }
+    public String getBindAddress()
+    {
+        return bindAddress;
+    }
 
-   public void setBindAddress(final String bindAddress)
-   {
-      this.bindAddress = bindAddress;
-   }
+    public void setBindAddress(final String bindAddress)
+    {
+        this.bindAddress = bindAddress;
+    }
 
-   public int getBindHttpPort()
-   {
-      return bindHttpPort;
-   }
+    public int getBindHttpPort()
+    {
+        return bindHttpPort;
+    }
 
-   /**
-    * Set the HTTP bind port.
-    *
-    * @param bindHttpPort HTTP bind port
-    */
-   public void setBindHttpPort(final int bindHttpPort)
-   {
-      this.bindHttpPort = bindHttpPort;
-   }
+    /**
+     * Set the HTTP bind port.
+     *
+     * @param bindHttpPort HTTP bind port
+     */
+    public void setBindHttpPort(final int bindHttpPort)
+    {
+        this.bindHttpPort = bindHttpPort;
+    }
 
-   public String getUser()
-   {
-      return user;
-   }
+    public String getUser()
+    {
+        return user;
+    }
 
-   public void setUser(final String user)
-   {
-      this.user = user;
-   }
+    public void setUser(final String user)
+    {
+        this.user = user;
+    }
 
-   public String getPass()
-   {
-      return pass;
-   }
+    public String getPass()
+    {
+        return pass;
+    }
 
-   public void setPass(final String pass)
-   {
-      this.pass = pass;
-   }
+    public void setPass(final String pass)
+    {
+        this.pass = pass;
+    }
 
-   public int getJmxPort()
-   {
-      return jmxPort;
-   }
+    public int getJmxPort()
+    {
+        return jmxPort;
+    }
 
-   public void setJmxPort(final int jmxPort)
-   {
-      this.jmxPort = jmxPort;
-   }
+    public void setJmxPort(final int jmxPort)
+    {
+        this.jmxPort = jmxPort;
+    }
 
-   public int getJmxServerPort()
-   {
-      return jmxServerPort;
-   }
+    public int getJmxServerPort()
+    {
+        return jmxServerPort;
+    }
 
-   public void setJmxServerPort(final int jmxServerPort)
-   {
-      this.jmxServerPort = jmxServerPort;
-   }
+    public void setJmxServerPort(final int jmxServerPort)
+    {
+        this.jmxServerPort = jmxServerPort;
+    }
 
-   public String getAppBase()
-   {
-      return appBase;
-   }
+    public String getAppBase()
+    {
+        return appBase;
+    }
 
-   /**
-    * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
-    */
-   public void setAppBase(final String appBase)
-   {
-      this.appBase = appBase;
-   }
+    /**
+     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
+     */
+    public void setAppBase(final String appBase)
+    {
+        this.appBase = appBase;
+    }
 
-   /**
-    * @return a switch indicating whether the WAR should be unpacked
-    */
-   public boolean isUnpackArchive()
-   {
-      return unpackArchive;
-   }
+    /**
+     * @return a switch indicating whether the WAR should be unpacked
+     */
+    public boolean isUnpackArchive()
+    {
+        return unpackArchive;
+    }
 
-   /**
-    * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
-    * CDI support in a servlet environment.
-    *
-    * @param unpackArchive a switch indicating whether the WAR should be unpacked
-    */
-   public void setUnpackArchive(final boolean unpackArchive)
-   {
-      this.unpackArchive = unpackArchive;
-   }
+    /**
+     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
+     * CDI support in a servlet environment.
+     *
+     * @param unpackArchive a switch indicating whether the WAR should be unpacked
+     */
+    public void setUnpackArchive(final boolean unpackArchive)
+    {
+        this.unpackArchive = unpackArchive;
+    }
 
-   /**
-    * @param urlCharset the urlCharset to set
-    */
-   public void setUrlCharset(final String urlCharset)
-   {
-      this.urlCharset = urlCharset;
-   }
+    /**
+     * @param urlCharset the urlCharset to set
+     */
+    public void setUrlCharset(final String urlCharset)
+    {
+        this.urlCharset = urlCharset;
+    }
 
-   /**
-    * @return the urlCharset
-    */
-   public String getUrlCharset()
-   {
-      return urlCharset;
-   }
+    /**
+     * @return the urlCharset
+     */
+    public String getUrlCharset()
+    {
+        return urlCharset;
+    }
 
-   /**
-    * @param jmxVirtualHost the jmxVirtualHost to set
-    */
-   public void setJmxVirtualHost(final String jmxVirtualHost)
-   {
-      this.jmxVirtualHost = jmxVirtualHost;
-   }
+    /**
+     * @param jmxVirtualHost the jmxVirtualHost to set
+     */
+    public void setJmxVirtualHost(final String jmxVirtualHost)
+    {
+        this.jmxVirtualHost = jmxVirtualHost;
+    }
 
-   /**
-    * @return the jmxVirtualHost
-    */
-   public String getJmxVirtualHost()
-   {
-      return jmxVirtualHost;
-   }
+    /**
+     * @return the jmxVirtualHost
+     */
+    public String getJmxVirtualHost()
+    {
+        return jmxVirtualHost;
+    }
 
-   /**
-    * @return the jmxUri
-    */
-   public URI getJmxUri()
-   {
-      return jmxUri;
-   }
+    /**
+     * @return the jmxUri
+     */
+    public URI getJmxUri()
+    {
+        return jmxUri;
+    }
 
-   /**
-    * @return the managerUrl
-    */
-   public URL getManagerUrl()
-   {
-      return managerUrl;
-   }
+    /**
+     * @return the managerUrl
+     */
+    public URL getManagerUrl()
+    {
+        return managerUrl;
+    }
 
-   protected URI createJmxUri()
-   {
-      try
-      {
-         final String uriString;
-         final String template;
+    protected URI createJmxUri()
+    {
+        try
+        {
+            final String uriString;
+            final String template;
 
-         if (jmxServerPort != 0)
-         {
-            template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
-            uriString = String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort);
-         }
-         else
-         {
-            template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
-            uriString = String.format(template, bindAddress, jmxPort);
-         }
+            if (jmxServerPort != 0)
+            {
+                template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
+                uriString = String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort);
+            }
+            else
+            {
+                template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
+                uriString = String.format(template, bindAddress, jmxPort);
+            }
 
-         return new URI(uriString);
-      }
-      catch (final URISyntaxException e)
-      {
-         throw new ConfigurationException("JMX URI is not valid, please provide ", e);
-      }
-   }
+            return new URI(uriString);
+        } catch (final URISyntaxException e)
+        {
+            throw new ConfigurationException("JMX URI is not valid, please provide ", e);
+        }
+    }
 
-   protected URL createManagerUrl()
-   {
-      try
-      {
-         final String template = "http://%s:%d/manager";
+    protected URL createManagerUrl()
+    {
+        try
+        {
+            final String template = "http://%s:%d/manager";
 
-         final String urlString = String.format(template, bindAddress, bindHttpPort);
+            final String urlString = String.format(template, bindAddress, bindHttpPort);
 
-         return new URL(urlString);
-      }
-      catch (final MalformedURLException e)
-      {
-         throw new ConfigurationException("Manager URL is not valid, please provide ", e);
-      }
-   }
+            return new URL(urlString);
+        } catch (final MalformedURLException e)
+        {
+            throw new ConfigurationException("Manager URL is not valid, please provide ", e);
+        }
+    }
 
 }

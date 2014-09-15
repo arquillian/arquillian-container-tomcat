@@ -33,71 +33,67 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  */
 public final class ShrinkWrapUtil
 {
-   private ShrinkWrapUtil()
-   {
-   }
+    private ShrinkWrapUtil()
+    {
+    }
 
-   /**
-    * Creates a tmp folder and exports the file. Returns the URL for that file location.
-    *
-    * @param archive Archive to export
-    * @return
-    */
-   public static URL toURL(final Archive<?> archive)
-   {
-      // create a random named temp file, then delete and use it as a directory
-      try
-      {
-         final File root = File.createTempFile("arquillian", archive.getName());
-         root.delete();
-         root.mkdirs();
+    /**
+     * Creates a tmp folder and exports the file. Returns the URL for that file location.
+     *
+     * @param archive Archive to export
+     * @return
+     */
+    public static URL toURL(final Archive<?> archive)
+    {
+        // create a random named temp file, then delete and use it as a directory
+        try
+        {
+            final File root = File.createTempFile("arquillian", archive.getName());
+            root.delete();
+            root.mkdirs();
 
-         final File deployment = new File(root, archive.getName());
-         deployment.deleteOnExit();
-         archive.as(ZipExporter.class).exportTo(deployment, true);
-         return deployment.toURI().toURL();
-      }
-      catch (final Exception e)
-      {
-         throw new RuntimeException("Could not export deployment to temp", e);
-      }
-   }
+            final File deployment = new File(root, archive.getName());
+            deployment.deleteOnExit();
+            archive.as(ZipExporter.class).exportTo(deployment, true);
+            return deployment.toURI().toURL();
+        } catch (final Exception e)
+        {
+            throw new RuntimeException("Could not export deployment to temp", e);
+        }
+    }
 
-   public static URL toURL(final Descriptor descriptor)
-   {
-      // create a random named temp file, then delete and use it as a directory
-      try
-      {
-         final File root = File.createTempFile("arquillian", descriptor.getDescriptorName());
-         root.delete();
-         root.mkdirs();
+    public static URL toURL(final Descriptor descriptor)
+    {
+        // create a random named temp file, then delete and use it as a directory
+        try
+        {
+            final File root = File.createTempFile("arquillian", descriptor.getDescriptorName());
+            root.delete();
+            root.mkdirs();
 
-         final File deployment = new File(root, descriptor.getDescriptorName());
-         deployment.deleteOnExit();
+            final File deployment = new File(root, descriptor.getDescriptorName());
+            deployment.deleteOnExit();
 
-         final FileOutputStream stream = new FileOutputStream(deployment);
-         try
-         {
-            descriptor.exportTo(stream);
-         }
-         finally
-         {
+            final FileOutputStream stream = new FileOutputStream(deployment);
             try
             {
-               stream.close();
-            }
-            catch (final Exception e)
+                descriptor.exportTo(stream);
+            } finally
             {
-               throw new RuntimeException(e);
+                try
+                {
+                    stream.close();
+                } catch (final Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
-         }
 
-         return deployment.toURI().toURL();
-      }
-      catch (final Exception e)
-      {
-         throw new RuntimeException("Could not export deployment to temp", e);
-      }
-   }
+            return deployment.toURI().toURL();
+        } catch (final Exception e)
+        {
+            throw new RuntimeException("Could not export deployment to temp", e);
+        }
+    }
 
 }

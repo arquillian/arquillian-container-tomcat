@@ -33,8 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the
- * Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
@@ -44,32 +43,32 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class TomcatRemoteClientIT
 {
-   @Deployment(testable = false)
-   public static WebArchive createDeployment()
-   {
-      return ShrinkWrap
+    @Deployment(testable = false)
+    public static WebArchive createDeployment()
+    {
+        return ShrinkWrap
             .create(WebArchive.class, "test.war")
             .addClass(TestServlet.class)
             .setWebXML(
-                  new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
-                        .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
-                        .createServletMapping().servletName("TestServlet").urlPattern("/Test").up().exportAsString()));
-   }
+                new StringAsset(Descriptors.create(WebAppDescriptor.class).version("2.5").createServlet()
+                    .servletClass(TestServlet.class.getName()).servletName("TestServlet").up()
+                    .createServletMapping().servletName("TestServlet").urlPattern("/Test").up().exportAsString()));
+    }
 
-   @Test
-   public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-   {
-      final String expected = "hello";
+    @Test
+    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
+    {
+        final String expected = "hello";
 
-      final URL url = new URL(contextRoot, "Test");
-      final InputStream in = url.openConnection().getInputStream();
+        final URL url = new URL(contextRoot, "Test");
+        final InputStream in = url.openConnection().getInputStream();
 
-      final byte[] buffer = new byte[10000];
-      final int len = in.read(buffer);
-      String httpResponse = "";
-      for (int q = 0; q < len; q++)
-         httpResponse += (char) buffer[q];
+        final byte[] buffer = new byte[10000];
+        final int len = in.read(buffer);
+        String httpResponse = "";
+        for (int q = 0; q < len; q++)
+            httpResponse += (char) buffer[q];
 
-      Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
-   }
+        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+    }
 }
