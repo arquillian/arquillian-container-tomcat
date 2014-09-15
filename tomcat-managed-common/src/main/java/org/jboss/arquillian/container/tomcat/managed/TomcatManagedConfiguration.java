@@ -68,9 +68,9 @@ public class TomcatManagedConfiguration extends TomcatConfiguration
             "Either \"java.home\" system property or javaHome property in Arquillian configuration "
                   + "must be set and point to a valid directory! " + javaHome + " is not valid directory!");
 
-      Validate.isValidFile(catalinaHome + "/conf/" + serverConfig,
-            "The server configuration file denoted by serverConfig property has to exist! This file: " + catalinaHome
-                  + "/conf/" + serverConfig + " does not!");
+      Validate.isValidFile(getCatalinaBase() + "/conf/" + serverConfig,
+            "The server configuration file denoted by serverConfig property has to exist! This file: "
+                  + getCatalinaBase() + "/conf/" + serverConfig + " does not!");
 
       // set write output to console
       this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>()
