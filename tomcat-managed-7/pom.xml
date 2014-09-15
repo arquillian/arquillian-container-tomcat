@@ -15,9 +15,13 @@
     <name>Arquillian Tomcat Managed 7.x Container</name>
 
     <properties>
+
         <tomcat.major.version>7</tomcat.major.version>
         <tomcat.version>${tomcat.major.version}.0.20</tomcat.version>
-        <tomcat.home>${project.build.directory}/apache-tomcat-${tomcat.version}</tomcat.home>
+
+        <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}</test.catalina.home>
+        <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat${tomcat.major.version}x</test.catalina.base>
+
     </properties>
 
     <dependencies>
@@ -40,33 +44,25 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>generate-test-resources</phase>
+                        <id>install-container</id>
                         <configuration>
-                            <tasks>
-                                <mkdir dir="${project.build.directory}/downloads" />
-                                <get
-                                    src="http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip"
-                                    dest="${project.build.directory}/downloads" verbose="true" skipexisting="true" />
-                                <unzip src="${project.build.directory}/downloads/apache-tomcat-${tomcat.version}.zip"
-                                    dest="${project.build.directory}" />
-                        <!-- Remove the default ROOT webapp so it won't collide with tests -->
-                                <delete dir="${project.build.directory}/apache-tomcat-${tomcat.version}/webapps/ROOT" />
-                            </tasks>
+                            <container>
+                                <containerId>tomcat${tomcat.major.version}x</containerId>
+                                <zipUrlInstaller>
+                                    <url>http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                                </zipUrlInstaller>
+                            </container>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>

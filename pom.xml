@@ -126,8 +126,8 @@
                     <artifactId>cargo-maven2-plugin</artifactId>
                     <version>1.4.9</version>
                 </plugin>
-            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
-               build itself. -->
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
+                    build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -135,21 +135,6 @@
                     <configuration>
                         <lifecycleMappingMetadata>
                             <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-antrun-plugin</artifactId>
-                                        <versionRange>[1.7,)</versionRange>
-                                        <goals>
-                                            <goal>run</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute>
-                                            <runOnIncremental>true</runOnIncremental>
-                                        </execute>
-                                    </action>
-                                </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>org.codehaus.mojo</groupId>
@@ -178,8 +163,8 @@
             <id>build-server</id>
             <build>
                 <plugins>
-               <!-- surefire default forks the JVM for testing, so we need to pass on the maven.repo.local variable so the
-                  MavenResolver used in the test cases can read from the same local repo. -->
+                   <!-- Surefire by default forks the JVM for testing, so we need to pass on the maven.repo.local variable so
+                        the MavenResolver used in the test cases can read from the same local repo. -->
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>

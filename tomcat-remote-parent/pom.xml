@@ -93,31 +93,38 @@
                             <goals>
                                 <goal>start</goal>
                             </goals>
+                            <configuration>
+                                <container>
+                                    <systemProperties>
+                                        <java.rmi.server.hostname>127.0.0.1</java.rmi.server.hostname>
+                                        <com.sun.management.jmxremote.port>${test.jmx.port}</com.sun.management.jmxremote.port>
+                                        <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+                                        <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+                                    </systemProperties>
+                                </container>
+                                <configuration>
+                                    <properties>
+                                        <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                                        <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                                        <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
+                                    </properties>
+                                    <configfiles>
+                                        <configfile>
+                                            <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                                            <toDir>conf</toDir>
+                                        </configfile>
+                                    </configfiles>
+                                </configuration>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>stop-container</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>stop</goal>
+                            </goals>
                         </execution>
                     </executions>
-                    <configuration>
-                        <container>
-                            <systemProperties>
-                                <java.rmi.server.hostname>127.0.0.1</java.rmi.server.hostname>
-                                <com.sun.management.jmxremote.port>${test.jmx.port}</com.sun.management.jmxremote.port>
-                                <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
-                                <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
-                            </systemProperties>
-                        </container>
-                        <configuration>
-                            <properties>
-                                <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
-                                <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
-                                <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
-                            </properties>
-                            <configfiles>
-                                <configfile>
-                                    <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
-                                    <toDir>conf</toDir>
-                                </configfile>
-                            </configfiles>
-                        </configuration>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>

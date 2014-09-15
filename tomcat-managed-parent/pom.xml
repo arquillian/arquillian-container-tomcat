@@ -15,6 +15,13 @@
     <packaging>pom</packaging>
     <name>Arquillian Tomcat Managed Container Parent</name>
 
+    <properties>
+        <!-- ARQ-630: We'll use credentials with ISO-8859-1 characters for testing.  This also tests for US-ASCII support as
+        the G0 subset overlaps with US-ASCII. -->
+        <test.manager.username>Schröder</test.manager.username>
+        <test.manager.password>Contraseña</test.manager.password>
+    </properties>
+
     <dependencies>
 
       <!-- Compile Scope -->
@@ -38,38 +45,62 @@
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
                     <executions>
                         <execution>
-                            <id>copy-resources</id>
-                            <phase>process-test-resources</phase>
+                            <id>reserve-network-port</id>
                             <goals>
-                                <goal>copy-resources</goal>
+                                <goal>reserve-network-port</goal>
                             </goals>
+                            <phase>initialize</phase>
                             <configuration>
-                                <outputDirectory>${tomcat.home}/conf</outputDirectory>
-                                <overwrite>true</overwrite>
-                                <resources>
-                                    <resource>
-                                        <directory>${basedir}/src/test/resources/container</directory>
-                                    </resource>
-                                </resources>
+                                <portNames>
+                                    <portName>test.ajp.port</portName>
+                                    <portName>test.http.port</portName>
+                                    <portName>test.jmx.port</portName>
+                                    <portName>test.rmi.port</portName>
+                                </portNames>
                             </configuration>
                         </execution>
                     </executions>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <environmentVariables>
-                            <CATALINA_HOME>${tomcat.home}</CATALINA_HOME>
-                        </environmentVariables>
-                  <!-- Workaround for SHRINKDESC-97 until it is fixed. -->
-                        <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
-                    </configuration>
+                    <groupId>org.codehaus.cargo</groupId>
+                    <artifactId>cargo-maven2-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>install-container</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>configure</goal>
+                            </goals>
+                            <configuration>
+                                <configuration>
+                                    <properties>
+                                        <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                                        <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                                        <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
+                                    </properties>
+                                    <configfiles>
+                                        <configfile>
+                                            <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                                            <toDir>conf</toDir>
+                                        </configfile>
+                                    </configfiles>
+                                </configuration>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
