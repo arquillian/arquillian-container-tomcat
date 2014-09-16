@@ -16,7 +16,10 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
+
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
@@ -30,17 +33,17 @@ import org.junit.runner.RunWith;
  *
  */
 @RunWith(Arquillian.class)
-public class Tomcat7ManagedClientIT extends TomcatManagedClientITBase
-{
-    @Deployment(name = TestDeploymentFactory.ROOT_CONTEXT, testable = false)
-    public static WebArchive createRootDeployment()
-    {
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.ROOT_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
+public class Tomcat7ManagedClientIT extends TomcatClientITBase {
+
+    @Deployment(name = ROOT_CONTEXT, testable = false)
+    public static WebArchive createRootDeployment() {
+
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_3_0);
     }
 
-    @Deployment(name = TestDeploymentFactory.TEST_CONTEXT, testable = false)
-    public static WebArchive createTestDeployment()
-    {
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TestDeploymentFactory.TEST_CONTEXT, TestDeploymentFactory.SERVLET_3_0);
+    @Deployment(name = TEST_CONTEXT, testable = false)
+    public static WebArchive createTestDeployment() {
+
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_3_0);
     }
 }

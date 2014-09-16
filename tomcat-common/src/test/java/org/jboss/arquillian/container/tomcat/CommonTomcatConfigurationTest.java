@@ -26,19 +26,16 @@ import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CommonTomcatConfigurationTest
-{
+public class CommonTomcatConfigurationTest {
     private TomcatConfiguration commonTomcatConfiguration;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         commonTomcatConfiguration = new TomcatConfiguration();
     }
 
     @Test
-    public void testCreateJmxUriForDefaultBindAddressAndJmxServerPort()
-    {
+    public void testCreateJmxUriForDefaultBindAddressAndJmxServerPort() {
         final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
 
         final String actualJmxUriString = actualJmxUri.toString();
@@ -49,8 +46,7 @@ public class CommonTomcatConfigurationTest
     }
 
     @Test
-    public void testCreateJmxUriForSetBindAddressAndJmxServerPort()
-    {
+    public void testCreateJmxUriForSetBindAddressAndJmxServerPort() {
         final int testJmxServerPort = 5;
         final String testBindAddress = "somewhere";
 
@@ -61,23 +57,20 @@ public class CommonTomcatConfigurationTest
 
         final String actualJmxUriString = actualJmxUri.toString();
 
-        final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort
-            + "/jmxrmi";
+        final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort + "/jmxrmi";
 
         assertEquals(expectedJmxUriString, actualJmxUriString);
     }
 
     @Test(expected = ConfigurationException.class)
-    public void testCreateJmxUriForInvalidUri()
-    {
+    public void testCreateJmxUriForInvalidUri() {
         commonTomcatConfiguration.setBindAddress("^");
 
         commonTomcatConfiguration.createJmxUri();
     }
 
     @Test
-    public void testCreateManagerUrlForDefaultHostAndPort()
-    {
+    public void testCreateManagerUrlForDefaultHostAndPort() {
         final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
 
         final String actualManagerUrlString = actualManagerUrl.toString();
@@ -88,8 +81,7 @@ public class CommonTomcatConfigurationTest
     }
 
     @Test
-    public void testCreateManagerUrlForSetHostAndPort()
-    {
+    public void testCreateManagerUrlForSetHostAndPort() {
         final String testBindAddress = "somewhere";
         final int testBindHttpPort = 5;
 
@@ -106,8 +98,7 @@ public class CommonTomcatConfigurationTest
     }
 
     @Test(expected = ConfigurationException.class)
-    public void testCreateManagerUrlForInvalidUrl()
-    {
+    public void testCreateManagerUrlForInvalidUrl() {
         commonTomcatConfiguration.setBindAddress(":");
 
         commonTomcatConfiguration.createManagerUrl();

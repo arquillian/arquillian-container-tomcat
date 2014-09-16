@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2014, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2010, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed;
+package org.jboss.arquillian.container.tomcat.remote;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
 
@@ -32,17 +32,17 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedClientIT extends TomcatClientITBase {
+public class Tomcat7RemoteClientIT extends TomcatClientITBase {
 
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_3_0);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_3_0);
     }
 }

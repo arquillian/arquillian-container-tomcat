@@ -146,7 +146,22 @@
                                     </pluginExecutionFilter>
                                     <action>
                                         <execute>
-                                            <runOnIncremental>true</runOnIncremental>
+                                            <runOnIncremental>false</runOnIncremental>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.cargo</groupId>
+                                        <artifactId>cargo-maven2-plugin</artifactId>
+                                        <versionRange>[1.4.9,)</versionRange>
+                                        <goals>
+                                            <goal>configure</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>false</runOnIncremental>
                                         </execute>
                                     </action>
                                 </pluginExecution>

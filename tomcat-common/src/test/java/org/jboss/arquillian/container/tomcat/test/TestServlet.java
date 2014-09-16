@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public class TestServlet extends HttpServlet
-{
+public class TestServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     public static final String URL_PATTERN = "/Test";
@@ -38,9 +38,8 @@ public class TestServlet extends HttpServlet
     public static final String MESSAGE = "hello";
 
     @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-        IOException
-    {
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+
         response.getWriter().append(MESSAGE);
     }
 }

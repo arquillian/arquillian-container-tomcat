@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed;
+package org.jboss.arquillian.container.tomcat.embedded;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
 
@@ -32,17 +32,17 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedClientIT extends TomcatClientITBase {
+public class Tomcat6EmbeddedClientIT extends TomcatClientITBase {
 
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_2_5);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_5);
     }
 }

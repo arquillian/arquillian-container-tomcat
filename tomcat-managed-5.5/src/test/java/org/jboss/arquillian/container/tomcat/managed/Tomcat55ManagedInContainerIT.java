@@ -16,21 +16,18 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
-import java.io.InputStream;
-import java.net.URL;
-
-import javax.annotation.Resource;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
+import static org.junit.Assert.*;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.container.tomcat.test.TestBean;
+import org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory;
 import org.jboss.arquillian.container.tomcat.test.TestServlet;
+import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
+import org.jboss.arquillian.container.tomcat.test.TomcatInContainerITBase;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.IOUtilDelegator;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
@@ -40,38 +37,42 @@ import org.junit.runner.RunWith;
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedInContainerIT
-{
-    @Resource(name = "resourceInjectionTestName")
-    private String resourceInjectionTestValue;
+public class Tomcat55ManagedInContainerIT extends TomcatInContainerITBase {
 
-    @Deployment
-    public static WebArchive createTestArchive()
-    {
-        final WebArchive war = ShrinkWrap.create(WebArchive.class, "test2.war").addClasses(TestServlet.class)
-            .setWebXML("in-container-web.xml");
+    @Deployment(name = ROOT_CONTEXT)
+    public static WebArchive createRootDeployment() {
+
+        return createDeployment(ROOT_CONTEXT);
+    }
+
+    @Deployment(name = TEST_CONTEXT)
+    public static WebArchive createTestDeployment() {
+
+        return createDeployment(TEST_CONTEXT);
+    }
+
+    @Override
+    protected void assertInjection(final TestBean testBean) {
+
+        assertEquals("Hello World from an evn-entry", resourceInjectionTestValue);
+    }
+
+    private static WebArchive createDeployment(final String context) {
+
+        final String archiveName = getArchiveName(context);
+
+        final WebArchive war =
+            ShrinkWrap
+                .create(WebArchive.class, archiveName)
+                .addClasses(TestServlet.class, TestBean.class, TomcatClientITBase.class, TomcatInContainerITBase.class,
+                    TestDeploymentFactory.class).addAsResource("logging.properties")
+                .setWebXML("in-container-web-" + SERVLET_2_4 + ".xml");
 
         return war;
     }
 
-    @Test
-    public void shouldBeAbleToInjectMembersIntoTestClass()
-    {
-        Assert.assertEquals("Hello World from an evn-entry", this.resourceInjectionTestValue);
-    }
+    private static String getArchiveName(final String context) {
 
-    @Test
-    @RunAsClient
-    public void shouldBeAbleToInvokeServletInDeployedWebApp(@ArquillianResource final URL contextRoot) throws Exception
-    {
-        final String expected = "hello";
-
-        final URL url = new URL(contextRoot, "Test");
-        final InputStream in = url.openConnection().getInputStream();
-
-        final byte[] buffer = IOUtilDelegator.asByteArray(in);
-        final String httpResponse = new String(buffer);
-
-        Assert.assertEquals("Expected output was not equal by value", expected, httpResponse);
+        return context + ".war";
     }
 }

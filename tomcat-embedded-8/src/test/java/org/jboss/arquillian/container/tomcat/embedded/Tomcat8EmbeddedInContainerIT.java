@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed;
+package org.jboss.arquillian.container.tomcat.embedded;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
+import org.jboss.arquillian.container.tomcat.test.TomcatInContainerITBase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
@@ -27,22 +27,21 @@ import org.junit.runner.RunWith;
 /**
  * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
- * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedClientIT extends TomcatClientITBase {
+public class Tomcat8EmbeddedInContainerIT extends TomcatInContainerITBase {
 
-    @Deployment(name = ROOT_CONTEXT, testable = false)
+    @Deployment(name = ROOT_CONTEXT)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_3_0);
     }
 
-    @Deployment(name = TEST_CONTEXT, testable = false)
+    @Deployment(name = TEST_CONTEXT)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(TEST_CONTEXT, SERVLET_3_0);
     }
 }
