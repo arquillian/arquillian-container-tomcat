@@ -34,8 +34,6 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
-import org.jboss.arquillian.container.tomcat.embedded.SystemPropertiesUtil;
-import org.jboss.arquillian.container.tomcat.embedded.TomcatEmbeddedConfiguration;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
@@ -63,8 +61,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  *
  * @version $Revision: $
  */
-public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbeddedConfiguration>
-{
+public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbeddedConfiguration> {
+
     private final SystemPropertiesUtil systemPropertiesUtil = new SystemPropertiesUtil();
 
     /**
@@ -90,24 +88,23 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
     private InstanceProducer<StandardContext> standardContextProducer;
 
     @Override
-    public Class<TomcatEmbeddedConfiguration> getConfigurationClass()
-    {
+    public Class<TomcatEmbeddedConfiguration> getConfigurationClass() {
+
         return TomcatEmbeddedConfiguration.class;
     }
 
     @Override
-    public ProtocolDescription getDefaultProtocol()
-    {
+    public ProtocolDescription getDefaultProtocol() {
+
         return new ProtocolDescription("Servlet 3.0");
     }
 
     @Override
-    public void setup(final TomcatEmbeddedConfiguration configuration)
-    {
+    public void setup(final TomcatEmbeddedConfiguration configuration) {
+
         final String serverName = configuration.getServerName();
 
-        if (serverName == null || "".equals(serverName))
-        {
+        if (serverName == null || "".equals(serverName)) {
             configuration.setServerName("arquillian-tomcat-embedded-7");
         }
 
@@ -115,37 +112,31 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
     }
 
     @Override
-    public void start() throws LifecycleException
-    {
-        try
-        {
+    public void start() throws LifecycleException {
+
+        try {
             startTomcatEmbedded();
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new LifecycleException("Failed to start embedded Tomcat", e);
         }
     }
 
     @Override
-    public void stop() throws LifecycleException
-    {
-        if (wasStarted)
-        {
-            try
-            {
+    public void stop() throws LifecycleException {
+
+        if (wasStarted) {
+            try {
                 stopTomcatEmbedded();
-            } catch (final org.apache.catalina.LifecycleException e)
-            {
+            } catch (final org.apache.catalina.LifecycleException e) {
                 throw new LifecycleException("Failed to stop Tomcat", e);
             }
         }
     }
 
     @Override
-    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
-    {
-        try
-        {
+    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
+
+        try {
             // Ensure we don't create a corrupted archive by exporting to a file that already exists.
             deleteWar(archive);
 
@@ -158,49 +149,44 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
             final StandardContext standardContext = (StandardContext) host.findChild(contextName.getName());
             standardContextProducer.set(standardContext);
 
-            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(),
-                configuration.getBindHttpPort());
+            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
-            for (final String mapping : standardContext.findServletMappings())
-            {
+            for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextName.getPath()));
             }
 
             return new ProtocolMetaData().addContext(httpContext);
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new DeploymentException("Failed to deploy " + archive.getName(), e);
         }
     }
 
     @Override
-    public void undeploy(final Archive<?> archive) throws DeploymentException
-    {
-        try
-        {
+    public void undeploy(final Archive<?> archive) throws DeploymentException {
+
+        try {
             embeddedHostConfig.undeployWAR(archive.getName());
 
             deleteWar(archive);
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new DeploymentException("Failed to undeploy " + archive.getName(), e);
         }
     }
 
     @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void deploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void undeploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    protected void startTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException
-    {
+    protected void startTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException {
+
         /*
          * Derived from setUp() in
          * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/test/org/apache/catalina/startup
@@ -215,8 +201,7 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
         CatalinaProperties.getProperty("foo");
 
         appBase = new File(tempDir, "webapps");
-        if (!appBase.exists() && !appBase.mkdirs())
-        {
+        if (!appBase.exists() && !appBase.mkdirs()) {
             throw new LifecycleException("Unable to create appBase " + appBase.getAbsolutePath() + " for Tomcat");
         }
 
@@ -256,8 +241,8 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
         wasStarted = true;
     }
 
-    protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException
-    {
+    protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException {
+
         tomcat.stop();
         tomcat.destroy();
     }
@@ -267,21 +252,18 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
      *
      * @see {@link TomcatEmbeddedConfiguration#isUnpackArchive()}
      */
-    private void deleteWar(final Archive<?> archive)
-    {
-        if (configuration.isUnpackArchive())
-        {
+    private void deleteWar(final Archive<?> archive) {
+
+        if (configuration.isUnpackArchive()) {
             final ContextName contextName = getContextName(archive);
             final File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
-            if (unpackDir.exists())
-            {
+            if (unpackDir.exists()) {
                 ExpandWar.deleteDir(unpackDir);
             }
         }
 
         final File warFile = new File(host.getAppBase(), archive.getName());
-        if (warFile.exists())
-        {
+        if (warFile.exists()) {
             warFile.delete();
         }
     }
@@ -295,38 +277,31 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
      * @return the Tomcat home directory path.
      * @throws LifecycleException if the underlying directory could not be created.
      */
-    private File getTomcatHomeFile() throws LifecycleException
-    {
+    private File getTomcatHomeFile() throws LifecycleException {
+
         // TODO this needs to be a lot more robust
         final String tomcatHome = configuration.getTomcatHome();
         File tomcatHomeFile;
 
-        if (tomcatHome != null)
-        {
+        if (tomcatHome != null) {
             tomcatHomeFile = new File(systemPropertiesUtil.substituteEvironmentVariable(tomcatHome));
 
-            if (!tomcatHomeFile.exists() && !tomcatHomeFile.mkdirs())
-            {
+            if (!tomcatHomeFile.exists() && !tomcatHomeFile.mkdirs()) {
                 throw new LifecycleException("Unable to create home directory for Tomcat");
             }
 
             tomcatHomeFile.deleteOnExit();
             return tomcatHomeFile;
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 tomcatHomeFile = File.createTempFile("tomcat-embedded-7", null);
-                if (!tomcatHomeFile.delete() || !tomcatHomeFile.mkdirs())
-                {
+                if (!tomcatHomeFile.delete() || !tomcatHomeFile.mkdirs()) {
                     throw new LifecycleException("Unable to create temporary home directory "
                         + tomcatHomeFile.getAbsolutePath() + " for Tomcat");
                 }
                 tomcatHomeFile.deleteOnExit();
                 return tomcatHomeFile;
-            } catch (final IOException e)
-            {
+            } catch (final IOException e) {
                 throw new LifecycleException("Unable to create temporary home directory for Tomcat", e);
             }
         }
@@ -338,8 +313,8 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
      * @param archive the Arquillian archive.
      * @return the Tomcat context name helper.
      */
-    private ContextName getContextName(final Archive<?> archive)
-    {
+    private ContextName getContextName(final Archive<?> archive) {
+
         return new ContextName(archive.getName(), true);
     }
 }

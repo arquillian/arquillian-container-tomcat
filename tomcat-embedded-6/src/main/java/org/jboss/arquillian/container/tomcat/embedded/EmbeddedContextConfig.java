@@ -37,14 +37,14 @@ import org.xml.sax.InputSource;
  *
  * @author Dan Allen
  */
-public class EmbeddedContextConfig extends ContextConfig
-{
+public class EmbeddedContextConfig extends ContextConfig {
+
     /**
      * Override as a hook to process the application context configuration.
      */
     @Override
-    protected void defaultWebConfig()
-    {
+    protected void defaultWebConfig() {
+
         applicationContextConfig();
         super.defaultWebConfig();
     }
@@ -53,47 +53,36 @@ public class EmbeddedContextConfig extends ContextConfig
      * Process the META-INF/context.xml descriptor in the web application root. This descriptor is not processed when a webapp
      * is added programmatically through a StandardContext
      */
-    protected void applicationContextConfig()
-    {
+    protected void applicationContextConfig() {
+
         final ServletContext servletContext = context.getServletContext();
         final InputStream stream = servletContext.getResourceAsStream("/" + Constants.ApplicationContextXml);
-        if (stream == null)
-        {
+        if (stream == null) {
             return;
         }
         // this bad-practice synchronization is inherited
-        synchronized (contextDigester)
-        {
+        synchronized (contextDigester) {
             URL url = null;
-            try
-            {
+            try {
                 url = servletContext.getResource("/" + Constants.ApplicationContextXml);
-            } catch (final MalformedURLException e)
-            {
-                throw new AssertionError("/" + Constants.ApplicationContextXml
-                    + " should not be considered a malformed URL");
+            } catch (final MalformedURLException e) {
+                throw new AssertionError("/" + Constants.ApplicationContextXml + " should not be considered a malformed URL");
             }
             final InputSource is = new InputSource(url.toExternalForm());
             is.setByteStream(stream);
             contextDigester.push(context);
-            try
-            {
+            try {
                 contextDigester.parse(is);
-            } catch (final Exception e)
-            {
+            } catch (final Exception e) {
                 ok = false;
                 log.error("Parse error in context.xml for " + context.getName(), e);
-            } finally
-            {
+            } finally {
                 contextDigester.reset();
-                try
-                {
-                    if (stream != null)
-                    {
+                try {
+                    if (stream != null) {
                         stream.close();
                     }
-                } catch (final IOException e)
-                {
+                } catch (final IOException e) {
                     log.error("Error closing context.xml for " + context.getName(), e);
                 }
             }
@@ -105,8 +94,8 @@ public class EmbeddedContextConfig extends ContextConfig
      * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.
      */
     @Override
-    protected void fixDocBase() throws IOException
-    {
+    protected void fixDocBase() throws IOException {
+
         super.fixDocBase();
         // If this field is not null, the unpacked WAR is removed when
         // the context is closed. This is normally used by the antiLocking

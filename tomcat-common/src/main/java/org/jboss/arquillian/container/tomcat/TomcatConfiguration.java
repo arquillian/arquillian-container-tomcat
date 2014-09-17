@@ -32,8 +32,7 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @version $Revision: $
  */
-public class TomcatConfiguration implements ContainerConfiguration
-{
+public class TomcatConfiguration implements ContainerConfiguration {
 
     private static final int MIN_PORT = 0;
 
@@ -64,32 +63,32 @@ public class TomcatConfiguration implements ContainerConfiguration
     private URL managerUrl;
 
     @Override
-    public void validate() throws ConfigurationException
-    {
+    public void validate() throws ConfigurationException {
+
         Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
 
-        Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT
-            + "[, but was " + jmxPort);
+        Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT + "[, but was "
+            + jmxPort);
 
-        Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + ","
-            + MAX_PORT + "[, but was " + jmxServerPort);
+        Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + "," + MAX_PORT
+            + "[, but was " + jmxServerPort);
 
         this.jmxUri = createJmxUri();
         this.managerUrl = createManagerUrl();
     }
 
-    public String getBindAddress()
-    {
+    public String getBindAddress() {
+
         return bindAddress;
     }
 
-    public void setBindAddress(final String bindAddress)
-    {
+    public void setBindAddress(final String bindAddress) {
+
         this.bindAddress = bindAddress;
     }
 
-    public int getBindHttpPort()
-    {
+    public int getBindHttpPort() {
+
         return bindHttpPort;
     }
 
@@ -98,69 +97,69 @@ public class TomcatConfiguration implements ContainerConfiguration
      *
      * @param bindHttpPort HTTP bind port
      */
-    public void setBindHttpPort(final int bindHttpPort)
-    {
+    public void setBindHttpPort(final int bindHttpPort) {
+
         this.bindHttpPort = bindHttpPort;
     }
 
-    public String getUser()
-    {
+    public String getUser() {
+
         return user;
     }
 
-    public void setUser(final String user)
-    {
+    public void setUser(final String user) {
+
         this.user = user;
     }
 
-    public String getPass()
-    {
+    public String getPass() {
+
         return pass;
     }
 
-    public void setPass(final String pass)
-    {
+    public void setPass(final String pass) {
+
         this.pass = pass;
     }
 
-    public int getJmxPort()
-    {
+    public int getJmxPort() {
+
         return jmxPort;
     }
 
-    public void setJmxPort(final int jmxPort)
-    {
+    public void setJmxPort(final int jmxPort) {
+
         this.jmxPort = jmxPort;
     }
 
-    public int getJmxServerPort()
-    {
+    public int getJmxServerPort() {
+
         return jmxServerPort;
     }
 
-    public void setJmxServerPort(final int jmxServerPort)
-    {
+    public void setJmxServerPort(final int jmxServerPort) {
+
         this.jmxServerPort = jmxServerPort;
     }
 
-    public String getAppBase()
-    {
+    public String getAppBase() {
+
         return appBase;
     }
 
     /**
      * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
      */
-    public void setAppBase(final String appBase)
-    {
+    public void setAppBase(final String appBase) {
+
         this.appBase = appBase;
     }
 
     /**
      * @return a switch indicating whether the WAR should be unpacked
      */
-    public boolean isUnpackArchive()
-    {
+    public boolean isUnpackArchive() {
+
         return unpackArchive;
     }
 
@@ -170,95 +169,88 @@ public class TomcatConfiguration implements ContainerConfiguration
      *
      * @param unpackArchive a switch indicating whether the WAR should be unpacked
      */
-    public void setUnpackArchive(final boolean unpackArchive)
-    {
+    public void setUnpackArchive(final boolean unpackArchive) {
+
         this.unpackArchive = unpackArchive;
     }
 
     /**
      * @param urlCharset the urlCharset to set
      */
-    public void setUrlCharset(final String urlCharset)
-    {
+    public void setUrlCharset(final String urlCharset) {
+
         this.urlCharset = urlCharset;
     }
 
     /**
      * @return the urlCharset
      */
-    public String getUrlCharset()
-    {
+    public String getUrlCharset() {
+
         return urlCharset;
     }
 
     /**
      * @param jmxVirtualHost the jmxVirtualHost to set
      */
-    public void setJmxVirtualHost(final String jmxVirtualHost)
-    {
+    public void setJmxVirtualHost(final String jmxVirtualHost) {
+
         this.jmxVirtualHost = jmxVirtualHost;
     }
 
     /**
      * @return the jmxVirtualHost
      */
-    public String getJmxVirtualHost()
-    {
+    public String getJmxVirtualHost() {
+
         return jmxVirtualHost;
     }
 
     /**
      * @return the jmxUri
      */
-    public URI getJmxUri()
-    {
+    public URI getJmxUri() {
+
         return jmxUri;
     }
 
     /**
      * @return the managerUrl
      */
-    public URL getManagerUrl()
-    {
+    public URL getManagerUrl() {
+
         return managerUrl;
     }
 
-    protected URI createJmxUri()
-    {
-        try
-        {
+    protected URI createJmxUri() {
+
+        try {
             final String uriString;
             final String template;
 
-            if (jmxServerPort != 0)
-            {
+            if (jmxServerPort != 0) {
                 template = "service:jmx:rmi://%s:%d/jndi/rmi://%s:%d/jmxrmi";
                 uriString = String.format(template, bindAddress, jmxServerPort, bindAddress, jmxPort);
-            }
-            else
-            {
+            } else {
                 template = "service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi";
                 uriString = String.format(template, bindAddress, jmxPort);
             }
 
             return new URI(uriString);
-        } catch (final URISyntaxException e)
-        {
+        } catch (final URISyntaxException e) {
             throw new ConfigurationException("JMX URI is not valid, please provide ", e);
         }
     }
 
-    protected URL createManagerUrl()
-    {
-        try
-        {
+    protected URL createManagerUrl() {
+
+        try {
             final String template = "http://%s:%d/manager";
 
             final String urlString = String.format(template, bindAddress, bindHttpPort);
 
             return new URL(urlString);
-        } catch (final MalformedURLException e)
-        {
+        } catch (final MalformedURLException e) {
             throw new ConfigurationException("Manager URL is not valid, please provide ", e);
         }
     }

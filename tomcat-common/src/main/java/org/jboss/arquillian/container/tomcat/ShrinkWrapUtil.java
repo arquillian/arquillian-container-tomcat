@@ -31,10 +31,10 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public final class ShrinkWrapUtil
-{
-    private ShrinkWrapUtil()
-    {
+public final class ShrinkWrapUtil {
+
+    private ShrinkWrapUtil() {
+
     }
 
     /**
@@ -43,11 +43,10 @@ public final class ShrinkWrapUtil
      * @param archive Archive to export
      * @return
      */
-    public static URL toURL(final Archive<?> archive)
-    {
+    public static URL toURL(final Archive<?> archive) {
+
         // create a random named temp file, then delete and use it as a directory
-        try
-        {
+        try {
             final File root = File.createTempFile("arquillian", archive.getName());
             root.delete();
             root.mkdirs();
@@ -56,17 +55,15 @@ public final class ShrinkWrapUtil
             deployment.deleteOnExit();
             archive.as(ZipExporter.class).exportTo(deployment, true);
             return deployment.toURI().toURL();
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new RuntimeException("Could not export deployment to temp", e);
         }
     }
 
-    public static URL toURL(final Descriptor descriptor)
-    {
+    public static URL toURL(final Descriptor descriptor) {
+
         // create a random named temp file, then delete and use it as a directory
-        try
-        {
+        try {
             final File root = File.createTempFile("arquillian", descriptor.getDescriptorName());
             root.delete();
             root.mkdirs();
@@ -75,23 +72,18 @@ public final class ShrinkWrapUtil
             deployment.deleteOnExit();
 
             final FileOutputStream stream = new FileOutputStream(deployment);
-            try
-            {
+            try {
                 descriptor.exportTo(stream);
-            } finally
-            {
-                try
-                {
+            } finally {
+                try {
                     stream.close();
-                } catch (final Exception e)
-                {
+                } catch (final Exception e) {
                     throw new RuntimeException(e);
                 }
             }
 
             return deployment.toURI().toURL();
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new RuntimeException("Could not export deployment to temp", e);
         }
     }

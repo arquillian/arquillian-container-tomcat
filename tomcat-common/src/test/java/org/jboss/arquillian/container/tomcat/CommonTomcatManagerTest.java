@@ -22,11 +22,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class CommonTomcatManagerTest {
-    private static final TomcatManager<TomcatConfiguration> COMMON_TOMCAT_MANAGER = new TomcatManager<TomcatConfiguration>(new TomcatConfiguration(),
-        new Tomcat7ManagerCommandSpec());
+
+    private static final TomcatManager<TomcatConfiguration> COMMON_TOMCAT_MANAGER = new TomcatManager<TomcatConfiguration>(
+        new TomcatConfiguration(), new Tomcat7ManagerCommandSpec());
 
     @Test
     public void testNormalizeArchiveName() {
+
         final String normalizeArchiveName = COMMON_TOMCAT_MANAGER.normalizeArchiveName("test.war");
 
         assertEquals("test", normalizeArchiveName);
@@ -34,6 +36,7 @@ public class CommonTomcatManagerTest {
 
     @Test
     public void testNormalizeArchiveNameForRootWar() {
+
         final String normalizeArchiveName = COMMON_TOMCAT_MANAGER.normalizeArchiveName("ROOT.war");
 
         assertEquals("", normalizeArchiveName);
@@ -41,6 +44,7 @@ public class CommonTomcatManagerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNormalizeArchiveNameForNull() {
+
         COMMON_TOMCAT_MANAGER.normalizeArchiveName(null);
     }
 }

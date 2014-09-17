@@ -20,11 +20,11 @@ package org.jboss.arquillian.container.tomcat.managed;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.core.spi.LoadableExtension;
 
-public class Tomcat55ManagedExtension implements LoadableExtension
-{
+public class Tomcat55ManagedExtension implements LoadableExtension {
+
     @Override
-    public void register(final ExtensionBuilder builder)
-    {
+    public void register(final ExtensionBuilder builder) {
+
         builder.service(DeployableContainer.class, Tomcat55ManagedContainer.class);
     }
 }

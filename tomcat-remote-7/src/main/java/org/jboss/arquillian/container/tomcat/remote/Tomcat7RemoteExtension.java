@@ -26,11 +26,11 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public class Tomcat7RemoteExtension implements LoadableExtension
-{
+public class Tomcat7RemoteExtension implements LoadableExtension {
+
     @Override
-    public void register(final ExtensionBuilder builder)
-    {
+    public void register(final ExtensionBuilder builder) {
+
         builder.service(DeployableContainer.class, Tomcat7RemoteContainer.class);
     }
 }

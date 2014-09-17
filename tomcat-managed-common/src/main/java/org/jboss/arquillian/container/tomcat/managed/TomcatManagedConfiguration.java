@@ -31,8 +31,8 @@ import org.jboss.arquillian.container.tomcat.Validate;
  * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
  * @version $Revision: $
  */
-public class TomcatManagedConfiguration extends TomcatConfiguration
-{
+public class TomcatManagedConfiguration extends TomcatConfiguration {
+
     static final String JAVA_HOME_SYSTEM_PROPERTY = "java.home";
 
     private boolean outputToConsole = true;
@@ -56,8 +56,8 @@ public class TomcatManagedConfiguration extends TomcatConfiguration
     private String loggingProperties = "logging.properties";
 
     @Override
-    public void validate() throws ConfigurationException
-    {
+    public void validate() throws ConfigurationException {
+
         super.validate();
 
         Validate.configurationDirectoryExists(catalinaHome,
@@ -69,15 +69,15 @@ public class TomcatManagedConfiguration extends TomcatConfiguration
                 + "must be set and point to a valid directory! " + javaHome + " is not valid directory!");
 
         Validate.isValidFile(getCatalinaBase() + "/conf/" + serverConfig,
-            "The server configuration file denoted by serverConfig property has to exist! This file: "
-                + getCatalinaBase() + "/conf/" + serverConfig + " does not!");
+            "The server configuration file denoted by serverConfig property has to exist! This file: " + getCatalinaBase()
+                + "/conf/" + serverConfig + " does not!");
 
         // set write output to console
-        this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>()
-        {
+        this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+
             @Override
-            public Boolean run()
-            {
+            public Boolean run() {
+
                 // By default, redirect to stdout unless disabled by this property
                 final String val = System.getProperty("org.apache.tomcat.writeconsole");
                 return val == null || !"false".equals(val);
@@ -86,45 +86,42 @@ public class TomcatManagedConfiguration extends TomcatConfiguration
 
     }
 
-    public String getCatalinaHome()
-    {
+    public String getCatalinaHome() {
+
         return catalinaHome;
     }
 
-    public void setCatalinaHome(final String catalinaHome)
-    {
+    public void setCatalinaHome(final String catalinaHome) {
+
         this.catalinaHome = catalinaHome;
     }
 
-    public String getCatalinaBase()
-    {
-        if (catalinaBase == null || "".equals(catalinaBase))
-        {
+    public String getCatalinaBase() {
+
+        if (catalinaBase == null || "".equals(catalinaBase)) {
             return catalinaHome;
-        }
-        else
-        {
+        } else {
             return catalinaBase;
         }
     }
 
-    public void setCatalinaBase(final String catalinaBase)
-    {
+    public void setCatalinaBase(final String catalinaBase) {
+
         this.catalinaBase = catalinaBase;
     }
 
-    public String getJavaHome()
-    {
+    public String getJavaHome() {
+
         return javaHome;
     }
 
-    public void setJavaHome(final String javaHome)
-    {
+    public void setJavaHome(final String javaHome) {
+
         this.javaHome = javaHome;
     }
 
-    public String getJavaVmArguments()
-    {
+    public String getJavaVmArguments() {
+
         return javaVmArguments;
     }
 
@@ -133,83 +130,83 @@ public class TomcatManagedConfiguration extends TomcatConfiguration
      *
      * @param javaVmArguments use as start up arguments
      */
-    public void setJavaVmArguments(final String javaVmArguments)
-    {
+    public void setJavaVmArguments(final String javaVmArguments) {
+
         this.javaVmArguments = javaVmArguments;
     }
 
-    public int getStartupTimeoutInSeconds()
-    {
+    public int getStartupTimeoutInSeconds() {
+
         return startupTimeoutInSeconds;
     }
 
-    public void setStartupTimeoutInSeconds(final int startupTimeoutInSeconds)
-    {
+    public void setStartupTimeoutInSeconds(final int startupTimeoutInSeconds) {
+
         this.startupTimeoutInSeconds = startupTimeoutInSeconds;
     }
 
-    public int getShutdownTimeoutInSeconds()
-    {
+    public int getShutdownTimeoutInSeconds() {
+
         return shutdownTimeoutInSeconds;
     }
 
-    public void setShutdownTimeoutInSeconds(final int shutdownTimeoutInSeconds)
-    {
+    public void setShutdownTimeoutInSeconds(final int shutdownTimeoutInSeconds) {
+
         this.shutdownTimeoutInSeconds = shutdownTimeoutInSeconds;
     }
 
-    public String getWorkDir()
-    {
+    public String getWorkDir() {
+
         return workDir;
     }
 
     /**
      * @param workDir the directory where the compiled JSP files and session serialization data is stored
      */
-    public void setWorkDir(final String workDir)
-    {
+    public void setWorkDir(final String workDir) {
+
         this.workDir = workDir;
     }
 
-    public String getServerConfig()
-    {
+    public String getServerConfig() {
+
         return serverConfig;
     }
 
-    public void setServerConfig(final String serverConfig)
-    {
+    public void setServerConfig(final String serverConfig) {
+
         this.serverConfig = serverConfig;
     }
 
     /**
      * @return the loggingProperties
      */
-    public String getLoggingProperties()
-    {
+    public String getLoggingProperties() {
+
         return loggingProperties;
     }
 
     /**
      * @param loggingProperties the loggingProperties to set
      */
-    public void setLoggingProperties(final String loggingProperties)
-    {
+    public void setLoggingProperties(final String loggingProperties) {
+
         this.loggingProperties = loggingProperties;
     }
 
     /**
      * @param outputToConsole the outputToConsole to set
      */
-    public void setOutputToConsole(final boolean outputToConsole)
-    {
+    public void setOutputToConsole(final boolean outputToConsole) {
+
         this.outputToConsole = outputToConsole;
     }
 
     /**
      * @return the outputToConsole
      */
-    public boolean isOutputToConsole()
-    {
+    public boolean isOutputToConsole() {
+
         return outputToConsole;
     }
 

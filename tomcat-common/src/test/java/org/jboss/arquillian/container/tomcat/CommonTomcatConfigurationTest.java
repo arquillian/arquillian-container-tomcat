@@ -27,15 +27,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CommonTomcatConfigurationTest {
+
     private TomcatConfiguration commonTomcatConfiguration;
 
     @Before
     public void setUp() {
+
         commonTomcatConfiguration = new TomcatConfiguration();
     }
 
     @Test
     public void testCreateJmxUriForDefaultBindAddressAndJmxServerPort() {
+
         final URI actualJmxUri = commonTomcatConfiguration.createJmxUri();
 
         final String actualJmxUriString = actualJmxUri.toString();
@@ -47,6 +50,7 @@ public class CommonTomcatConfigurationTest {
 
     @Test
     public void testCreateJmxUriForSetBindAddressAndJmxServerPort() {
+
         final int testJmxServerPort = 5;
         final String testBindAddress = "somewhere";
 
@@ -57,13 +61,15 @@ public class CommonTomcatConfigurationTest {
 
         final String actualJmxUriString = actualJmxUri.toString();
 
-        final String expectedJmxUriString = "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort + "/jmxrmi";
+        final String expectedJmxUriString =
+            "service:jmx:rmi:///jndi/rmi://" + testBindAddress + ":" + testJmxServerPort + "/jmxrmi";
 
         assertEquals(expectedJmxUriString, actualJmxUriString);
     }
 
     @Test(expected = ConfigurationException.class)
     public void testCreateJmxUriForInvalidUri() {
+
         commonTomcatConfiguration.setBindAddress("^");
 
         commonTomcatConfiguration.createJmxUri();
@@ -71,6 +77,7 @@ public class CommonTomcatConfigurationTest {
 
     @Test
     public void testCreateManagerUrlForDefaultHostAndPort() {
+
         final URL actualManagerUrl = commonTomcatConfiguration.createManagerUrl();
 
         final String actualManagerUrlString = actualManagerUrl.toString();
@@ -82,6 +89,7 @@ public class CommonTomcatConfigurationTest {
 
     @Test
     public void testCreateManagerUrlForSetHostAndPort() {
+
         final String testBindAddress = "somewhere";
         final int testBindHttpPort = 5;
 
@@ -99,6 +107,7 @@ public class CommonTomcatConfigurationTest {
 
     @Test(expected = ConfigurationException.class)
     public void testCreateManagerUrlForInvalidUrl() {
+
         commonTomcatConfiguration.setBindAddress(":");
 
         commonTomcatConfiguration.createManagerUrl();

@@ -39,16 +39,16 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
  * @author <a href="kpiwko@redhat.com>Karel Piwko</a>
  *
  */
-public class ProtocolMetadataParser<C extends TomcatConfiguration>
-{
+public class ProtocolMetadataParser<C extends TomcatConfiguration> {
+
     private static final Logger log = Logger.getLogger(ProtocolMetaData.class.getName());
 
     private final C configuration;
 
     protected String catalinaServletTemplate = "Catalina:j2eeType=Servlet,WebModule=//%s/%s,*";
 
-    public ProtocolMetadataParser(final C configuration)
-    {
+    public ProtocolMetadataParser(final C configuration) {
+
         this.configuration = configuration;
     }
 
@@ -67,17 +67,15 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration>
      * @return
      * @throws DeploymentException
      */
-    public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException
-    {
+    public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException {
+
         final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
         final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
         JMXConnector jmxc = null;
-        try
-        {
+        try {
             jmxc = connect(configuration.getJmxUri());
-        } catch (final IOException ex)
-        {
+        } catch (final IOException ex) {
             throw new DeploymentException("Unable to contruct metadata for archive deployment.\n" + "Can't connect to '"
                 + configuration.getJmxUri() + "'."
                 + "\n   Make sure JMX remote acces is enabled Tomcat's JVM - e.g. in startup.sh using $JAVA_OPTS."
@@ -87,21 +85,17 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration>
         }
 
         Set<ObjectInstance> servletMBeans;
-        try
-        {
+        try {
             servletMBeans = getServletMBeans(jmxc, context);
-        } catch (final IOException e)
-        {
+        } catch (final IOException e) {
             throw new DeploymentException("Unable to construct metadata for archive deployment", e);
         }
 
         // For each servlet MBean of the given context add the servlet info to the HTTPContext.
-        for (final ObjectInstance oi : servletMBeans)
-        {
+        for (final ObjectInstance oi : servletMBeans) {
             final String servletName = oi.getObjectName().getKeyProperty("name");
             httpContext.add(new Servlet(servletName, context));
-            if (log.isLoggable(Level.FINE))
-            {
+            if (log.isLoggable(Level.FINE)) {
                 log.fine("Added servlet " + oi.toString() + " to HttpContext for archive" + context);
             }
         }
@@ -110,31 +104,28 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration>
         return protocolMetaData;
     }
 
-    protected JMXConnector connect(final URI jmxUri) throws IOException
-    {
+    protected JMXConnector connect(final URI jmxUri) throws IOException {
+
         log.info("Connecting to JMX at " + jmxUri);
         final JMXServiceURL url = new JMXServiceURL(jmxUri.toASCIIString());
 
         return JMXConnectorFactory.connect(url, null);
     }
 
-    protected Set<ObjectInstance> getServletMBeans(final JMXConnector jmxc, final String context) throws IOException
-    {
+    protected Set<ObjectInstance> getServletMBeans(final JMXConnector jmxc, final String context) throws IOException {
+
         // connect to MBeanServer and get metadata
         final MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
         final String catalinaServlet = String.format(catalinaServletTemplate, configuration.getJmxVirtualHost(), context);
 
         ObjectName servletON;
-        try
-        {
+        try {
             servletON = ObjectName.getInstance(catalinaServlet);
-        } catch (final MalformedObjectNameException e)
-        {
+        } catch (final MalformedObjectNameException e) {
             throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
                 + "Following object name is not valid: " + catalinaServlet, e);
 
-        } catch (final NullPointerException e)
-        {
+        } catch (final NullPointerException e) {
             throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
                 + "Object name must not be null", e);
         }

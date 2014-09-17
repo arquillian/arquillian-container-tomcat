@@ -26,8 +26,8 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
  * @author Dan Allen
  * @version $Revision: $
  */
-public class TomcatEmbeddedConfiguration implements ContainerConfiguration
-{
+public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
+
     private String bindAddress = "localhost";
 
     private int bindHttpPort = 8080;
@@ -43,22 +43,22 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration
     private boolean unpackArchive = false;
 
     @Override
-    public void validate() throws ConfigurationException
-    {
+    public void validate() throws ConfigurationException {
+
     }
 
-    public String getBindAddress()
-    {
+    public String getBindAddress() {
+
         return bindAddress;
     }
 
-    public void setBindAddress(final String bindAddress)
-    {
+    public void setBindAddress(final String bindAddress) {
+
         this.bindAddress = bindAddress;
     }
 
-    public int getBindHttpPort()
-    {
+    public int getBindHttpPort() {
+
         return bindHttpPort;
     }
 
@@ -67,68 +67,68 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration
      *
      * @param httpBindPort HTTP bind port
      */
-    public void setBindHttpPort(final int bindHttpPort)
-    {
+    public void setBindHttpPort(final int bindHttpPort) {
+
         this.bindHttpPort = bindHttpPort;
     }
 
-    public void setTomcatHome(final String jbossHome)
-    {
+    public void setTomcatHome(final String jbossHome) {
+
         this.tomcatHome = jbossHome;
     }
 
-    public String getTomcatHome()
-    {
+    public String getTomcatHome() {
+
         return tomcatHome;
     }
 
     /**
      * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
      */
-    public void setAppBase(final String tomcatAppBase)
-    {
+    public void setAppBase(final String tomcatAppBase) {
+
         this.appBase = tomcatAppBase;
     }
 
-    public String getAppBase()
-    {
+    public String getAppBase() {
+
         return appBase;
     }
 
     /**
      * @param workDir the directory where the compiled JSP files and session serialization data is stored
      */
-    public void setWorkDir(final String tomcatWorkDir)
-    {
+    public void setWorkDir(final String tomcatWorkDir) {
+
         this.workDir = tomcatWorkDir;
     }
 
-    public String getTomcatWorkDir()
-    {
+    public String getTomcatWorkDir() {
+
         return workDir;
     }
 
     /**
      * @param serverName the serverName to set
      */
-    public void setServerName(final String serverName)
-    {
+    public void setServerName(final String serverName) {
+
         this.serverName = serverName;
     }
 
     /**
      * @return the serverName
      */
-    public String getServerName()
-    {
+    public String getServerName() {
+
         return serverName;
     }
 
     /**
      * @return a switch indicating whether the WAR should be unpacked
      */
-    public boolean isUnpackArchive()
-    {
+    public boolean isUnpackArchive() {
+
         return unpackArchive;
     }
 
@@ -138,8 +138,8 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration
      *
      * @param a switch indicating whether the WAR should be unpacked
      */
-    public void setUnpackArchive(final boolean unpack)
-    {
+    public void setUnpackArchive(final boolean unpack) {
+
         this.unpackArchive = unpack;
     }
 }

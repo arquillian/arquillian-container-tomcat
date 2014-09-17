@@ -40,15 +40,14 @@ import org.apache.catalina.startup.Tomcat;
  * @author Dan Allen
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  */
-public class EmbeddedContextConfig extends ContextConfig
-{
+public class EmbeddedContextConfig extends ContextConfig {
 
     /**
      * Initialize the context config so to disable processing of the default global web.xml. As an embedded container we lack
      * the stock config file compliment.
      */
-    public EmbeddedContextConfig()
-    {
+    public EmbeddedContextConfig() {
+
         super();
 
         setDefaultWebXml(Constants.NoDefaultWebXml);
@@ -58,8 +57,8 @@ public class EmbeddedContextConfig extends ContextConfig
      * Override to apply the equivalent of the stock "$CATALINA_BASE/conf/web.xml" to contexts programmatically.
      */
     @Override
-    protected synchronized void beforeStart()
-    {
+    protected synchronized void beforeStart() {
+
         super.beforeStart();
 
         ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
@@ -70,8 +69,8 @@ public class EmbeddedContextConfig extends ContextConfig
      * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.
      */
     @Override
-    protected void fixDocBase() throws IOException
-    {
+    protected void fixDocBase() throws IOException {
+
         super.fixDocBase();
         // If this field is not null, the unpacked WAR is removed when
         // the context is closed. This is normally used by the antiLocking

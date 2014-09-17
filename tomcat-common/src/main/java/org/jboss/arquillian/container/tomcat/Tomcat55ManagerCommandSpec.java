@@ -24,24 +24,23 @@ package org.jboss.arquillian.container.tomcat;
  * @see <a href="http://tomcat.apache.org/tomcat-5.5-doc/manager-howto.html">Tomcat 5.5 Manager App HOW-TO</a>
  * @see <a href="http://tomcat.apache.org/tomcat-6.0-doc/manager-howto.html">Tomcat 6.0 Manager App HOW-TO</a>
  */
-public class Tomcat55ManagerCommandSpec implements TomcatManagerCommandSpec
-{
+public class Tomcat55ManagerCommandSpec implements TomcatManagerCommandSpec {
 
     @Override
-    public String getListCommand()
-    {
+    public String getListCommand() {
+
         return "/list";
     }
 
     @Override
-    public String getDeployCommand()
-    {
+    public String getDeployCommand() {
+
         return "/deploy?path=";
     }
 
     @Override
-    public String getUndeployCommand()
-    {
+    public String getUndeployCommand() {
+
         return "/undeploy?path=";
     }
 }

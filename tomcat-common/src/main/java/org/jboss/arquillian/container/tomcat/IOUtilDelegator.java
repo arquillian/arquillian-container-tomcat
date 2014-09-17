@@ -26,8 +26,8 @@ import java.io.InputStream;
  * @author <a href="mailto:ken@glxn.net">Ken Gullaksen</a>
  * @version $Revision: $
  */
-class IOUtilDelegator
-{
+class IOUtilDelegator {
+
     /**
      * Delegates to {@link ByteArrayIOUtil#asByteArray(java.io.InputStream)}
      * 
@@ -35,8 +35,8 @@ class IOUtilDelegator
      * @throws IllegalArgumentException If the stream was not specified
      * @return the byte[] for the given InputStream
      */
-    public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException
-    {
+    public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException {
+
         return ByteArrayIOUtil.asByteArray(in);
     }
 

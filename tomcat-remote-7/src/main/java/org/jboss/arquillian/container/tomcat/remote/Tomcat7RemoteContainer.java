@@ -32,10 +32,10 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  *
  * @version $Revision: $
  */
-public class Tomcat7RemoteContainer extends TomcatRemoteContainer
-{
-    public Tomcat7RemoteContainer()
-    {
+public class Tomcat7RemoteContainer extends TomcatRemoteContainer {
+
+    public Tomcat7RemoteContainer() {
+
         super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
     }
 }

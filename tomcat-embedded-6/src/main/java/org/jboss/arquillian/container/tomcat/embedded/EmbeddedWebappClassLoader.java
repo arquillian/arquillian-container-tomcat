@@ -30,68 +30,60 @@ import org.apache.catalina.loader.WebappClassLoader;
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public class EmbeddedWebappClassLoader extends WebappClassLoader
-{
-    public EmbeddedWebappClassLoader()
-    {
+public class EmbeddedWebappClassLoader extends WebappClassLoader {
+
+    public EmbeddedWebappClassLoader() {
+
         super();
     }
 
-    public EmbeddedWebappClassLoader(final ClassLoader parent)
-    {
+    public EmbeddedWebappClassLoader(final ClassLoader parent) {
+
         super(parent);
     }
 
     @Override
-    public synchronized Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException
-    {
+    public synchronized Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
+
         Class<?> clazz = null;
 
         // previously been loaded ?
         clazz = findLoadedClass0(name);
-        if (clazz != null)
-        {
+        if (clazz != null) {
             if (resolve)
                 resolveClass(clazz);
             return clazz;
         }
 
         clazz = findLoadedClass(name);
-        if (clazz != null)
-        {
+        if (clazz != null) {
             if (resolve)
                 resolveClass(clazz);
             return clazz;
         }
 
-        try
-        {
+        try {
             // do we have it?
             clazz = findClass(name);
-            if (clazz != null)
-            {
+            if (clazz != null) {
                 if (resolve)
                     resolveClass(clazz);
                 return clazz;
             }
-        } catch (final ClassNotFoundException e)
-        {
+        } catch (final ClassNotFoundException e) {
         }
         // check parent
         ClassLoader loader = this.parent;
         if (loader == null)
             loader = this.system;
-        try
-        {
+        try {
             clazz = loader.loadClass(name);
-            if (clazz != null)
-            {
+            if (clazz != null) {
                 if (resolve)
                     resolveClass(clazz);
                 return clazz;
             }
-        } catch (final ClassNotFoundException e)
-        {
+        } catch (final ClassNotFoundException e) {
         }
         throw new ClassNotFoundException(name);
     }
@@ -102,26 +94,21 @@ public class EmbeddedWebappClassLoader extends WebappClassLoader
      * @see org.apache.catalina.loader.WebappClassLoader#getResource(java.lang.String)
      */
     @Override
-    public URL getResource(final String name)
-    {
+    public URL getResource(final String name) {
+
         URL url = null;
         // find locally
         url = findResource(name);
-        if (url != null)
-        {
-            if (getAntiJARLocking())
-            {
+        if (url != null) {
+            if (getAntiJARLocking()) {
                 final ResourceEntry entry = (ResourceEntry) this.resourceEntries.get(name);
-                try
-                {
+                try {
                     final String repository = entry.codeBase.toString();
-                    if ((repository.endsWith(".jar")) && (!(name.endsWith(".class"))))
-                    {
+                    if ((repository.endsWith(".jar")) && (!(name.endsWith(".class")))) {
                         final File resourceFile = new File(this.loaderDir, name);
                         url = getURI(resourceFile);
                     }
-                } catch (final Exception e)
-                {
+                } catch (final Exception e) {
                 }
             }
             return url;
@@ -132,8 +119,7 @@ public class EmbeddedWebappClassLoader extends WebappClassLoader
         if (loader == null)
             loader = this.system;
         url = loader.getResource(name);
-        if (url != null)
-        {
+        if (url != null) {
             return url;
         }
 

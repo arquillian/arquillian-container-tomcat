@@ -29,10 +29,10 @@ import org.jboss.arquillian.container.spi.ConfigurationException;
  * @author <a href="mailto:aslak@conduct.no">Aslak Knutsen</a>
  * @version $Revision: $
  */
-public final class Validate
-{
-    private Validate()
-    {
+public final class Validate {
+
+    private Validate() {
+
     }
 
     /**
@@ -42,10 +42,9 @@ public final class Validate
      * @param message The exception message
      * @throws IllegalArgumentException Thrown if obj is null
      */
-    public static void notNull(final Object obj, final String message) throws IllegalArgumentException
-    {
-        if (obj == null)
-        {
+    public static void notNull(final Object obj, final String message) throws IllegalArgumentException {
+
+        if (obj == null) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -57,10 +56,9 @@ public final class Validate
      * @param message The exception message
      * @throws IllegalArgumentException Thrown if obj is null
      */
-    public static void notNullOrEmpty(final String string, final String message) throws IllegalArgumentException
-    {
-        if (string == null || string.length() == 0)
-        {
+    public static void notNullOrEmpty(final String string, final String message) throws IllegalArgumentException {
+
+        if (string == null || string.length() == 0) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -71,10 +69,9 @@ public final class Validate
      * @param string The object to check
      * @return {@code true} if string is not empty, {@code false} otherwise
      */
-    public static boolean isNotNullOrEmpty(final String string) throws IllegalArgumentException
-    {
-        if (string == null || string.length() == 0)
-        {
+    public static boolean isNotNullOrEmpty(final String string) throws IllegalArgumentException {
+
+        if (string == null || string.length() == 0) {
             return false;
         }
 
@@ -88,10 +85,9 @@ public final class Validate
      * @param message The exception message
      * @throws IllegalStateException Thrown if obj is null
      */
-    public static void stateNotNull(final Object obj, final String message) throws IllegalStateException
-    {
-        if (obj == null)
-        {
+    public static void stateNotNull(final Object obj, final String message) throws IllegalStateException {
+
+        if (obj == null) {
             throw new IllegalStateException(message);
         }
     }
@@ -103,13 +99,12 @@ public final class Validate
      * @param message The exception message
      * @throws IllegalArgumentException Throws if given file does not exist or if it cannot be read
      */
-    public static void isValidFile(final String path, final String message) throws IllegalArgumentException
-    {
+    public static void isValidFile(final String path, final String message) throws IllegalArgumentException {
+
         notNull(path, message);
         final File file = new File(path);
 
-        if (!file.exists() || !file.canRead())
-        {
+        if (!file.exists() || !file.canRead()) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -121,11 +116,9 @@ public final class Validate
      * @param message The exception message
      * @throws ConfigurationException Thrown if string is empty, null or it does not represent a path the a valid directory
      */
-    public static void configurationDirectoryExists(final String string, final String message)
-        throws ConfigurationException
-    {
-        if (string == null || string.length() == 0 || new File(string).isDirectory() == false)
-        {
+    public static void configurationDirectoryExists(final String string, final String message) throws ConfigurationException {
+
+        if (string == null || string.length() == 0 || new File(string).isDirectory() == false) {
             throw new ConfigurationException(message);
         }
     }
@@ -140,30 +133,25 @@ public final class Validate
      * @throws IllegalArgumentException Thrown if value does not lie in the interval
      */
     public static void isInRange(final int value, final int bottom, final int top, final String message)
-        throws IllegalArgumentException
-    {
-        if (value > top && value < bottom)
-        {
+        throws IllegalArgumentException {
+
+        if (value > top && value < bottom) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    public static void isInReadableDirectory(final String path, final String message) throws IllegalArgumentException
-    {
+    public static void isInReadableDirectory(final String path, final String message) throws IllegalArgumentException {
+
         notNull(path, message);
         final File file = new File(path);
 
-        try
-        {
-            if (!file.createNewFile())
-            {
-                if (!file.canRead())
-                {
+        try {
+            if (!file.createNewFile()) {
+                if (!file.canRead()) {
                     throw new IllegalArgumentException(message);
                 }
             }
-        } catch (final IOException e)
-        {
+        } catch (final IOException e) {
             throw new IllegalArgumentException(message, e);
         }
 

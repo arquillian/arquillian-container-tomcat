@@ -32,11 +32,10 @@ import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
-public class Tomcat55ManagedContainer extends TomcatManagedContainer
-{
+public class Tomcat55ManagedContainer extends TomcatManagedContainer {
 
-    public Tomcat55ManagedContainer()
-    {
+    public Tomcat55ManagedContainer() {
+
         super(new ProtocolDescription("Servlet 2.5"), new Tomcat55ManagerCommandSpec());
     }
 }

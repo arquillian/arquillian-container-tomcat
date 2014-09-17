@@ -33,12 +33,11 @@ public class TestServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String URL_PATTERN = "/Test";
-
     public static final String MESSAGE = "hello";
 
     @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+        IOException {
 
         response.getWriter().append(MESSAGE);
     }

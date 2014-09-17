@@ -9,28 +9,27 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TomcatManagedContainerTest
-{
+public class TomcatManagedContainerTest {
 
     private TomcatManagedContainer commonTomcatManagedContainer;
 
     @Before
-    public void setUp()
-    {
-        commonTomcatManagedContainer = new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"),
-            new Tomcat7ManagerCommandSpec())
-        {
-            @Override
-            public ProtocolDescription getDefaultProtocol()
-            {
-                return null;
-            }
-        };
+    public void setUp() {
+
+        commonTomcatManagedContainer =
+            new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec()) {
+
+                @Override
+                public ProtocolDescription getDefaultProtocol() {
+
+                    return null;
+                }
+            };
     }
 
     @Test
-    public void testGetJavaCommandForConfiguration()
-    {
+    public void testGetJavaCommandForConfiguration() {
+
         final TomcatManagedConfiguration commonTomcatManagedConfiguration = new TomcatManagedConfiguration();
 
         final String testJavaHome = File.separator + "test" + File.separator + "java" + File.separator + "home";
@@ -47,8 +46,8 @@ public class TomcatManagedContainerTest
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testGetJavaCommandForNoConfiguration()
-    {
+    public void testGetJavaCommandForNoConfiguration() {
+
         // No .setup(commonTomcatManagedConfiguration)
 
         commonTomcatManagedContainer.getJavaCommand();

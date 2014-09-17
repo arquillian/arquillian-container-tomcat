@@ -21,8 +21,8 @@ package org.jboss.arquillian.container.tomcat;
  *
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  */
-public interface TomcatManagerCommandSpec
-{
+public interface TomcatManagerCommandSpec {
+
     /**
      * The list command.
      *

@@ -26,8 +26,7 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:trepel@redhat.com">Tomas Repel</a>
  *
  */
-public class AdditionalJavaOptionsParser
-{
+public class AdditionalJavaOptionsParser {
 
     private static final String OPTION = "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"|\\S+";
 
@@ -41,17 +40,14 @@ public class AdditionalJavaOptionsParser
      * @param additionaOptions - options to parse
      * @return List of parsed options, returns empty list rather that null value
      */
-    public static List<String> parse(final String additionalOptions)
-    {
+    public static List<String> parse(final String additionalOptions) {
+
         final List<String> options = new ArrayList<String>();
-        if (additionalOptions != null)
-        {
+        if (additionalOptions != null) {
             final Pattern p = Pattern.compile(OPTION, Pattern.DOTALL);
             final Matcher m = p.matcher(additionalOptions);
-            while (m.find())
-            {
-                if (!m.group().trim().equals(""))
-                {
+            while (m.find()) {
+                if (!m.group().trim().equals("")) {
                     options.add(Pattern.compile(QUOTED_CONTENT, Pattern.DOTALL).matcher(m.group().trim()).replaceAll("$1"));
                 }
             }

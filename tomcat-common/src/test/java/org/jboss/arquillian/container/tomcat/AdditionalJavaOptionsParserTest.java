@@ -32,6 +32,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseNull() {
+
         final String additionalProperties = null;
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -41,6 +42,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseEmpty() {
+
         final String additionalProperties = "";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -50,6 +52,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseOnlyWhiteSpaces() {
+
         final String additionalProperties = "  \t\n\t   ";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -59,6 +62,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseDelimitedByWhitespaces() {
+
         final String additionalProperties = "p0 p1\tp2\np3  p2\t\tp5\n\np6";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -68,6 +72,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseDelimitedByQuotes() {
+
         final String additionalProperties = "p0 \"p1 with space\"\t\"p2\"\"p3\"\n\"p4\" p5";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -77,6 +82,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseWindowsPaths() {
+
         final String additionalProperties = "p1=C:\\MyApps\\myApp.exe \"p2=C:\\Program Files\\MyApp\\myApp.exe\"";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -86,6 +92,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseIfQuoteIsInside() {
+
         final String additionalProperties = "p0 p1Quote\"Is\"Inside \"p2\"";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 
@@ -95,6 +102,7 @@ public class AdditionalJavaOptionsParserTest {
 
     @Test
     public void parseQuotesOnly() {
+
         final String additionalProperties = "\"p0\"\"p1\"\"p3\"\"p4\"";
         final List<String> props = AdditionalJavaOptionsParser.parse(additionalProperties);
 

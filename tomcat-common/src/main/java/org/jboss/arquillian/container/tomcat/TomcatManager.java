@@ -43,8 +43,8 @@ import org.jboss.arquillian.container.spi.client.container.DeploymentException;
  * @author Craig R. McClanahan
  *
  */
-public class TomcatManager<C extends TomcatConfiguration>
-{
+public class TomcatManager<C extends TomcatConfiguration> {
+
     private static Logger log = Logger.getLogger(TomcatManager.class.getName());
 
     // encoding of manager web app
@@ -59,14 +59,14 @@ public class TomcatManager<C extends TomcatConfiguration>
      *
      * @param configuration the configuration
      */
-    public TomcatManager(final C configuration, final TomcatManagerCommandSpec tomcatManagerCommandSpec)
-    {
+    public TomcatManager(final C configuration, final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
+
         this.configuration = configuration;
         this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
     }
 
-    public void deploy(final String name, final URL content) throws IOException, DeploymentException
-    {
+    public void deploy(final String name, final URL content) throws IOException, DeploymentException {
+
         final String contentType = "application/octet-stream";
         Validate.notNullOrEmpty(name, "Name must not be null or empty");
         Validate.notNull(content, "Content to be deployed must not be null");
@@ -77,62 +77,54 @@ public class TomcatManager<C extends TomcatConfiguration>
 
         // Building URL
         final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getDeployCommand());
-        try
-        {
+        try {
             command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
-        } catch (final UnsupportedEncodingException e)
-        {
+        } catch (final UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
         execute(command.toString(), stream, contentType, contentLength);
     }
 
-    public void undeploy(final String name) throws IOException, DeploymentException
-    {
+    public void undeploy(final String name) throws IOException, DeploymentException {
+
         Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
 
         // Building URL
         final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getUndeployCommand());
-        try
-        {
+        try {
             command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
-        } catch (final UnsupportedEncodingException e)
-        {
+        } catch (final UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
         execute(command.toString(), null, null, -1);
     }
 
-    public void list() throws IOException
-    {
+    public void list() throws IOException {
+
         execute(tomcatManagerCommandSpec.getListCommand(), null, null, -1);
     }
 
-    public boolean isRunning()
-    {
-        try
-        {
+    public boolean isRunning() {
+
+        try {
             list();
             return true;
-        } catch (final IOException e)
-        {
+        } catch (final IOException e) {
             return false;
         }
     }
 
-    public String normalizeArchiveName(final String name)
-    {
+    public String normalizeArchiveName(final String name) {
+
         Validate.notNull(name, "Archive name must not be empty");
 
-        if ("ROOT.war".equals(name))
-        {
+        if ("ROOT.war".equals(name)) {
             return "";
         }
 
-        if (name.indexOf('.') != -1)
-        {
+        if (name.indexOf('.') != -1) {
             return name.substring(0, name.lastIndexOf("."));
         }
 
@@ -151,13 +143,11 @@ public class TomcatManager<C extends TomcatConfiguration>
      * @throws MalformedURLException
      * @throws DeploymentException
      */
-    protected void execute(final String command, final InputStream istream, final String contentType,
-        final int contentLength) throws IOException
-    {
+    protected void execute(final String command, final InputStream istream, final String contentType, final int contentLength)
+        throws IOException {
 
         URLConnection conn = null;
-        try
-        {
+        try {
             // Create a connection for this command
             conn = new URL(configuration.getManagerUrl() + command).openConnection();
             final HttpURLConnection hconn = (HttpURLConnection) conn;
@@ -166,30 +156,24 @@ public class TomcatManager<C extends TomcatConfiguration>
             hconn.setAllowUserInteraction(false);
             hconn.setDoInput(true);
             hconn.setUseCaches(false);
-            if (istream != null)
-            {
+            if (istream != null) {
                 hconn.setDoOutput(true);
                 hconn.setRequestMethod("PUT");
-                if (contentType != null)
-                {
+                if (contentType != null) {
                     hconn.setRequestProperty("Content-Type", contentType);
                 }
-                if (contentLength >= 0)
-                {
+                if (contentLength >= 0) {
                     hconn.setRequestProperty("Content-Length", "" + contentLength);
 
                     hconn.setFixedLengthStreamingMode(contentLength);
                 }
-            }
-            else
-            {
+            } else {
                 hconn.setDoOutput(false);
                 hconn.setRequestMethod("GET");
             }
             hconn.setRequestProperty("User-Agent", "Arquillian-Tomcat-Manager-Util/1.0");
             // add authorization header if password is provided
-            if (configuration.getUser() != null && configuration.getUser().length() != 0)
-            {
+            if (configuration.getUser() != null && configuration.getUser().length() != 0) {
                 hconn.setRequestProperty("Authorization", constructHttpBasicAuthHeader());
             }
             hconn.setRequestProperty("Accept", "text/plain");
@@ -198,8 +182,7 @@ public class TomcatManager<C extends TomcatConfiguration>
             hconn.connect();
 
             // Send the request data (if any)
-            if (istream != null)
-            {
+            if (istream != null) {
                 final BufferedOutputStream ostream = new BufferedOutputStream(hconn.getOutputStream(), 1024);
                 IOUtil.copy(istream, ostream);
                 ostream.flush();
@@ -208,18 +191,16 @@ public class TomcatManager<C extends TomcatConfiguration>
             }
 
             processResponse(command, hconn);
-        } finally
-        {
+        } finally {
             IOUtil.closeQuietly(istream);
         }
     }
 
-    protected void processResponse(final String command, final HttpURLConnection hconn) throws IOException
-    {
+    protected void processResponse(final String command, final HttpURLConnection hconn) throws IOException {
+
         final int httpResponseCode = hconn.getResponseCode();
         // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-        if (httpResponseCode >= 400 && httpResponseCode < 500)
-        {
+        if (httpResponseCode >= 400 && httpResponseCode < 500) {
             throw new ConfigurationException(
                 "Unable to connect to Tomcat manager. "
                     + "The server command ("
@@ -232,53 +213,42 @@ public class TomcatManager<C extends TomcatConfiguration>
                     + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
                     + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
                     + "The user must have appripriate role specified in tomcat-users.xml file.\n");
-        }
-        else if (httpResponseCode >= 300)
-        {
+        } else if (httpResponseCode >= 300) {
             throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
                 + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
         }
         BufferedReader reader = null;
-        try
-        {
+        try {
             // Process the response message
             reader = new BufferedReader(new InputStreamReader(hconn.getInputStream(), MANAGER_CHARSET));
             String line = reader.readLine();
             String contentError = null;
-            if (line != null && !line.startsWith("OK -"))
-            {
+            if (line != null && !line.startsWith("OK -")) {
                 contentError = line;
             }
-            while (line != null)
-            {
-                if (log.isLoggable(Level.FINE))
-                {
+            while (line != null) {
+                if (log.isLoggable(Level.FINE)) {
                     log.fine(line);
                 }
                 line = reader.readLine();
             }
-            if (contentError != null)
-            {
-                throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError
-                    + ").");
+            if (contentError != null) {
+                throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError + ").");
             }
-        } finally
-        {
+        } finally {
             IOUtil.closeQuietly(reader);
         }
     }
 
-    protected String constructHttpBasicAuthHeader()
-    {
+    protected String constructHttpBasicAuthHeader() {
+
         // Set up an authorization header with our credentials
         final String credentials = configuration.getUser() + ":" + configuration.getPass();
         // Encodes the user:password pair as a sequence of ISO-8859-1 bytes.
         // We'll return the Base64 encoded form of this ISO-8859-1 byte sequence.
-        try
-        {
+        try {
             return "Basic " + Base64Coder.encodeString_IOS_8859_1(credentials);
-        } catch (final UnsupportedEncodingException e)
-        {
+        } catch (final UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }

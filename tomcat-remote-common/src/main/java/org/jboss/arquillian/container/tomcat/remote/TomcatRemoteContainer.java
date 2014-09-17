@@ -43,8 +43,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  *
  * @version $Revision: $
  */
-abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration>
-{
+abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration> {
+
     private final ProtocolDescription protocolDescription;
 
     private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
@@ -56,53 +56,52 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
 
     private TomcatManager<TomcatRemoteConfiguration> manager;
 
-    TomcatRemoteContainer(final ProtocolDescription protocolDescription,
-        final TomcatManagerCommandSpec tomcatManagerCommandSpec)
-    {
+    TomcatRemoteContainer(final ProtocolDescription protocolDescription, final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
+
         this.protocolDescription = protocolDescription;
         this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
     }
 
     @Override
-    public Class<TomcatRemoteConfiguration> getConfigurationClass()
-    {
+    public Class<TomcatRemoteConfiguration> getConfigurationClass() {
+
         return TomcatRemoteConfiguration.class;
     }
 
     @Override
-    public ProtocolDescription getDefaultProtocol()
-    {
+    public ProtocolDescription getDefaultProtocol() {
+
         return protocolDescription;
     }
 
     @Override
-    public void setup(final TomcatRemoteConfiguration configuration)
-    {
+    public void setup(final TomcatRemoteConfiguration configuration) {
+
         this.configuration = configuration;
         this.manager = new TomcatManager<TomcatRemoteConfiguration>(configuration, tomcatManagerCommandSpec);
     }
 
     @Override
-    public void start() throws LifecycleException
-    {
+    public void start() throws LifecycleException {
+
         // no-op
     }
 
     @Override
-    public void stop() throws LifecycleException
-    {
+    public void stop() throws LifecycleException {
+
         // no-op
     }
 
     @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void deploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void undeploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -114,36 +113,32 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
      * @throws DeploymentException
      */
     @Override
-    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
-    {
+    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
+
         Validate.notNull(archive, "Archive must not be null");
 
         final String archiveName = manager.normalizeArchiveName(archive.getName());
         final URL archiveURL = ShrinkWrapUtil.toURL(archive);
-        try
-        {
+        try {
             manager.deploy("/" + archiveName, archiveURL);
-        } catch (final IOException e)
-        {
+        } catch (final IOException e) {
             throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
         }
 
-        final ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<TomcatRemoteConfiguration>(
-            configuration);
+        final ProtocolMetadataParser<TomcatRemoteConfiguration> parser =
+            new ProtocolMetadataParser<TomcatRemoteConfiguration>(configuration);
         return parser.retrieveContextServletInfo(archiveName);
     }
 
     @Override
-    public void undeploy(final Archive<?> archive) throws DeploymentException
-    {
+    public void undeploy(final Archive<?> archive) throws DeploymentException {
+
         Validate.notNull(archive, "Archive must not be null");
 
         final String archiveName = manager.normalizeArchiveName(archive.getName());
-        try
-        {
+        try {
             manager.undeploy("/" + archiveName);
-        } catch (final IOException e)
-        {
+        } catch (final IOException e) {
             throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
         }
     }

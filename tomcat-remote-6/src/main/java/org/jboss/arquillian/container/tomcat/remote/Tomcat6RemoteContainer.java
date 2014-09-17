@@ -32,10 +32,10 @@ import org.jboss.arquillian.container.tomcat.Tomcat55ManagerCommandSpec;
  *
  * @version $Revision: $
  */
-public class Tomcat6RemoteContainer extends TomcatRemoteContainer
-{
-    public Tomcat6RemoteContainer()
-    {
+public class Tomcat6RemoteContainer extends TomcatRemoteContainer {
+
+    public Tomcat6RemoteContainer() {
+
         super(new ProtocolDescription("Servlet 2.5"), new Tomcat55ManagerCommandSpec());
     }
 }

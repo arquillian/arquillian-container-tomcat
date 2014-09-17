@@ -24,24 +24,23 @@ package org.jboss.arquillian.container.tomcat;
  * @see <a href="http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html">Tomcat 7.0 Manager App HOW-TO</a>
  * @see <a href="http://tomcat.apache.org/tomcat-8.0-doc/manager-howto.html">Tomcat 8.0 Manager App HOW-TO</a>
  */
-public class Tomcat7ManagerCommandSpec implements TomcatManagerCommandSpec
-{
+public class Tomcat7ManagerCommandSpec implements TomcatManagerCommandSpec {
 
     @Override
-    public String getListCommand()
-    {
+    public String getListCommand() {
+
         return "/text/list";
     }
 
     @Override
-    public String getDeployCommand()
-    {
+    public String getDeployCommand() {
+
         return "/text/deploy?path=";
     }
 
     @Override
-    public String getUndeployCommand()
-    {
+    public String getUndeployCommand() {
+
         return "/text/undeploy?path=";
     }
 }

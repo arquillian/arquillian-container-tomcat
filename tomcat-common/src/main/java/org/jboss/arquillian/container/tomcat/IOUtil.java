@@ -31,8 +31,7 @@ import java.util.logging.Logger;
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
  * @version $Revision: $
  */
-final class IOUtil
-{
+final class IOUtil {
 
     // -------------------------------------------------------------------------------------||
     // Class Members ----------------------------------------------------------------------||
@@ -55,8 +54,8 @@ final class IOUtil
     /**
      * Internal constructor; should not be called
      */
-    private IOUtil()
-    {
+    private IOUtil() {
+
         throw new UnsupportedOperationException("No instances should be created; stateless class");
     }
 
@@ -71,8 +70,8 @@ final class IOUtil
      * @throws IllegalArgumentException If the stream was not specified
      * @return the byte[] for the given InputStream
      */
-    public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException
-    {
+    public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException {
+
         return IOUtilDelegator.asByteArray(in);
     }
 
@@ -82,33 +81,26 @@ final class IOUtil
      * @param in
      * @throws IllegalArgumentException If the stream was not specified
      */
-    public static String asUTF8String(final InputStream in)
-    {
+    public static String asUTF8String(final InputStream in) {
+
         // Precondition check
         Validate.notNull(in, "Stream must be specified");
 
         final StringBuilder buffer = new StringBuilder();
         String line;
 
-        try
-        {
+        try {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(in, CHARSET_UTF8));
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 buffer.append(line).append(Character.LINE_SEPARATOR);
             }
-        } catch (final IOException ioe)
-        {
+        } catch (final IOException ioe) {
             throw new RuntimeException("Error in obtaining string from " + in, ioe);
-        } finally
-        {
-            try
-            {
+        } finally {
+            try {
                 in.close();
-            } catch (final IOException ignore)
-            {
-                if (log.isLoggable(Level.FINER))
-                {
+            } catch (final IOException ignore) {
+                if (log.isLoggable(Level.FINER)) {
                     log.finer("Could not close stream due to: " + ignore.getMessage() + "; ignoring");
                 }
             }
@@ -125,12 +117,11 @@ final class IOUtil
      * @param output
      * @throws IOException If a problem occurred during any I/O operations
      */
-    public static void copy(final InputStream input, final OutputStream output) throws IOException
-    {
+    public static void copy(final InputStream input, final OutputStream output) throws IOException {
+
         final byte[] buffer = new byte[4096];
         int read = 0;
-        while ((read = input.read(buffer)) != -1)
-        {
+        while ((read = input.read(buffer)) != -1) {
             output.write(buffer, 0, read);
         }
 
@@ -145,12 +136,11 @@ final class IOUtil
      * @param content The content to write to the specified stream
      * @throws IOException If a problem occured during any I/O operations
      */
-    public static void bufferedWriteWithFlush(final OutputStream output, final byte[] content) throws IOException
-    {
+    public static void bufferedWriteWithFlush(final OutputStream output, final byte[] content) throws IOException {
+
         final int size = 4096;
         int offset = 0;
-        while (content.length - (offset + size) > size)
-        {
+        while (content.length - (offset + size) > size) {
             output.write(content, offset, offset + size);
             offset += size;
         }
@@ -166,30 +156,22 @@ final class IOUtil
      * @throws IOException If a problem occurred during any I/O operations during the copy, but on closing the streams these
      *         will be ignored and logged at {@link Level#FINER}
      */
-    public static void copyWithClose(final InputStream input, final OutputStream output) throws IOException
-    {
-        try
-        {
+    public static void copyWithClose(final InputStream input, final OutputStream output) throws IOException {
+
+        try {
             copy(input, output);
-        } finally
-        {
-            try
-            {
+        } finally {
+            try {
                 input.close();
-            } catch (final IOException ignore)
-            {
-                if (log.isLoggable(Level.FINER))
-                {
+            } catch (final IOException ignore) {
+                if (log.isLoggable(Level.FINER)) {
                     log.finer("Could not close stream due to: " + ignore.getMessage() + "; ignoring");
                 }
             }
-            try
-            {
+            try {
                 output.close();
-            } catch (final IOException ignore)
-            {
-                if (log.isLoggable(Level.FINER))
-                {
+            } catch (final IOException ignore) {
+                if (log.isLoggable(Level.FINER)) {
                     log.finer("Could not close stream due to: " + ignore.getMessage() + "; ignoring");
                 }
             }
@@ -201,16 +183,13 @@ final class IOUtil
      *
      * @param closeable the closeable to be closed
      */
-    public static void closeQuietly(final Closeable closeable)
-    {
-        try
-        {
-            if (closeable != null)
-            {
+    public static void closeQuietly(final Closeable closeable) {
+
+        try {
+            if (closeable != null) {
                 closeable.close();
             }
-        } catch (final IOException ignore)
-        {
+        } catch (final IOException ignore) {
             // ignore
         }
     }

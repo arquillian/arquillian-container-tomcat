@@ -32,11 +32,10 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @version $Revision: $
  */
-public class Tomcat7ManagedContainer extends TomcatManagedContainer
-{
+public class Tomcat7ManagedContainer extends TomcatManagedContainer {
 
-    public Tomcat7ManagedContainer()
-    {
+    public Tomcat7ManagedContainer() {
+
         super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
     }
 }

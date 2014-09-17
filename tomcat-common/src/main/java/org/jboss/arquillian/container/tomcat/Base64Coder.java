@@ -29,16 +29,14 @@ import java.io.UnsupportedEncodingException;
  * Author: Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland<br>
  * Multi-licensed: EPL / LGPL / GPL / AL / BSD / MIT.
  */
-public class Base64Coder
-{
+public class Base64Coder {
 
     // The line separator string of the operating system.
     private static final String systemLineSeparator = System.getProperty("line.separator");
 
     // Mapping table from 6-bit nibbles to Base64 characters.
     private static final char[] map1 = new char[64];
-    static
-    {
+    static {
         int i = 0;
         for (char c = 'A'; c <= 'Z'; c++)
             map1[i++] = c;
@@ -52,8 +50,7 @@ public class Base64Coder
 
     // Mapping table from Base64 characters to 6-bit nibbles.
     private static final byte[] map2 = new byte[128];
-    static
-    {
+    static {
         for (int i = 0; i < map2.length; i++)
             map2[i] = -1;
         for (int i = 0; i < 64; i++)
@@ -66,8 +63,8 @@ public class Base64Coder
      * @param s A String to be encoded.
      * @return A String containing the Base64 encoded data.
      */
-    public static String encodeString_IOS_8859_1(final String s) throws UnsupportedEncodingException
-    {
+    public static String encodeString_IOS_8859_1(final String s) throws UnsupportedEncodingException {
+
         return new String(encode(s.getBytes("ISO-8859-1")));
     }
 
@@ -77,8 +74,8 @@ public class Base64Coder
      * @param s A String to be encoded.
      * @return A String containing the Base64 encoded data.
      */
-    public static String encodeString(final String s)
-    {
+    public static String encodeString(final String s) {
+
         return new String(encode(s.getBytes()));
     }
 
@@ -89,8 +86,8 @@ public class Base64Coder
      * @param in An array containing the data bytes to be encoded.
      * @return A String containing the Base64 encoded data, broken into lines.
      */
-    public static String encodeLines(final byte[] in)
-    {
+    public static String encodeLines(final byte[] in) {
+
         return encodeLines(in, 0, in.length, 76, systemLineSeparator);
     }
 
@@ -104,8 +101,9 @@ public class Base64Coder
      * @param lineSeparator The line separator to be used to separate the output lines.
      * @return A String containing the Base64 encoded data, broken into lines.
      */
-    public static String encodeLines(final byte[] in, final int iOff, final int iLen, final int lineLen, final String lineSeparator)
-    {
+    public static String encodeLines(final byte[] in, final int iOff, final int iLen, final int lineLen,
+        final String lineSeparator) {
+
         final int blockLen = (lineLen * 3) / 4;
         if (blockLen <= 0)
             throw new IllegalArgumentException();
@@ -113,8 +111,7 @@ public class Base64Coder
         final int bufLen = ((iLen + 2) / 3) * 4 + lines * lineSeparator.length();
         final StringBuilder buf = new StringBuilder(bufLen);
         int ip = 0;
-        while (ip < iLen)
-        {
+        while (ip < iLen) {
             final int l = Math.min(iLen - ip, blockLen);
             buf.append(encode(in, iOff + ip, l));
             buf.append(lineSeparator);
@@ -129,8 +126,8 @@ public class Base64Coder
      * @param in An array containing the data bytes to be encoded.
      * @return A character array containing the Base64 encoded data.
      */
-    public static char[] encode(final byte[] in)
-    {
+    public static char[] encode(final byte[] in) {
+
         return encode(in, 0, in.length);
     }
 
@@ -141,8 +138,8 @@ public class Base64Coder
      * @param iLen Number of bytes to process in <code>in</code>.
      * @return A character array containing the Base64 encoded data.
      */
-    public static char[] encode(final byte[] in, final int iLen)
-    {
+    public static char[] encode(final byte[] in, final int iLen) {
+
         return encode(in, 0, iLen);
     }
 
@@ -154,16 +151,15 @@ public class Base64Coder
      * @param iLen Number of bytes to process in <code>in</code>, starting at <code>iOff</code>.
      * @return A character array containing the Base64 encoded data.
      */
-    public static char[] encode(final byte[] in, final int iOff, final int iLen)
-    {
+    public static char[] encode(final byte[] in, final int iOff, final int iLen) {
+
         final int oDataLen = (iLen * 4 + 2) / 3; // output length without padding
         final int oLen = ((iLen + 2) / 3) * 4; // output length including padding
         final char[] out = new char[oLen];
         int ip = iOff;
         final int iEnd = iOff + iLen;
         int op = 0;
-        while (ip < iEnd)
-        {
+        while (ip < iEnd) {
             final int i0 = in[ip++] & 0xff;
             final int i1 = ip < iEnd ? in[ip++] & 0xff : 0;
             final int i2 = ip < iEnd ? in[ip++] & 0xff : 0;
@@ -188,8 +184,8 @@ public class Base64Coder
      * @return A String containing the decoded data.
      * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
      */
-    public static String decodeString(final String s)
-    {
+    public static String decodeString(final String s) {
+
         return new String(decode(s));
     }
 
@@ -201,12 +197,11 @@ public class Base64Coder
      * @return An array containing the decoded data bytes.
      * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
      */
-    public static byte[] decodeLines(final String s)
-    {
+    public static byte[] decodeLines(final String s) {
+
         final char[] buf = new char[s.length()];
         int p = 0;
-        for (int ip = 0; ip < s.length(); ip++)
-        {
+        for (int ip = 0; ip < s.length(); ip++) {
             final char c = s.charAt(ip);
             if (c != ' ' && c != '\r' && c != '\n' && c != '\t')
                 buf[p++] = c;
@@ -221,8 +216,8 @@ public class Base64Coder
      * @return An array containing the decoded data bytes.
      * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
      */
-    public static byte[] decode(final String s)
-    {
+    public static byte[] decode(final String s) {
+
         return decode(s.toCharArray());
     }
 
@@ -233,8 +228,8 @@ public class Base64Coder
      * @return An array containing the decoded data bytes.
      * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
      */
-    public static byte[] decode(final char[] in)
-    {
+    public static byte[] decode(final char[] in) {
+
         return decode(in, 0, in.length);
     }
 
@@ -247,8 +242,8 @@ public class Base64Coder
      * @return An array containing the decoded data bytes.
      * @throws IllegalArgumentException If the input is not valid Base64 encoded data.
      */
-    public static byte[] decode(final char[] in, final int iOff, int iLen)
-    {
+    public static byte[] decode(final char[] in, final int iOff, int iLen) {
+
         if (iLen % 4 != 0)
             throw new IllegalArgumentException("Length of Base64 encoded input string is not a multiple of 4.");
         while (iLen > 0 && in[iOff + iLen - 1] == '=')
@@ -258,8 +253,7 @@ public class Base64Coder
         int ip = iOff;
         final int iEnd = iOff + iLen;
         int op = 0;
-        while (ip < iEnd)
-        {
+        while (ip < iEnd) {
             final int i0 = in[ip++];
             final int i1 = in[ip++];
             final int i2 = ip < iEnd ? in[ip++] : 'A';
@@ -285,8 +279,8 @@ public class Base64Coder
     }
 
     // Dummy constructor.
-    private Base64Coder()
-    {
+    private Base64Coder() {
+
     }
 
 } // end class Base64Coder
