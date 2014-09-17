@@ -18,10 +18,14 @@ package org.jboss.arquillian.container.tomcat.embedded;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
 
+import java.net.URL;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
@@ -44,5 +48,21 @@ public class Tomcat6EmbeddedClientIT extends TomcatClientITBase {
     public static WebArchive createTestDeployment() {
 
         return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_5);
+    }
+
+    @Test
+    @Ignore
+    @Override
+    public void shouldBeAbleToInvokeJspInDeployedRootWebApp(final URL contextRoot) throws Exception {
+
+        // The Tomcat 6 Embedded container does not currently load the default web.xml for out-of-the-box JSP support.
+    }
+
+    @Test
+    @Ignore
+    @Override
+    public void shouldBeAbleToInvokeJspInDeployedWebApp(final URL contextRoot) throws Exception {
+
+        // The Tomcat 6 Embedded container does not currently load the default web.xml for out-of-the-box JSP support.
     }
 }

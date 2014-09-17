@@ -18,10 +18,7 @@ package org.jboss.arquillian.container.tomcat.test;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.descriptor.api.Descriptors;
-import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 public final class TestDeploymentFactory {
@@ -50,14 +47,9 @@ public final class TestDeploymentFactory {
 
         final String archiveName = getArchiveName(contextRoot);
 
-        final StringAsset webAppDescriptor =
-            new StringAsset(Descriptors.create(WebAppDescriptor.class).version(webAppVersion).createServlet()
-                .servletClass(TEST_SERVLET_CLASS_NAME).servletName(TEST_SERVLET_NAME).up().createServletMapping()
-                .servletName(TEST_SERVLET_NAME).urlPattern(TEST_SERVLET_PATH).up().exportAsString());
-
         final WebArchive war =
             ShrinkWrap.create(WebArchive.class, archiveName).addClass(TestServlet.class).addAsResource("logging.properties")
-                .addAsWebResource(TEST_WELCOME_FILE).setWebXML(webAppDescriptor);
+                .addAsWebResource(TEST_WELCOME_FILE).setWebXML("web-" + webAppVersion + ".xml");
 
         return war;
     }
