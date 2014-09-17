@@ -15,11 +15,6 @@
     <packaging>pom</packaging>
     <name>Arquillian Tomcat Remote Container Parent</name>
 
-    <properties>
-        <test.manager.username>admin</test.manager.username>
-        <test.manager.password>admin</test.manager.password>
-    </properties>
-
     <dependencies>
 
       <!-- Compile Scope -->
@@ -54,35 +49,8 @@
     </dependencies>
 
     <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>reserve-network-port</id>
-                            <goals>
-                                <goal>reserve-network-port</goal>
-                            </goals>
-                            <phase>initialize</phase>
-                            <configuration>
-                                <portNames>
-                                    <portName>test.ajp.port</portName>
-                                    <portName>test.http.port</portName>
-                                    <portName>test.jmx.port</portName>
-                                    <portName>test.rmi.port</portName>
-                                </portNames>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
@@ -122,17 +90,6 @@
                             <phase>post-integration-test</phase>
                             <goals>
                                 <goal>stop</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
                             </goals>
                         </execution>
                     </executions>
