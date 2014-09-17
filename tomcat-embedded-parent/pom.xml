@@ -25,11 +25,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-api</artifactId>
-        </dependency>
-
       <!-- Test Scope -->
 
         <dependency>
