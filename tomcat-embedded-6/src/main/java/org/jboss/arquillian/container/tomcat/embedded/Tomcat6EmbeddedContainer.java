@@ -43,7 +43,6 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.arquillian.container.spi.context.annotation.DeploymentScoped;
-import org.jboss.arquillian.container.tomcat.embedded.TomcatEmbeddedConfiguration;
 import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
@@ -66,8 +65,8 @@ import org.jboss.shrinkwrap.tomcat_6.api.ShrinkWrapStandardContext;
  * @author Dan Allen
  * @version $Revision: $
  */
-public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbeddedConfiguration>
-{
+public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbeddedConfiguration> {
+
     private static final Logger log = Logger.getLogger(Tomcat6EmbeddedContainer.class.getName());
 
     private static final String ENV_VAR = "${env.";
@@ -97,24 +96,23 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
     private InstanceProducer<StandardContext> standardContextProducer;
 
     @Override
-    public Class<TomcatEmbeddedConfiguration> getConfigurationClass()
-    {
+    public Class<TomcatEmbeddedConfiguration> getConfigurationClass() {
+
         return TomcatEmbeddedConfiguration.class;
     }
 
     @Override
-    public ProtocolDescription getDefaultProtocol()
-    {
+    public ProtocolDescription getDefaultProtocol() {
+
         return new ProtocolDescription("Servlet 2.5");
     }
 
     @Override
-    public void setup(final TomcatEmbeddedConfiguration configuration)
-    {
+    public void setup(final TomcatEmbeddedConfiguration configuration) {
+
         final String serverName = configuration.getServerName();
 
-        if (serverName == null || "".equals(serverName))
-        {
+        if (serverName == null || "".equals(serverName)) {
             configuration.setServerName("arquillian-tomcat-embedded-6");
         }
 
@@ -122,45 +120,42 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
     }
 
     @Override
-    public void start() throws LifecycleException
-    {
-        try
-        {
+    public void start() throws LifecycleException {
+
+        try {
             startTomcatEmbedded();
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new LifecycleException("Failed to start embedded Tomcat", e);
         }
     }
 
     @Override
-    public void stop() throws LifecycleException
-    {
-        try
-        {
+    public void stop() throws LifecycleException {
+
+        try {
             removeFailedUnDeployments();
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new LifecycleException("Could not clean up", e);
         }
-        if (wasStarted)
-        {
-            try
-            {
+        if (wasStarted) {
+            try {
                 stopTomcatEmbedded();
-            } catch (final org.apache.catalina.LifecycleException e)
-            {
+            } catch (final org.apache.catalina.LifecycleException e) {
                 throw new LifecycleException("Failed to stop Tomcat", e);
             }
         }
     }
 
     @Override
-    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException
-    {
-        try
-        {
+    public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
+
+        try {
             final StandardContext standardContext = archive.as(ShrinkWrapStandardContext.class);
+
+            if (archive.getName().startsWith("ROOT")) {
+                standardContext.setPath("");
+            }
+
             standardContext.addLifecycleListener(new EmbeddedContextConfig());
             standardContext.setUnpackWAR(configuration.isUnpackArchive());
             standardContext.setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
@@ -168,8 +163,7 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
             // Need to tell TomCat to use TCCL as parent, else the WebContextClassloader will be looking in AppCL
             standardContext.setParentClassLoader(Thread.currentThread().getContextClassLoader());
 
-            if (standardContext.getUnpackWAR())
-            {
+            if (standardContext.getUnpackWAR()) {
                 deleteUnpackedWAR(standardContext);
             }
 
@@ -185,83 +179,70 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
             standardContextProducer.set(standardContext);
 
             final String contextPath = standardContext.getPath();
-            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(),
-                configuration.getBindHttpPort());
+            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
-            for (final String mapping : standardContext.findServletMappings())
-            {
+            for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextPath));
             }
 
             return new ProtocolMetaData().addContext(httpContext);
-        } catch (final Exception e)
-        {
+        } catch (final Exception e) {
             throw new DeploymentException("Failed to deploy " + archive.getName(), e);
         }
     }
 
     @Override
-    public void undeploy(final Archive<?> archive) throws DeploymentException
-    {
+    public void undeploy(final Archive<?> archive) throws DeploymentException {
+
         final StandardContext standardContext = standardContextProducer.get();
-        if (standardContext != null)
-        {
+        if (standardContext != null) {
             host.removeChild(standardContext);
-            try
-            {
+            try {
                 standardContext.stop();
                 standardContext.destroy();
-            } catch (final Exception e)
-            {
+            } catch (final Exception e) {
                 log.log(Level.WARNING, "Error on undeployment of " + standardContext.getName(), e);
             }
-            if (standardContext.getUnpackWAR())
-            {
+            if (standardContext.getUnpackWAR()) {
                 deleteUnpackedWAR(standardContext);
             }
         }
     }
 
     @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void deploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException
-    {
+    public void undeploy(final Descriptor descriptor) throws DeploymentException {
+
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    protected void startTomcatEmbedded() throws UnknownHostException, org.apache.catalina.LifecycleException
-    {
+    protected void startTomcatEmbedded() throws UnknownHostException, org.apache.catalina.LifecycleException {
+
         // creating the tomcat embedded == service tag in server.xml
         tomcat = new Embedded();
         tomcat.setName(configuration.getServerName());
         // TODO this needs to be a lot more robust
         String tomcatHome = configuration.getTomcatHome();
         File tomcatHomeFile = null;
-        if (tomcatHome != null)
-        {
-            if (tomcatHome.startsWith(ENV_VAR))
-            {
+        if (tomcatHome != null) {
+            if (tomcatHome.startsWith(ENV_VAR)) {
                 final String sysVar = tomcatHome.substring(ENV_VAR.length(), tomcatHome.length() - 1);
                 tomcatHome = System.getProperty(sysVar);
-                if (tomcatHome != null && tomcatHome.length() > 0 && new File(tomcatHome).isAbsolute())
-                {
+                if (tomcatHome != null && tomcatHome.length() > 0 && new File(tomcatHome).isAbsolute()) {
                     tomcatHomeFile = new File(tomcatHome);
                     log.info("Using tomcat home from environment variable: " + tomcatHome);
                 }
-            }
-            else
-            {
+            } else {
                 tomcatHomeFile = new File(tomcatHome);
             }
         }
 
-        if (tomcatHomeFile == null)
-        {
+        if (tomcatHomeFile == null) {
             tomcatHomeFile = new File(System.getProperty(TMPDIR_SYS_PROP), "tomcat-embedded-6");
         }
 
@@ -281,16 +262,16 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
         final File appBaseFile = new File(tomcatHomeFile, configuration.getAppBase());
         appBaseFile.mkdirs();
         host = tomcat.createHost(configuration.getBindAddress(), appBaseFile.getAbsolutePath());
-        if (configuration.getTomcatWorkDir() != null)
-        {
+        if (configuration.getTomcatWorkDir() != null) {
             ((StandardHost) host).setWorkDir(configuration.getTomcatWorkDir());
         }
         ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive());
         engine.addChild(host);
 
         // creates an http connector, i.e., <connector> element in server.xml
-        final Connector connector = tomcat.createConnector(InetAddress.getByName(configuration.getBindAddress()),
-            configuration.getBindHttpPort(), false);
+        final Connector connector =
+            tomcat.createConnector(InetAddress.getByName(configuration.getBindAddress()), configuration.getBindHttpPort(),
+                false);
         tomcat.addConnector(connector);
         connector.setContainer(engine);
 
@@ -300,8 +281,8 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
         wasStarted = true;
     }
 
-    protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException
-    {
+    protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException {
+
         tomcat.stop();
         tomcat.destroy();
     }
@@ -309,41 +290,42 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
     /**
      * Make sure an the unpacked WAR is not left behind you would think Tomcat would cleanup an unpacked WAR, but it doesn't
      */
-    protected void deleteUnpackedWAR(final StandardContext standardContext)
-    {
-        final File unpackDir = new File(host.getAppBase(), standardContext.getPath().substring(1));
-        if (unpackDir.exists())
-        {
+    protected void deleteUnpackedWAR(final StandardContext standardContext) {
+
+        String path = standardContext.getPath();
+
+        if ("".equals(path)) {
+            path = "/ROOT";
+        }
+
+        final File unpackDir = new File(host.getAppBase(), path.substring(1));
+
+        if (unpackDir.exists()) {
             ExpandWar.deleteDir(unpackDir);
         }
     }
 
-    private void undeploy(final String name) throws DeploymentException
-    {
+    private void undeploy(final String name) throws DeploymentException {
+
         final Container child = host.findChild(name);
-        if (child != null)
-        {
+        if (child != null) {
             host.removeChild(child);
         }
     }
 
-    private void removeFailedUnDeployments() throws IOException
-    {
+    private void removeFailedUnDeployments() throws IOException {
+
         final List<String> remainingDeployments = new ArrayList<String>();
-        for (final String name : failedUndeployments)
-        {
-            try
-            {
+        for (final String name : failedUndeployments) {
+            try {
                 undeploy(name);
-            } catch (final Exception e)
-            {
+            } catch (final Exception e) {
                 final IOException ioe = new IOException();
                 ioe.initCause(e);
                 throw ioe;
             }
         }
-        if (remainingDeployments.size() > 0)
-        {
+        if (remainingDeployments.size() > 0) {
             log.severe("Failed to undeploy these artifacts: " + remainingDeployments);
         }
         failedUndeployments.clear();
