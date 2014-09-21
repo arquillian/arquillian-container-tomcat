@@ -14,27 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed;
+package org.jboss.arquillian.container.tomcat;
 
-import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
-import org.junit.Before;
+/**
+ * Utilities for Strings inspired by the <a
+ * href="http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html">utility of the same
+ * name</a> in Apache Commons Lang.
+ *
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
+ */
+public class StringUtils {
 
-public class TomcatManagedContainerTest {
+    public static boolean isBlank(final String string) {
 
-    private TomcatManagedContainer commonTomcatManagedContainer;
-
-    @Before
-    public void setUp() {
-
-        commonTomcatManagedContainer =
-            new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec()) {
-
-                @Override
-                public ProtocolDescription getDefaultProtocol() {
-
-                    return null;
-                }
-            };
+        return string == null || string.trim().length() == 0;
     }
 }

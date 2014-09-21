@@ -16,6 +16,8 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
+import static org.jboss.arquillian.container.tomcat.managed.TomcatManagedConfiguration.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
@@ -32,9 +35,10 @@ import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
-import org.jboss.arquillian.container.tomcat.AdditionalJavaOptionsParser;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
+import org.jboss.arquillian.container.tomcat.StringUtils;
+import org.jboss.arquillian.container.tomcat.SystemUtils;
 import org.jboss.arquillian.container.tomcat.TomcatManager;
 import org.jboss.arquillian.container.tomcat.TomcatManagerCommandSpec;
 import org.jboss.arquillian.container.tomcat.Validate;
@@ -101,6 +105,7 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
     @Override
     public void start() throws LifecycleException {
 
+        // FIXME: ARQ-1619 - Tomcat managed container ignores allowConnectingToRunningServer
         if (manager.isRunning()) {
             throw new LifecycleException("The server is already running! "
                 + "Managed containers does not support connecting to running server instances due to the "
@@ -111,51 +116,41 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
         }
 
         try {
-            final String CATALINA_HOME = configuration.getCatalinaHome();
-            final String CATALINA_BASE = configuration.getCatalinaBase();
-            final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
 
-            final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
-            final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();
+            final List<String> startupCommand = new ArrayList<String>();
 
-            final String javaCommand = getJavaCommand();
+            final String binDirPath = configuration.getCatalinaHome() + File.separator + "bin";
 
-            // construct a command to execute
-            final List<String> cmd = new ArrayList<String>();
+            final String startupScript =
+                binDirPath + File.separator + "catalina" + (SystemUtils.IS_OS_WINDOWS ? ".bat" : ".sh");
 
-            cmd.add(javaCommand);
+            startupCommand.add(startupScript);
 
-            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/"
-                + configuration.getLoggingProperties());
-            cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
+            // TODO: Add to configuration so "jpda" can be used instead...
+            startupCommand.add("run");
 
-            cmd.add("-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
-            cmd.add("-Dcom.sun.management.jmxremote.ssl=false");
-            cmd.add("-Dcom.sun.management.jmxremote.authenticate=false");
+            if (!StringUtils.isBlank(configuration.getServerConfig())) {
 
-            cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
+                startupCommand.add("-config");
+                startupCommand.add("conf/" + File.separator + configuration.getServerConfig());
+            }
 
-            String CLASS_PATH = absoluteCatalinaHomePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-            CLASS_PATH += absoluteCatalinaHomePath + "/bin/tomcat-juli.jar";
+            final ProcessBuilder startupProcessBuilder = new ProcessBuilder(startupCommand);
 
-            cmd.add("-classpath");
-            cmd.add(CLASS_PATH);
-            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + "/endorsed");
-            cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
-            cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
-            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + "/temp");
-            cmd.add("org.apache.catalina.startup.Bootstrap");
-            cmd.add("-config");
-            cmd.add(absoluteCatalinaBasePath + "/conf/" + configuration.getServerConfig());
-            cmd.add("start");
+            startupProcessBuilder.directory(new File(binDirPath));
 
-            // execute command
-            final ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
+            final Map<String, String> environmentMap = startupProcessBuilder.environment();
+
+            applyEnvironment(environmentMap);
+
             startupProcessBuilder.redirectErrorStream(true);
-            startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
-            log.info("Starting Tomcat with: " + cmd.toString());
+
+            log.info("Starting Tomcat with: " + startupCommand);
+
             startupProcess = startupProcessBuilder.start();
+
             new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
+
             final Process proc = startupProcess;
 
             shutdownThread = new Thread(new Runnable() {
@@ -265,6 +260,43 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    private void applyEnvironment(final Map<String, String> environmentMap) {
+
+        final EnvironmentFacade environment = new EnvironmentFacade(environmentMap);
+
+        environment.put(CATALINA_HOME, configuration.getCatalinaHome());
+        environment.put(CATALINA_BASE, configuration.getCatalinaBase());
+        environment.put(CATALINA_OUT, configuration.getCatalinaOut());
+        environment.put(CATALINA_PID, configuration.getCatalinaPid());
+        environment.put(CATALINA_OPTS, configuration.getCatalinaOpts());
+        environment.put(CATALINA_TMPDIR, configuration.getCatalinaTmpDir());
+        environment.put(JAVA_HOME, configuration.getJavaHome());
+        environment.put(JRE_HOME, configuration.getJreHome());
+        environment.put(JAVA_OPTS, configuration.getJavaOpts());
+        environment.put(JAVA_ENDORSED_DIRS, configuration.getJavaEndorsedDirs());
+        environment.put(JPDA_TRANSPORT, configuration.getJpdaTransport());
+        environment.put(JPDA_ADDRESS, configuration.getJpdaAddress());
+        environment.put(JPDA_SUSPEND, configuration.getJpdaSuspend());
+        environment.put(JPDA_OPTS, configuration.getJpdaOpts());
+        environment.put(LOGGING_CONFIG, configuration.getLoggingConfig());
+        environment.put(LOGGING_MANAGER, configuration.getLoggingManager());
+
+        // TODO: Deprecate and remove remaining legacy configuration properties in favor of CATALINA_OPTS and LOGGING_CONFIG...
+
+        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
+        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.ssl=false");
+        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.authenticate=false");
+
+        @SuppressWarnings("deprecation")
+        final String loggingProperties = configuration.getLoggingProperties();
+
+        if (!StringUtils.isBlank(loggingProperties)) {
+
+            environment.append(LOGGING_CONFIG, "-Djava.util.logging.config.file=.." + File.separator + "conf" + File.separator
+                + loggingProperties);
+        }
+    }
+
     /**
      * Runnable that consumes the output of the startupProcess. If nothing consumes the output the AS will hang on some
      * platforms
@@ -308,14 +340,5 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
         } catch (final InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    String getJavaCommand() {
-
-        if (configuration == null) {
-            throw new IllegalStateException("setup not called");
-        }
-
-        return configuration.getJavaHome() + File.separator + "bin" + File.separator + "java";
     }
 }

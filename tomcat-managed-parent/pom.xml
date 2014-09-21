@@ -17,7 +17,7 @@
 
     <dependencies>
 
-      <!-- Compile Scope -->
+        <!-- Compile Scope -->
 
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -25,7 +25,7 @@
             <version>${project.version}</version>
         </dependency>
 
-      <!-- Test Scope -->
+        <!-- Test Scope -->
 
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -65,6 +65,18 @@
                                     </configfiles>
                                 </configuration>
                             </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>install-container</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>

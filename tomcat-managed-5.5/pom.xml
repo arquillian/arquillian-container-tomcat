@@ -62,6 +62,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-container</id>
+                        <configuration>
+                            <tasks>
+                                <chmod perm="u+x">
+                                    <fileset dir="${test.catalina.home}/bin">
+                                        <include name="**/*.sh" />
+                                    </fileset>
+                                </chmod>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

@@ -14,27 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.managed;
+package org.jboss.arquillian.container.tomcat;
 
-import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
-import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
-import org.junit.Before;
+/**
+ * Utilities for Strings inspired by the <a
+ * href="http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/SystemUtils.html">utility of the same
+ * name</a> in Apache Commons Lang.
+ *
+ * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
+ */
+public class SystemUtils {
 
-public class TomcatManagedContainerTest {
+    private static final String OS_NAME = System.getProperty("os.name") == null ? "" : System.getProperty("os.name");
 
-    private TomcatManagedContainer commonTomcatManagedContainer;
+    private static final String OS_NAME_WINDOWS_PREFIX = "Windows";
 
-    @Before
-    public void setUp() {
-
-        commonTomcatManagedContainer =
-            new TomcatManagedContainer(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec()) {
-
-                @Override
-                public ProtocolDescription getDefaultProtocol() {
-
-                    return null;
-                }
-            };
-    }
+    public static final boolean IS_OS_WINDOWS = OS_NAME.startsWith(OS_NAME_WINDOWS_PREFIX);
 }
