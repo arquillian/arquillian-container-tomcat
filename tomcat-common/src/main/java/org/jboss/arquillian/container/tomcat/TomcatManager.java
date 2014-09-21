@@ -212,7 +212,7 @@ public class TomcatManager<C extends TomcatConfiguration> {
                     + ").\n\n"
                     + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
                     + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
-                    + "The user must have appripriate role specified in tomcat-users.xml file.\n");
+                    + "The user must have aapropriate role specified in tomcat-users.xml file.\n");
         } else if (httpResponseCode >= 300) {
             throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
                 + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");

@@ -26,19 +26,16 @@ package org.jboss.arquillian.container.tomcat;
  */
 public class Tomcat7ManagerCommandSpec implements TomcatManagerCommandSpec {
 
-    @Override
     public String getListCommand() {
 
         return "/text/list";
     }
 
-    @Override
     public String getDeployCommand() {
 
         return "/text/deploy?path=";
     }
 
-    @Override
     public String getUndeployCommand() {
 
         return "/text/undeploy?path=";

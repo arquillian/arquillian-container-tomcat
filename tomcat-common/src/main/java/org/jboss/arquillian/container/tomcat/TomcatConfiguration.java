@@ -62,7 +62,6 @@ public class TomcatConfiguration implements ContainerConfiguration {
 
     private URL managerUrl;
 
-    @Override
     public void validate() throws ConfigurationException {
 
         Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
