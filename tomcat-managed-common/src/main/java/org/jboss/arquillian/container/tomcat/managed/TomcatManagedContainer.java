@@ -16,8 +16,6 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
-import static org.jboss.arquillian.container.tomcat.managed.TomcatManagedConfiguration.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -61,13 +59,12 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
     private static final Logger log = Logger.getLogger(TomcatManagedContainer.class.getName());
 
+    private final EnvironmentStrategy environmentStrategy = new EnvironmentStrategy();
+
     private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
 
     private final ProtocolDescription protocolDescription;
 
-    /**
-     * Tomcat container configuration
-     */
     private TomcatManagedConfiguration configuration;
 
     private TomcatManager<? extends TomcatManagedConfiguration> manager;
@@ -126,7 +123,7 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
             startupCommand.add(startupScript);
 
-            // TODO: Add to configuration so "jpda" can be used instead...
+            // TODO: Add to configuration so "jpda" can be used as well...
             startupCommand.add("run");
 
             if (!StringUtils.isBlank(configuration.getServerConfig())) {
@@ -141,11 +138,11 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
             final Map<String, String> environmentMap = startupProcessBuilder.environment();
 
-            applyEnvironment(environmentMap);
+            environmentStrategy.applyEnvironment(configuration, environmentMap);
 
             startupProcessBuilder.redirectErrorStream(true);
 
-            log.info("Starting Tomcat with: " + startupCommand);
+            log.info("Starting Tomcat with command: " + startupCommand + " and environment: " + environmentMap);
 
             startupProcess = startupProcessBuilder.start();
 
@@ -194,6 +191,8 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
     @Override
     public void stop() throws LifecycleException {
+
+        // TODO: Switch to catalina.sh start/stop instead of run/[kill]?
 
         if (shutdownThread != null) {
             Runtime.getRuntime().removeShutdownHook(shutdownThread);
@@ -258,43 +257,6 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
     public void undeploy(final Descriptor descriptor) throws DeploymentException {
 
         throw new UnsupportedOperationException("Not implemented");
-    }
-
-    private void applyEnvironment(final Map<String, String> environmentMap) {
-
-        final EnvironmentFacade environment = new EnvironmentFacade(environmentMap);
-
-        environment.put(CATALINA_HOME, configuration.getCatalinaHome());
-        environment.put(CATALINA_BASE, configuration.getCatalinaBase());
-        environment.put(CATALINA_OUT, configuration.getCatalinaOut());
-        environment.put(CATALINA_PID, configuration.getCatalinaPid());
-        environment.put(CATALINA_OPTS, configuration.getCatalinaOpts());
-        environment.put(CATALINA_TMPDIR, configuration.getCatalinaTmpDir());
-        environment.put(JAVA_HOME, configuration.getJavaHome());
-        environment.put(JRE_HOME, configuration.getJreHome());
-        environment.put(JAVA_OPTS, configuration.getJavaOpts());
-        environment.put(JAVA_ENDORSED_DIRS, configuration.getJavaEndorsedDirs());
-        environment.put(JPDA_TRANSPORT, configuration.getJpdaTransport());
-        environment.put(JPDA_ADDRESS, configuration.getJpdaAddress());
-        environment.put(JPDA_SUSPEND, configuration.getJpdaSuspend());
-        environment.put(JPDA_OPTS, configuration.getJpdaOpts());
-        environment.put(LOGGING_CONFIG, configuration.getLoggingConfig());
-        environment.put(LOGGING_MANAGER, configuration.getLoggingManager());
-
-        // TODO: Deprecate and remove remaining legacy configuration properties in favor of CATALINA_OPTS and LOGGING_CONFIG...
-
-        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.port=" + configuration.getJmxPort());
-        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.ssl=false");
-        environment.append(CATALINA_OPTS, "-Dcom.sun.management.jmxremote.authenticate=false");
-
-        @SuppressWarnings("deprecation")
-        final String loggingProperties = configuration.getLoggingProperties();
-
-        if (!StringUtils.isBlank(loggingProperties)) {
-
-            environment.append(LOGGING_CONFIG, "-Djava.util.logging.config.file=.." + File.separator + "conf" + File.separator
-                + loggingProperties);
-        }
     }
 
     /**

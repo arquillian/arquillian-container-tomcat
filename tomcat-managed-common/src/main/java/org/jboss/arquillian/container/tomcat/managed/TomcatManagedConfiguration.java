@@ -214,7 +214,7 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     /**
      * (Optional) The options for the java command that starts Tomcat.
      *
-     * See the Java documentation for the options that affect the Java Runtime EnvironmentFacade.
+     * See the Java documentation for the options that affect the Java Runtime EnvironmentMapFacade.
      *
      * See the "System Properties" page in the Tomcat Configuration Reference for the system properties that are specific to
      * Tomcat.

@@ -24,7 +24,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EnvironmentFacadeTest {
+public class EnvironmentMapFacadeTest {
 
     private static final String TEST_KEY = "TEST_KEY";
 
@@ -34,7 +34,7 @@ public class EnvironmentFacadeTest {
 
     private Map<String, String> environmentMap;
 
-    private EnvironmentFacade environmentFacade;
+    private EnvironmentMapFacade environmentFacade;
 
     private static final String EXPECTED_APPENDED_VALUE = TEST_VALUE + " " + TEST_APPEND_VALUE;
 
@@ -42,19 +42,7 @@ public class EnvironmentFacadeTest {
     public void setUp() {
 
         environmentMap = new HashMap<String, String>();
-        environmentFacade = new EnvironmentFacade(environmentMap);
-    }
-
-    @Test
-    public void testClear() {
-
-        assertThat(environmentMap).isEmpty();
-
-        environmentMap.put(TEST_KEY, TEST_VALUE);
-
-        environmentFacade.clear();
-
-        assertThat(environmentMap).isEmpty();
+        environmentFacade = new EnvironmentMapFacade(environmentMap);
     }
 
     @Test

@@ -21,14 +21,14 @@ import java.util.Map;
 import org.jboss.arquillian.container.tomcat.StringUtils;
 
 /**
- * A facade intended for use with a {@link ProcessBuilder#environment()} map.
+ * A facade intended simplify use of a {@link ProcessBuilder#environment()} map.
  *
  * Note that as the <code>ProcessBuilder</code> API calls for the returned map to be mutated in order to affect the environment
  * of the launched process, this facade operates directly on the given map. In particular it assumes the map is modifiable.
  *
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
  */
-class EnvironmentFacade {
+class EnvironmentMapFacade {
 
     private final Map<String, String> environmentMap;
 
@@ -37,17 +37,9 @@ class EnvironmentFacade {
      *
      * @param environmentMap the environment map to operate on.
      */
-    EnvironmentFacade(final Map<String, String> environmentMap) {
+    EnvironmentMapFacade(final Map<String, String> environmentMap) {
 
         this.environmentMap = environmentMap;
-    }
-
-    /**
-     * Clears the environment for the new process.
-     */
-    void clear() {
-
-        environmentMap.clear();
     }
 
     /**
