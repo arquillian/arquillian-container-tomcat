@@ -78,7 +78,7 @@ public class EmbeddedHostConfig extends HostConfig {
 
     private String getContextName(final String warFileName) {
 
-        final ContextName contextName = new ContextName(warFileName, true);
+        final ContextName contextName = CompatUtils.createContextName(warFileName);
         return contextName.getName();
     }
 }
