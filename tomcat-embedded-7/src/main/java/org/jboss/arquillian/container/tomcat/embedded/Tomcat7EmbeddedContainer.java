@@ -315,6 +315,6 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
      */
     private ContextName getContextName(final Archive<?> archive) {
 
-        return new ContextName(archive.getName(), true);
+        return CompatUtils.createContextName(archive.getName());
     }
 }
