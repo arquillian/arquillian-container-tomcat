@@ -17,7 +17,7 @@
 package org.jboss.arquillian.container.tomcat.managed;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_2_4;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_3_1;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -27,24 +27,26 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat 8 server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
+ * @author <a href="mailto:dadrus@gmx.de">Dimitrij Drus</a>
  * @version $Revision: $
+ *
  */
 @RunWith(Arquillian.class)
-public class Tomcat55ManagedClientIT extends TomcatClientITBase {
+public class Tomcat8ManagedClientIT extends TomcatClientITBase {
 
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_3_1);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_2_4);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_3_1);
     }
 }
