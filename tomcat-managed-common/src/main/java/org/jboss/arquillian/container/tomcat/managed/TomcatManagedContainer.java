@@ -112,8 +112,12 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
         try {
             final String CATALINA_HOME = configuration.getCatalinaHome();
-            final String CATALINA_BASE = configuration.getCatalinaBase();
+            String CATALINA_BASE = configuration.getCatalinaBase();
             final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
+            
+            if(CATALINA_BASE == null) {
+            	CATALINA_BASE = CATALINA_HOME;
+            }
 
             final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
             final String absoluteCatalinaBasePath = new File(CATALINA_BASE).getAbsolutePath();

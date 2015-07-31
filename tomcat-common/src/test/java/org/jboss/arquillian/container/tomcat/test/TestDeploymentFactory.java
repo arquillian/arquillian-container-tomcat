@@ -39,6 +39,8 @@ public final class TestDeploymentFactory {
 
     public static final String SERVLET_3_0 = "3.0";
 
+    public static final String SERVLET_3_1 = "3.1";
+
     public static final String ROOT_CONTEXT = "ROOT";
 
     public static final String TEST_CONTEXT = "test";
