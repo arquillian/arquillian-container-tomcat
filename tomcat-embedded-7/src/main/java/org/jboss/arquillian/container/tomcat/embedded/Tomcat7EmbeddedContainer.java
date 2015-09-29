@@ -231,7 +231,7 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
 
         embeddedHostConfig = new EmbeddedHostConfig();
-        embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
+        ((StandardHost)host).setUnpackWARs(configuration.isUnpackArchive());
 
         host.addLifecycleListener(embeddedHostConfig);
 
