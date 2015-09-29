@@ -225,11 +225,10 @@ public class Tomcat8EmbeddedContainer implements DeployableContainer<TomcatEmbed
         // We only want to deploy apps in accord with our DeployableContainer life cycle.
         host.setDeployOnStartup(false);
         host.setAutoDeploy(false);
-
         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
 
         embeddedHostConfig = new EmbeddedHostConfig();
-        embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
+        ((StandardHost)host).setUnpackWARs(configuration.isUnpackArchive());
 
         host.addLifecycleListener(embeddedHostConfig);
 
