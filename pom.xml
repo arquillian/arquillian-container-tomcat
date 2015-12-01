@@ -289,6 +289,7 @@
         <module>tomcat-managed-5.5</module>
         <module>tomcat-managed-6</module>
         <module>tomcat-managed-7</module>
+        <module>tomcat-managed-8</module>
         <module>tomcat-remote-common</module>
         <module>tomcat-remote-parent</module>
         <module>tomcat-remote-6</module>
