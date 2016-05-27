@@ -128,8 +128,9 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             final List<String> cmd = new ArrayList<String>();
 
             cmd.add(javaCommand);
+            String seperator=File.separator;
 
-            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + "/conf/"
+            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath +seperator+ "conf"+seperator
                 + configuration.getLoggingProperties());
             cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
@@ -139,18 +140,18 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
             cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
-            String CLASS_PATH = absoluteCatalinaHomePath + "/bin/bootstrap.jar" + System.getProperty("path.separator");
-            CLASS_PATH += absoluteCatalinaHomePath + "/bin/tomcat-juli.jar";
+            String CLASS_PATH = absoluteCatalinaHomePath + seperator+ "bin"+seperator+"bootstrap.jar" +File.pathSeparator;
+            CLASS_PATH += absoluteCatalinaHomePath + seperator+"bin"+seperator+"tomcat-juli.jar";
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
-            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + "/endorsed");
+            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath +seperator+ "endorsed");
             cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
             cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
-            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + "/temp");
+            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + seperator+ "temp");
             cmd.add("org.apache.catalina.startup.Bootstrap");
             cmd.add("-config");
-            cmd.add(absoluteCatalinaBasePath + "/conf/" + configuration.getServerConfig());
+            cmd.add(absoluteCatalinaBasePath + seperator+"conf"+seperator + configuration.getServerConfig());
             cmd.add("start");
 
             // execute command
