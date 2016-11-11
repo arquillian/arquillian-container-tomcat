@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-parent-tomcat</artifactId>
-        <version>1.0.0.Final-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.jboss.arquillian.container</groupId>
+    <artifactId>arquillian-parent-tomcat</artifactId>
+    <version>1.0.0.Final-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>arquillian-tomcat-remote-common</artifactId>
-    <name>Arquillian Tomcat Remote Container Common</name>
+  <artifactId>arquillian-tomcat-remote-common</artifactId>
+  <name>Arquillian Tomcat Remote Container Common</name>
 
-    <dependencies>
+  <dependencies>
 
-      <!-- Compile Scope -->
+    <!-- Compile Scope -->
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-      <!-- Test Scope -->
+    <!-- Test Scope -->
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-common</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
