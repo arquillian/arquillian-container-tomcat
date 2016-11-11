@@ -28,11 +28,11 @@
 
     <properties>
 
-        <arquillian.core.version>1.1.5.Final</arquillian.core.version>
-        <shrinkwrap.version>1.2.2</shrinkwrap.version>
-        <shrinkwrap.descriptors.version>2.0.0-alpha-5</shrinkwrap.descriptors.version>
-        <shrinkwrap.resolver.version>2.1.1</shrinkwrap.resolver.version>
-        <weld.version>1.1.8.Final</weld.version>
+        <arquillian.core.version>1.1.11.Final</arquillian.core.version>
+        <shrinkwrap.version>1.2.6</shrinkwrap.version>
+        <shrinkwrap.descriptors.version>2.0.0-alpha-10</shrinkwrap.descriptors.version>
+        <shrinkwrap.resolver.version>2.2.4</shrinkwrap.resolver.version>
+        <weld.version>1.1.33.Final</weld.version>
 
         <!-- override from parent -->
         <maven.compiler.argument.target>1.5</maven.compiler.argument.target>
@@ -47,21 +47,6 @@
         <dependencies>
 
             <!-- BOMs -->
-
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.core.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-build</artifactId>
-                <version>${arquillian.core.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.jboss.shrinkwrap</groupId>
                 <artifactId>shrinkwrap-bom</artifactId>
@@ -83,26 +68,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <!-- Depchains -->
-
             <dependency>
-                <groupId>org.jboss.shrinkwrap</groupId>
-                <artifactId>shrinkwrap-depchain</artifactId>
-                <version>${shrinkwrap.version}</version>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.core.version}</version>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-depchain</artifactId>
-                <version>${shrinkwrap.descriptors.version}</version>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-build</artifactId>
+                <version>${arquillian.core.version}</version>
                 <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                <artifactId>shrinkwrap-resolver-depchain</artifactId>
-                <version>${shrinkwrap.resolver.version}</version>
-                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- Test Scope -->
