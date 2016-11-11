@@ -15,7 +15,7 @@
     <name>Arquillian Tomcat Embedded 8.x Container</name>
 
     <properties>
-        <tomcat.version>8.0.1</tomcat.version>
+        <tomcat.version>8.0.38</tomcat.version>
         <ecj.version>4.3.1</ecj.version>
     </properties>
 
