@@ -16,8 +16,10 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
-import static org.junit.Assert.*;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_2_4;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
+import static org.junit.Assert.assertEquals;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.tomcat.test.TestBean;
