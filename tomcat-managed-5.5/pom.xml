@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,9 +19,7 @@
         <tomcat.major.version>5</tomcat.major.version>
         <tomcat.version>${tomcat.major.version}.5.36</tomcat.version>
 
-        <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}</test.catalina.home>
-        <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat${tomcat.major.version}x</test.catalina.base>
-
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -33,7 +31,7 @@
             <scope>test</scope>
         </dependency>
 
-      <!-- Tomcat 5.5 specific tests, Weld is not compatible, testing @Resource injection -->
+        <!-- Tomcat 5.5 specific tests, Weld is not compatible, testing @Resource injection -->
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
@@ -43,25 +41,45 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>install-container</id>
+
+    <profiles>
+        <profile>
+            <id>JDK5-7</id>
+            <activation>
+                <jdk>[1.5,1.7]</jdk>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+                <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}</test.catalina.home>
+                <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat${tomcat.major.version}x</test.catalina.base>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <container>
-                                <containerId>tomcat${tomcat.major.version}x</containerId>
-                                <zipUrlInstaller>
-                                    <url>http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
-                                </zipUrlInstaller>
-                            </container>
+                            <skipTests>false</skipTests>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-container</id>
+                                <configuration>
+                                    <container>
+                                        <containerId>tomcat${tomcat.major.version}x</containerId>
+                                        <zipUrlInstaller>
+                                            <url>http://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                                        </zipUrlInstaller>
+                                    </container>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
