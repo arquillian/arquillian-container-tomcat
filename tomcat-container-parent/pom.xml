@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-parent-tomcat</artifactId>
-        <version>1.0.0.Final-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.jboss.arquillian.container</groupId>
+    <artifactId>arquillian-parent-tomcat</artifactId>
+    <version>1.0.0.Final-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>arquillian-tomcat-container-parent</artifactId>
-    <packaging>pom</packaging>
-    <name>Arquillian Tomcat Container Parent</name>
+  <artifactId>arquillian-tomcat-container-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>Arquillian Tomcat Container Parent</name>
 
-    <properties>
+  <properties>
 
-        <!-- ARQ-630: We'll use credentials with ISO-8859-1 characters for testing. This also tests for US-ASCII support as
-            the G0 subset overlaps with US-ASCII. -->
-        <test.manager.username>Schröder</test.manager.username>
-        <test.manager.password>Contraseña</test.manager.password>
+    <!-- ARQ-630: We'll use credentials with ISO-8859-1 characters for testing. This also tests for US-ASCII support as
+        the G0 subset overlaps with US-ASCII. -->
+    <test.manager.username>Schröder</test.manager.username>
+    <test.manager.password>Contraseña</test.manager.password>
 
-        <test.ajp.port>8009</test.ajp.port>
-        <test.http.port>8080</test.http.port>
-        <test.jmx.port>8050</test.jmx.port>
-        <test.rmi.port>1099</test.rmi.port>
+    <test.ajp.port>8009</test.ajp.port>
+    <test.http.port>8080</test.http.port>
+    <test.jmx.port>8050</test.jmx.port>
+    <test.rmi.port>1099</test.rmi.port>
 
-    </properties>
+  </properties>
 
-    <dependencies>
+  <dependencies>
 
-        <!-- Compile Scope -->
+    <!-- Compile Scope -->
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-        <!-- Test Scope -->
+    <!-- Test Scope -->
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-common</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
-        <plugins>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

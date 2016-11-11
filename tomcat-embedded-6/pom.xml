@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jboss.arquillian.container</groupId>
-        <artifactId>arquillian-tomcat-embedded-parent</artifactId>
-        <version>1.0.0.Final-SNAPSHOT</version>
-        <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
-    </parent>
+  <parent>
+    <groupId>org.jboss.arquillian.container</groupId>
+    <artifactId>arquillian-tomcat-embedded-parent</artifactId>
+    <version>1.0.0.Final-SNAPSHOT</version>
+    <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
+  </parent>
 
-    <artifactId>arquillian-tomcat-embedded-6</artifactId>
-    <name>Arquillian Tomcat Embedded 6.x Container</name>
+  <artifactId>arquillian-tomcat-embedded-6</artifactId>
+  <name>Arquillian Tomcat Embedded 6.x Container</name>
 
-    <properties>
-        <tomcat.version>6.0.47</tomcat.version>
-        <shrinkwrap.container.tomcat.version>1.0.0-beta-1</shrinkwrap.container.tomcat.version>
-    </properties>
+  <properties>
+    <tomcat.version>6.0.47</tomcat.version>
+    <shrinkwrap.container.tomcat.version>1.0.0-beta-1</shrinkwrap.container.tomcat.version>
+  </properties>
 
-    <dependencies>
+  <dependencies>
 
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.container</groupId>
-            <artifactId>shrinkwrap-container-tomcat-60</artifactId>
-            <version>${shrinkwrap.container.tomcat.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.container</groupId>
+      <artifactId>shrinkwrap-container-tomcat-60</artifactId>
+      <version>${shrinkwrap.container.tomcat.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>annotations-api</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>catalina</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>coyote</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>jasper</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>juli</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>annotations-api</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>catalina</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>coyote</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>jasper</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>juli</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
 </project>
