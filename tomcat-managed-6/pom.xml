@@ -16,7 +16,7 @@
   <properties>
 
     <tomcat.major.version>6</tomcat.major.version>
-    <tomcat.version>${tomcat.major.version}.0.47</tomcat.version>
+    <tomcat.version>${tomcat.major.version}.0.48</tomcat.version>
 
     <test.catalina.home>
       ${project.build.directory}/cargo/installs/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}

@@ -15,7 +15,7 @@
 
   <properties>
     <tomcat.major.version>6</tomcat.major.version>
-    <tomcat.version>${tomcat.major.version}.0.47</tomcat.version>
+    <tomcat.version>${tomcat.major.version}.0.48</tomcat.version>
   </properties>
 
   <dependencies>
