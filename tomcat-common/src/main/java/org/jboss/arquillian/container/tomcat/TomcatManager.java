@@ -100,6 +100,10 @@ public class TomcatManager<C extends TomcatConfiguration> {
         execute(command.toString(), null, null, -1);
     }
 
+    public void serverInfo() throws IOException {
+        execute(tomcatManagerCommandSpec.getServerInfoCommand(), null, null, -1);
+    }
+    
     public void list() throws IOException {
 
         execute(tomcatManagerCommandSpec.getListCommand(), null, null, -1);
@@ -108,7 +112,7 @@ public class TomcatManager<C extends TomcatConfiguration> {
     public boolean isRunning() {
 
         try {
-            list();
+            serverInfo();
             return true;
         } catch (final IOException e) {
             return false;
