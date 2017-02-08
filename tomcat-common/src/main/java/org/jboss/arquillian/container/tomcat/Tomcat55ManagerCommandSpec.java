@@ -26,6 +26,10 @@ package org.jboss.arquillian.container.tomcat;
  */
 public class Tomcat55ManagerCommandSpec implements TomcatManagerCommandSpec {
 
+	public String getServerInfoCommand() {
+		return "/serverinfo";
+	}
+	
     public String getListCommand() {
 
         return "/list";

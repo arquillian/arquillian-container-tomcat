@@ -100,6 +100,15 @@ public class TomcatManager<C extends TomcatConfiguration> {
         execute(command.toString(), null, null, -1);
     }
 
+    public void serverInfo() throws IOException {
+        execute(tomcatManagerCommandSpec.getServerInfoCommand(), null, null, -1);
+    }
+    
+    /**
+     * This method is deprecated, please use {@link TomcatManager#serverInfo()} instead, to find out if container is running. 
+     * 
+     */
+    @Deprecated
     public void list() throws IOException {
 
         execute(tomcatManagerCommandSpec.getListCommand(), null, null, -1);
@@ -108,7 +117,7 @@ public class TomcatManager<C extends TomcatConfiguration> {
     public boolean isRunning() {
 
         try {
-            list();
+            serverInfo();
             return true;
         } catch (final IOException e) {
             return false;

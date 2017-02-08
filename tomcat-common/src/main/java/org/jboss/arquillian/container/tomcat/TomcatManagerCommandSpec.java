@@ -24,9 +24,16 @@ package org.jboss.arquillian.container.tomcat;
 public interface TomcatManagerCommandSpec {
 
     /**
+     * The server info command.
+     *
+     * @return the server info command.
+     */
+    String getServerInfoCommand();
+	
+    /**
      * The list command.
      *
-     * @return the deploy command.
+     * @return the list command.
      */
     String getListCommand();
 
