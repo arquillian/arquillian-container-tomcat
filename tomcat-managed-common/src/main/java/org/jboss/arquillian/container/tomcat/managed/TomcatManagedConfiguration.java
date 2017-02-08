@@ -62,9 +62,6 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
 		if (javaHome == null || "".equals(javaHome)) {
 			javaHome = System.getProperty(JAVA_HOME_SYSTEM_PROPERTY);
 		}
-		if (catalinaBase == null || "".equals(catalinaBase)) {
-			catalinaBase = catalinaHome;
-		}
 	}
 
     @Override
@@ -79,10 +76,13 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
         Validate.configurationDirectoryExists(javaHome,
             "Either \"java.home\" system property, JAVA_HOME environment variable or javaHome property in Arquillian configuration "
                 + "must be set and point to a valid directory! " + javaHome + " is not valid directory!");
-
-        Validate.isValidFile(getCatalinaBase() + "/conf/" + serverConfig,
-            "The server configuration file denoted by serverConfig property has to exist! This file: " + getCatalinaBase()
-                + "/conf/" + serverConfig + " does not!");
+        
+        //to keep backward compatibility, check catalinaBase only when it's set, otherwise catalinaHome will be used instead
+        if (catalinaBase != null &&  catalinaBase.length() != 0) {
+            Validate.isValidFile(getCatalinaBase() + "/conf/" + serverConfig,
+                "The server configuration file denoted by serverConfig property has to exist! This file: " + getCatalinaBase()
+                    + "/conf/" + serverConfig + " does not!");
+        }
 
         // set write output to console
         this.setOutputToConsole(AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
