@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jboss.arquillian.container</groupId>
     <artifactId>arquillian-tomcat-embedded-parent</artifactId>
-    <version>1.0.0.CR10</version>
+    <version>1.0.0-SNAPSHOT</version>
     <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
   </parent>
 
