@@ -66,9 +66,10 @@ final class IOUtil {
     /**
      * Obtains the contents of the specified stream as a byte array
      *
-     * @param in
-     * @throws IllegalArgumentException If the stream was not specified
      * @return the byte[] for the given InputStream
+     *
+     * @throws IllegalArgumentException
+     *     If the stream was not specified
      */
     public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException {
 
@@ -78,8 +79,8 @@ final class IOUtil {
     /**
      * Obtains the contents of the specified stream as a String in UTF-8 charset.
      *
-     * @param in
-     * @throws IllegalArgumentException If the stream was not specified
+     * @throws IllegalArgumentException
+     *     If the stream was not specified
      */
     public static String asUTF8String(final InputStream in) {
 
@@ -110,12 +111,12 @@ final class IOUtil {
     }
 
     /**
-     * Copies the contents from an InputStream to an OutputStream. It is the responsibility of the caller to close the streams
+     * Copies the contents from an InputStream to an OutputStream. It is the responsibility of the caller to close the
+     * streams
      * passed in when done, though the {@link OutputStream} will be fully flushed.
      *
-     * @param input
-     * @param output
-     * @throws IOException If a problem occurred during any I/O operations
+     * @throws IOException
+     *     If a problem occurred during any I/O operations
      */
     public static void copy(final InputStream input, final OutputStream output) throws IOException {
 
@@ -132,9 +133,13 @@ final class IOUtil {
      * Writing the specified contents to the specified OutputStream using an internal buffer. Flushing the stream when
      * completed. Caller is responsible for opening and closing the specified stream.
      *
-     * @param output The OutputStream
-     * @param content The content to write to the specified stream
-     * @throws IOException If a problem occured during any I/O operations
+     * @param output
+     *     The OutputStream
+     * @param content
+     *     The content to write to the specified stream
+     *
+     * @throws IOException
+     *     If a problem occured during any I/O operations
      */
     public static void bufferedWriteWithFlush(final OutputStream output, final byte[] content) throws IOException {
 
@@ -151,10 +156,9 @@ final class IOUtil {
     /**
      * Copies the contents from an InputStream to an OutputStream and closes both streams.
      *
-     * @param input
-     * @param output
-     * @throws IOException If a problem occurred during any I/O operations during the copy, but on closing the streams these
-     *         will be ignored and logged at {@link Level#FINER}
+     * @throws IOException
+     *     If a problem occurred during any I/O operations during the copy, but on closing the streams these
+     *     will be ignored and logged at {@link Level#FINER}
      */
     public static void copyWithClose(final InputStream input, final OutputStream output) throws IOException {
 
@@ -181,7 +185,8 @@ final class IOUtil {
     /**
      * Closes an closeable instance ignoring exceptions
      *
-     * @param closeable the closeable to be closed
+     * @param closeable
+     *     the closeable to be closed
      */
     public static void closeQuietly(final Closeable closeable) {
 
@@ -193,5 +198,4 @@ final class IOUtil {
             // ignore
         }
     }
-
 }

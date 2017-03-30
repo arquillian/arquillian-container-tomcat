@@ -40,8 +40,8 @@ public final class ShrinkWrapUtil {
     /**
      * Creates a tmp folder and exports the file. Returns the URL for that file location.
      *
-     * @param archive Archive to export
-     * @return
+     * @param archive
+     *     Archive to export
      */
     public static URL toURL(final Archive<?> archive) {
 
@@ -87,5 +87,4 @@ public final class ShrinkWrapUtil {
             throw new RuntimeException("Could not export deployment to temp", e);
         }
     }
-
 }

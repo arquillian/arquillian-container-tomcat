@@ -34,8 +34,7 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  */
 public class Tomcat8ManagedContainer extends TomcatManagedContainer {
 
-	public Tomcat8ManagedContainer() {
-		super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
-	}
-
+    public Tomcat8ManagedContainer() {
+        super(new ProtocolDescription("Servlet 3.0"), new Tomcat7ManagerCommandSpec());
+    }
 }

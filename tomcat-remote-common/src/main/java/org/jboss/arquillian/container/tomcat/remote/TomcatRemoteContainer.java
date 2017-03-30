@@ -40,7 +40,6 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
- *
  * @version $Revision: $
  */
 abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration> {
@@ -56,7 +55,8 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
 
     private TomcatManager<TomcatRemoteConfiguration> manager;
 
-    TomcatRemoteContainer(final ProtocolDescription protocolDescription, final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
+    TomcatRemoteContainer(final ProtocolDescription protocolDescription,
+        final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
 
         this.protocolDescription = protocolDescription;
         this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
@@ -108,8 +108,6 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
     /**
      * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
      *
-     * @param archive
-     * @return
      * @throws DeploymentException
      */
     @Override

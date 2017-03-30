@@ -24,9 +24,7 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- *
  * @author <a href="mailto:trepel@redhat.com">Tomas Repel</a>
- *
  */
 public class AdditionalJavaOptionsParserTest {
 

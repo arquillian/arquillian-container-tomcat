@@ -26,13 +26,15 @@ import org.apache.catalina.startup.Tomcat;
 
 /**
  * A custom {@link ContextConfig} for use in the Embedded Tomcat container integration for Arquillian.
- *
  * <p>
- * This configuration disables processing of a default web.xml (typically "$CATALINA_BASE/conf/web.xml"), as we don't have one.
- * Instead we leverage {@link Tomcat#initWebappDefaults(org.apache.catalina.Context)} to apply the equivalent configuration
+ * <p>
+ * This configuration disables processing of a default web.xml (typically "$CATALINA_BASE/conf/web.xml"), as we don't have
+ * one.
+ * Instead we leverage {@link Tomcat#initWebappDefaults(org.apache.catalina.Context)} to apply the equivalent
+ * configuration
  * prior to context start.
  * </p>
- *
+ * <p>
  * <p>
  * This implementation also marks an unpacked WAR for deletion when the context is stopped.
  * </p>
@@ -43,7 +45,8 @@ import org.apache.catalina.startup.Tomcat;
 public class EmbeddedContextConfig extends ContextConfig {
 
     /**
-     * Initialize the context config so to disable processing of the default global web.xml. As an embedded container we lack
+     * Initialize the context config so to disable processing of the default global web.xml. As an embedded container we
+     * lack
      * the stock config file compliment.
      */
     public EmbeddedContextConfig() {
@@ -63,7 +66,9 @@ public class EmbeddedContextConfig extends ContextConfig {
 
         ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
         Tomcat.initWebappDefaults(context);
-    };
+    }
+
+    ;
 
     /**
      * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.

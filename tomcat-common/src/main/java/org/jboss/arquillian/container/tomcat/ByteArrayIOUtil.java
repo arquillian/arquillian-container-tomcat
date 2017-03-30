@@ -35,9 +35,13 @@ class ByteArrayIOUtil {
     /**
      * Obtains the contents of the specified stream as a byte array
      *
-     * @param in InputStream
-     * @throws IllegalArgumentException If the stream was not specified
+     * @param in
+     *     InputStream
+     *
      * @return the byte[] for the given InputStream
+     *
+     * @throws IllegalArgumentException
+     *     If the stream was not specified
      */
     static byte[] asByteArray(final InputStream in) throws IllegalArgumentException {
 

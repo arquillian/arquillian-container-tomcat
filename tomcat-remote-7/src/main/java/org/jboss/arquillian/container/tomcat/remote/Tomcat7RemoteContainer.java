@@ -26,10 +26,8 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  * operations.
  * </p>
  *
- *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
- *
  * @version $Revision: $
  */
 public class Tomcat7RemoteContainer extends TomcatRemoteContainer {

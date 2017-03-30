@@ -33,7 +33,6 @@ import org.junit.runner.RunWith;
  * @author Dan Allen
  * @author <a href="mailto:dadrus@gmx.de">Dimitrij Drus</a>
  * @version $Revision: $
- *
  */
 @RunWith(Arquillian.class)
 public class Tomcat8ManagedClientIT extends TomcatClientITBase {

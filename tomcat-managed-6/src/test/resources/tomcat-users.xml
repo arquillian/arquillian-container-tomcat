@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <tomcat-users>
 
-    <role rolename="manager-script" />
-    <user username="${test.manager.username}" password="${test.manager.password}" roles="manager-script" />
+  <role rolename="manager-script"/>
+  <user username="${test.manager.username}" password="${test.manager.password}" roles="manager-script"/>
 
 </tomcat-users>

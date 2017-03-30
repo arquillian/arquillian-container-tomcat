@@ -37,7 +37,6 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 
 /**
  * @author <a href="kpiwko@redhat.com>Karel Piwko</a>
- *
  */
 public class ProtocolMetadataParser<C extends TomcatConfiguration> {
 
@@ -54,17 +53,16 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration> {
 
     /**
      * Retrieves given context's servlets information through JMX.
-     *
-     * How it works: 1) Get the WebModule, identified as //{host}/{contextPath} 2) Get it's path attrib 3) Get it's servlets
-     * attrib, which is String[] which actually represents ObjectName[] 4) Get each of these Servlets and their mappings 5) For
+     * <p>
+     * How it works: 1) Get the WebModule, identified as //{host}/{contextPath} 2) Get it's path attrib 3) Get it's
+     * servlets
+     * attrib, which is String[] which actually represents ObjectName[] 4) Get each of these Servlets and their mappings
+     * 5) For
      * each of {mapping}, do HTTPContext#add( new Servlet( "{mapping}", "//{host}/{contextPath}" ) );
-     *
+     * <p>
      * // WebModule -> ... -> Attributes // -> path == /manager // -> servlets == String[] // ->
      * Catalina:j2eeType=Servlet,name=<name>,WebModule=<...>,J2EEApplication =none,J2EEServer=none
      *
-     *
-     * @param context
-     * @return
      * @throws DeploymentException
      */
     public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException {
@@ -124,7 +122,6 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration> {
         } catch (final MalformedObjectNameException e) {
             throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
                 + "Following object name is not valid: " + catalinaServlet, e);
-
         } catch (final NullPointerException e) {
             throw new IllegalArgumentException("Unable to retrieve catalina MBeans for protocol metadata construction.\n"
                 + "Object name must not be null", e);

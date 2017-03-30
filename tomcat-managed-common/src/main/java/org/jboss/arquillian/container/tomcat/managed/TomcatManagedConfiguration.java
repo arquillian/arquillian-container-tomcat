@@ -34,7 +34,7 @@ import org.jboss.arquillian.container.tomcat.Validate;
 public class TomcatManagedConfiguration extends TomcatConfiguration {
 
     static final String JAVA_HOME_ENV_PROPERTY = "JAVA_HOME";
-    
+
     static final String JAVA_HOME_SYSTEM_PROPERTY = "java.home";
 
     private boolean outputToConsole = true;
@@ -56,13 +56,13 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     private String serverConfig = "server.xml";
 
     private String loggingProperties = "logging.properties";
-    
+
     public TomcatManagedConfiguration() {
-		// if no javaHome set, reuse this Java JVM
-		if (javaHome == null || "".equals(javaHome)) {
-			javaHome = System.getProperty(JAVA_HOME_SYSTEM_PROPERTY);
-		}
-	}
+        // if no javaHome set, reuse this Java JVM
+        if (javaHome == null || "".equals(javaHome)) {
+            javaHome = System.getProperty(JAVA_HOME_SYSTEM_PROPERTY);
+        }
+    }
 
     @Override
     public void validate() throws ConfigurationException {
@@ -76,12 +76,15 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
         Validate.configurationDirectoryExists(javaHome,
             "Either \"java.home\" system property, JAVA_HOME environment variable or javaHome property in Arquillian configuration "
                 + "must be set and point to a valid directory! " + javaHome + " is not valid directory!");
-        
+
         //to keep backward compatibility, check catalinaBase only when it's set, otherwise catalinaHome will be used instead
-        if (catalinaBase != null &&  catalinaBase.length() != 0) {
+        if (catalinaBase != null && catalinaBase.length() != 0) {
             Validate.isValidFile(getCatalinaBase() + "/conf/" + serverConfig,
-                "The server configuration file denoted by serverConfig property has to exist! This file: " + getCatalinaBase()
-                    + "/conf/" + serverConfig + " does not!");
+                "The server configuration file denoted by serverConfig property has to exist! This file: "
+                    + getCatalinaBase()
+                    + "/conf/"
+                    + serverConfig
+                    + " does not!");
         }
 
         // set write output to console
@@ -95,7 +98,6 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
                 return val == null || !"false".equals(val);
             }
         }));
-
     }
 
     public String getCatalinaHome() {
@@ -109,7 +111,7 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     }
 
     public String getCatalinaBase() {
-            return catalinaBase;
+        return catalinaBase;
     }
 
     public void setCatalinaBase(final String catalinaBase) {
@@ -135,7 +137,8 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     /**
      * This will override the default ("-Xmx512m -XX:MaxPermSize=128m") startup JVM arguments.
      *
-     * @param javaVmArguments use as start up arguments
+     * @param javaVmArguments
+     *     use as start up arguments
      */
     public void setJavaVmArguments(final String javaVmArguments) {
 
@@ -168,7 +171,8 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     }
 
     /**
-     * @param workDir the directory where the compiled JSP files and session serialization data is stored
+     * @param workDir
+     *     the directory where the compiled JSP files and session serialization data is stored
      */
     public void setWorkDir(final String workDir) {
 
@@ -194,7 +198,8 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     }
 
     /**
-     * @param loggingProperties the loggingProperties to set
+     * @param loggingProperties
+     *     the loggingProperties to set
      */
     public void setLoggingProperties(final String loggingProperties) {
 
@@ -202,7 +207,8 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     }
 
     /**
-     * @param outputToConsole the outputToConsole to set
+     * @param outputToConsole
+     *     the outputToConsole to set
      */
     public void setOutputToConsole(final boolean outputToConsole) {
 
@@ -216,5 +222,4 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
 
         return outputToConsole;
     }
-
 }

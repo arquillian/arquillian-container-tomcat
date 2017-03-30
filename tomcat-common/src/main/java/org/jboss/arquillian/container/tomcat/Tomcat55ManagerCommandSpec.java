@@ -20,16 +20,15 @@ package org.jboss.arquillian.container.tomcat;
  * Commands known to work for Tomcat 5.5.x through 6.x.
  *
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
- *
  * @see <a href="http://tomcat.apache.org/tomcat-5.5-doc/manager-howto.html">Tomcat 5.5 Manager App HOW-TO</a>
  * @see <a href="http://tomcat.apache.org/tomcat-6.0-doc/manager-howto.html">Tomcat 6.0 Manager App HOW-TO</a>
  */
 public class Tomcat55ManagerCommandSpec implements TomcatManagerCommandSpec {
 
-	public String getServerInfoCommand() {
-		return "/serverinfo";
-	}
-	
+    public String getServerInfoCommand() {
+        return "/serverinfo";
+    }
+
     public String getListCommand() {
 
         return "/list";

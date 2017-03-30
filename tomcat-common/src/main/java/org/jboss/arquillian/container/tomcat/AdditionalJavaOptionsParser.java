@@ -22,9 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author <a href="mailto:trepel@redhat.com">Tomas Repel</a>
- *
  */
 public class AdditionalJavaOptionsParser {
 
@@ -33,11 +31,15 @@ public class AdditionalJavaOptionsParser {
     private static final String QUOTED_CONTENT = "^\"(.*)\"$";
 
     /**
-     * Parse additional java options. Options are separated by whitespace. In case some option value contains whitespace, the
-     * whole key-value pair has to be quoted. For instance string 'opt0 opt1=val1 "opt2=val2 with space"' results in three
+     * Parse additional java options. Options are separated by whitespace. In case some option value contains whitespace,
+     * the
+     * whole key-value pair has to be quoted. For instance string 'opt0 opt1=val1 "opt2=val2 with space"' results in
+     * three
      * key-value pairs (opt0 option has an empty value).
      *
-     * @param additionaOptions - options to parse
+     * @param additionaOptions
+     *     - options to parse
+     *
      * @return List of parsed options, returns empty list rather that null value
      */
     public static List<String> parse(final String additionalOptions) {
@@ -48,11 +50,11 @@ public class AdditionalJavaOptionsParser {
             final Matcher m = p.matcher(additionalOptions);
             while (m.find()) {
                 if (!m.group().trim().equals("")) {
-                    options.add(Pattern.compile(QUOTED_CONTENT, Pattern.DOTALL).matcher(m.group().trim()).replaceAll("$1"));
+                    options.add(
+                        Pattern.compile(QUOTED_CONTENT, Pattern.DOTALL).matcher(m.group().trim()).replaceAll("$1"));
                 }
             }
         }
         return options;
     }
-
 }

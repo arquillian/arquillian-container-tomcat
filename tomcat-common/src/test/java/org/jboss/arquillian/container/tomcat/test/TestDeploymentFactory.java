@@ -50,8 +50,11 @@ public final class TestDeploymentFactory {
         final String archiveName = getArchiveName(contextRoot);
 
         final WebArchive war =
-            ShrinkWrap.create(WebArchive.class, archiveName).addClass(TestServlet.class).addAsResource("logging.properties")
-                .addAsWebResource(TEST_WELCOME_FILE).setWebXML("web-" + webAppVersion + ".xml");
+            ShrinkWrap.create(WebArchive.class, archiveName)
+                .addClass(TestServlet.class)
+                .addAsResource("logging.properties")
+                .addAsWebResource(TEST_WELCOME_FILE)
+                .setWebXML("web-" + webAppVersion + ".xml");
 
         return war;
     }
@@ -68,7 +71,8 @@ public final class TestDeploymentFactory {
                 .addAsLibraries(
                     Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                         .resolve("org.jboss.weld.servlet:weld-servlet").withTransitivity().asFile())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml").setWebXML("in-container-web-" + webAppVersion + ".xml");
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .setWebXML("in-container-web-" + webAppVersion + ".xml");
 
         return war;
     }

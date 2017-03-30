@@ -24,7 +24,7 @@ import org.apache.catalina.loader.WebappClassLoader;
 
 /**
  * Override Tomcats WebappClassLoader to change the delegation order.
- *
+ * <p>
  * Deployment first, then parent/system.
  *
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>

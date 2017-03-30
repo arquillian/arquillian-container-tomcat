@@ -36,7 +36,8 @@ import org.jboss.arquillian.container.spi.ConfigurationException;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 
 /**
- * Based on AbstractCatalinaTask, abstract base class for Ant tasks that interact with the <em>Manager</em> web application for
+ * Based on AbstractCatalinaTask, abstract base class for Ant tasks that interact with the <em>Manager</em> web
+ * application for
  * dynamically deploying and undeploying applications.
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
@@ -56,7 +57,8 @@ public class TomcatManager<C extends TomcatConfiguration> {
     /**
      * Creates a Tomcat manager abstraction
      *
-     * @param configuration the configuration
+     * @param configuration
+     *     the configuration
      */
     public TomcatManager(final C configuration, final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
 
@@ -103,10 +105,10 @@ public class TomcatManager<C extends TomcatConfiguration> {
     public void serverInfo() throws IOException {
         execute(tomcatManagerCommandSpec.getServerInfoCommand(), null, null, -1);
     }
-    
+
     /**
-     * This method is deprecated, please use {@link TomcatManager#serverInfo()} instead, to find out if container is running. 
-     * 
+     * This method is deprecated, please use {@link TomcatManager#serverInfo()} instead, to find out if container is
+     * running.
      */
     @Deprecated
     public void list() throws IOException {
@@ -140,19 +142,26 @@ public class TomcatManager<C extends TomcatConfiguration> {
     }
 
     /**
-     * Execute the specified command, based on the configured properties. The input stream will be closed upon completion of
+     * Execute the specified command, based on the configured properties. The input stream will be closed upon completion
+     * of
      * this task, whether it was executed successfully or not.
      *
-     * @param command       Command to be executed
-     * @param istream       InputStream to include in an HTTP PUT, if any
-     * @param contentType   Content type to specify for the input, if any
-     * @param contentLength Content length to specify for the input, if any
+     * @param command
+     *     Command to be executed
+     * @param istream
+     *     InputStream to include in an HTTP PUT, if any
+     * @param contentType
+     *     Content type to specify for the input, if any
+     * @param contentLength
+     *     Content length to specify for the input, if any
+     *
      * @throws IOException
      * @throws MalformedURLException
      * @throws DeploymentException
      */
-    protected void execute(final String command, final InputStream istream, final String contentType, final int contentLength)
-            throws IOException {
+    protected void execute(final String command, final InputStream istream, final String contentType,
+        final int contentLength)
+        throws IOException {
 
         URLConnection conn = null;
         try {
@@ -210,20 +219,20 @@ public class TomcatManager<C extends TomcatConfiguration> {
         // Supposes that <= 199 is not bad, but is it? See http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         if (httpResponseCode >= 400 && httpResponseCode < 500) {
             throw new ConfigurationException(
-                    "Unable to connect to Tomcat manager. "
-                            + "The server command ("
-                            + command
-                            + ") failed with responseCode ("
-                            + httpResponseCode
-                            + ") and responseMessage ("
-                            + hconn.getResponseMessage()
-                            + ").\n\n"
-                            + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
-                            + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
-                            + "The user must have aapropriate role specified in tomcat-users.xml file.\n");
+                "Unable to connect to Tomcat manager. "
+                    + "The server command ("
+                    + command
+                    + ") failed with responseCode ("
+                    + httpResponseCode
+                    + ") and responseMessage ("
+                    + hconn.getResponseMessage()
+                    + ").\n\n"
+                    + "Please make sure that you provided correct credentials to an user which is able to access Tomcat manager application.\n"
+                    + "These credentials can be specified in the Arquillian container configuration as \"user\" and \"pass\" properties.\n"
+                    + "The user must have aapropriate role specified in tomcat-users.xml file.\n");
         } else if (httpResponseCode >= 300) {
             throw new IllegalStateException("The server command (" + command + ") failed with responseCode ("
-                    + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
+                + httpResponseCode + ") and responseMessage (" + hconn.getResponseMessage() + ").");
         }
         BufferedReader reader = null;
         try {
@@ -241,7 +250,8 @@ public class TomcatManager<C extends TomcatConfiguration> {
                 line = reader.readLine();
             }
             if (contentError != null) {
-                throw new RuntimeException("The server command (" + command + ") failed with content (" + contentError + ").");
+                throw new RuntimeException(
+                    "The server command (" + command + ") failed with content (" + contentError + ").");
             }
         } finally {
             IOUtil.closeQuietly(reader);
@@ -260,5 +270,4 @@ public class TomcatManager<C extends TomcatConfiguration> {
             throw new RuntimeException(e);
         }
     }
-
 }

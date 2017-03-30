@@ -42,24 +42,25 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
- * Arquillian {@link DeployableContainer} implementation for an Embedded Tomcat server; responsible for both lifecycle and
+ * Arquillian {@link DeployableContainer} implementation for an Embedded Tomcat server; responsible for both lifecycle
+ * and
  * deployment operations.
  * </p>
- *
  * <p>
- * Please note that the context path set for the webapp must begin with a forward slash. Otherwise, certain path operations
- * within Tomcat will behave inconsistently. Though it goes without saying, the host name (bindAddress) cannot have a trailing
+ * <p>
+ * Please note that the context path set for the webapp must begin with a forward slash. Otherwise, certain path
+ * operations
+ * within Tomcat will behave inconsistently. Though it goes without saying, the host name (bindAddress) cannot have a
+ * trailing
  * slash for the same reason.
  * </p>
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
- *
- * @see <a href='http://svn.apache.org/repos/asf/tomcat/trunk/test/org/apache/catalina/startup/TomcatBaseTest.java'>
- *      org.apache.catalina.startup.TomcatBaseTest</a>
- *
  * @version $Revision: $
+ * @see <a href='http://svn.apache.org/repos/asf/tomcat/trunk/test/org/apache/catalina/startup/TomcatBaseTest.java'>
+ * org.apache.catalina.startup.TomcatBaseTest</a>
  */
 public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbeddedConfiguration> {
 
@@ -149,7 +150,8 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
             final StandardContext standardContext = (StandardContext) host.findChild(contextName.getName());
             standardContextProducer.set(standardContext);
 
-            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
+            final HTTPContext httpContext =
+                new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
             for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextName.getPath()));
@@ -231,7 +233,7 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
 
         embeddedHostConfig = new EmbeddedHostConfig();
-        ((StandardHost)host).setUnpackWARs(configuration.isUnpackArchive());
+        ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive());
 
         host.addLifecycleListener(embeddedHostConfig);
 
@@ -270,12 +272,15 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
 
     /**
      * Get the abstract pathname for the Tomcat home directory. The path will either be as specified by
-     * {@link TomcatEmbeddedConfiguration#getTomcatHome()}, or if <code>null</code> a temporary path will be returned. Either
+     * {@link TomcatEmbeddedConfiguration#getTomcatHome()}, or if <code>null</code> a temporary path will be returned.
+     * Either
      * underlying directory will be created with parents if necessary, and if created it will also be set to
      * {@link File#deleteOnExit()}.
      *
      * @return the Tomcat home directory path.
-     * @throws LifecycleException if the underlying directory could not be created.
+     *
+     * @throws LifecycleException
+     *     if the underlying directory could not be created.
      */
     private File getTomcatHomeFile() throws LifecycleException {
 
@@ -310,7 +315,9 @@ public class Tomcat7EmbeddedContainer implements DeployableContainer<TomcatEmbed
     /**
      * Get the Tomcat <code>ContextName</code> helper for the given Arquillian <code>Archive</code>.
      *
-     * @param archive the Arquillian archive.
+     * @param archive
+     *     the Arquillian archive.
+     *
      * @return the Tomcat context name helper.
      */
     private ContextName getContextName(final Archive<?> archive) {

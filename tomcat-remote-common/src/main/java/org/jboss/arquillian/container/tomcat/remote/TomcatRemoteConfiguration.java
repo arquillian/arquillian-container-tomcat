@@ -36,8 +36,6 @@ public class TomcatRemoteConfiguration extends TomcatConfiguration {
 
     /**
      * Use {@link TomcatRemoteConfiguration#getBindAddress()} instead
-     *
-     * @return
      */
     @Deprecated
     public String getHost() {
@@ -47,8 +45,6 @@ public class TomcatRemoteConfiguration extends TomcatConfiguration {
 
     /**
      * Use {@link TomcatRemoteConfiguration#setBindHttpPort(int)} instead
-     * 
-     * @param httpPort
      */
     @Deprecated
     public void setHttpPort(final int httpPort) {
@@ -58,7 +54,7 @@ public class TomcatRemoteConfiguration extends TomcatConfiguration {
 
     /**
      * Use {@link TomcatRemoteConfiguration#getBindPort()} instead
-     * 
+     *
      * @return httpPort
      */
     @Deprecated
@@ -69,13 +65,13 @@ public class TomcatRemoteConfiguration extends TomcatConfiguration {
 
     /**
      * Use {@link TomcatRemoteConfiguration#setBindAddress(String)} instead
-     * 
-     * @param host the http host
+     *
+     * @param host
+     *     the http host
      */
     @Deprecated
     public void setHost(final String host) {
 
         setBindAddress(host);
     }
-
 }

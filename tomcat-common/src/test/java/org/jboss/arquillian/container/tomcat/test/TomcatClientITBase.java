@@ -38,7 +38,8 @@ public abstract class TomcatClientITBase {
 
     @Test
     @OperateOnDeployment(ROOT_CONTEXT)
-    public void shouldBeAbleToInvokeServletInDeployedRootWebApp(@ArquillianResource final URL contextRoot) throws Exception {
+    public void shouldBeAbleToInvokeServletInDeployedRootWebApp(@ArquillianResource final URL contextRoot)
+        throws Exception {
 
         final URL servletUrl = getServletUrl(contextRoot);
 
@@ -92,5 +93,4 @@ public abstract class TomcatClientITBase {
         }
         return httpResponse.replaceAll("\\s+", "");
     }
-
 }

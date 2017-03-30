@@ -43,7 +43,8 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
- * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an Managed
+ * Arquillian {@link org.jboss.arquillian.container.spi.client.container.DeployableContainer} implementation for an
+ * Managed
  * Tomcat server; responsible for both lifecycle and deployment operations.
  * </p>
  *
@@ -114,9 +115,9 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             final String CATALINA_HOME = configuration.getCatalinaHome();
             String CATALINA_BASE = configuration.getCatalinaBase();
             final String ADDITIONAL_JAVA_OPTS = configuration.getJavaVmArguments();
-            
-            if(CATALINA_BASE == null) {
-            	CATALINA_BASE = CATALINA_HOME;
+
+            if (CATALINA_BASE == null) {
+                CATALINA_BASE = CATALINA_HOME;
             }
 
             final String absoluteCatalinaHomePath = new File(CATALINA_HOME).getAbsolutePath();
@@ -128,9 +129,9 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             final List<String> cmd = new ArrayList<String>();
 
             cmd.add(javaCommand);
-            String seperator=File.separator;
+            String seperator = File.separator;
 
-            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath +seperator+ "conf"+seperator
+            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + seperator + "conf" + seperator
                 + configuration.getLoggingProperties());
             cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
@@ -140,18 +141,19 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
             cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
-            String CLASS_PATH = absoluteCatalinaHomePath + seperator+ "bin"+seperator+"bootstrap.jar" +File.pathSeparator;
-            CLASS_PATH += absoluteCatalinaHomePath + seperator+"bin"+seperator+"tomcat-juli.jar";
+            String CLASS_PATH =
+                absoluteCatalinaHomePath + seperator + "bin" + seperator + "bootstrap.jar" + File.pathSeparator;
+            CLASS_PATH += absoluteCatalinaHomePath + seperator + "bin" + seperator + "tomcat-juli.jar";
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
-            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath +seperator+ "endorsed");
+            cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + seperator + "endorsed");
             cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
             cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
-            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + seperator+ "temp");
+            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + seperator + "temp");
             cmd.add("org.apache.catalina.startup.Bootstrap");
             cmd.add("-config");
-            cmd.add(absoluteCatalinaBasePath + seperator+"conf"+seperator + configuration.getServerConfig());
+            cmd.add(absoluteCatalinaBasePath + seperator + "conf" + seperator + configuration.getServerConfig());
             cmd.add("start");
 
             // execute command
@@ -194,12 +196,10 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
                 destroystartupProcess();
                 throw new TimeoutException(String.format("Managed server was not started within [%d] s", startupTimeout));
             }
-
         } catch (final Exception ex) {
 
             throw new LifecycleException("Could not start container", ex);
         }
-
     }
 
     @Override
@@ -223,8 +223,6 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
     /**
      * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
      *
-     * @param archive
-     * @return
      * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
      */
     @Override
@@ -300,7 +298,6 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             } catch (final IOException e) {
             }
         }
-
     }
 
     private int destroystartupProcess() {

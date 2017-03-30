@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 /**
  * IOUtilDelegator
- *
+ * <p>
  * Class that helps expose package private {@link ByteArrayIOUtil}
  *
  * @author <a href="mailto:ken@glxn.net">Ken Gullaksen</a>
@@ -30,14 +30,14 @@ class IOUtilDelegator {
 
     /**
      * Delegates to {@link ByteArrayIOUtil#asByteArray(java.io.InputStream)}
-     * 
-     * @param in
-     * @throws IllegalArgumentException If the stream was not specified
+     *
      * @return the byte[] for the given InputStream
+     *
+     * @throws IllegalArgumentException
+     *     If the stream was not specified
      */
     public static byte[] asByteArray(final InputStream in) throws IllegalArgumentException {
 
         return ByteArrayIOUtil.asByteArray(in);
     }
-
 }

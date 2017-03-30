@@ -51,13 +51,16 @@ import org.jboss.shrinkwrap.tomcat_6.api.ShrinkWrapStandardContext;
 
 /**
  * <p>
- * Arquillian {@link DeployableContainer} implementation for an Embedded Tomcat server; responsible for both lifecycle and
+ * Arquillian {@link DeployableContainer} implementation for an Embedded Tomcat server; responsible for both lifecycle
+ * and
  * deployment operations.
  * </p>
- *
  * <p>
- * Please note that the context path set for the webapp must begin with a forward slash. Otherwise, certain path operations
- * within Tomcat will behave inconsistently. Though it goes without saying, the host name (bindAddress) cannot have a trailing
+ * <p>
+ * Please note that the context path set for the webapp must begin with a forward slash. Otherwise, certain path
+ * operations
+ * within Tomcat will behave inconsistently. Though it goes without saying, the host name (bindAddress) cannot have a
+ * trailing
  * slash for the same reason.
  * </p>
  *
@@ -179,7 +182,8 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
             standardContextProducer.set(standardContext);
 
             final String contextPath = standardContext.getPath();
-            final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
+            final HTTPContext httpContext =
+                new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
 
             for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextPath));
@@ -288,7 +292,8 @@ public class Tomcat6EmbeddedContainer implements DeployableContainer<TomcatEmbed
     }
 
     /**
-     * Make sure an the unpacked WAR is not left behind you would think Tomcat would cleanup an unpacked WAR, but it doesn't
+     * Make sure an the unpacked WAR is not left behind you would think Tomcat would cleanup an unpacked WAR, but it
+     * doesn't
      */
     protected void deleteUnpackedWAR(final StandardContext standardContext) {
 

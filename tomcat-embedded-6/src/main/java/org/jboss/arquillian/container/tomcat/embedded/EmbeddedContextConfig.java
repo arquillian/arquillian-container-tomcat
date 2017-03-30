@@ -29,9 +29,10 @@ import org.xml.sax.InputSource;
 
 /**
  * A custom {@link ContextConfig} for use in the Embedded Tomcat container integration for Arquillian.
- *
  * <p>
- * This configuration adds processing of the META-INF/context.xml descriptor in the web application root when the context is
+ * <p>
+ * This configuration adds processing of the META-INF/context.xml descriptor in the web application root when the context
+ * is
  * started. This implementation also marks an unpacked WAR for deletion when the context is stopped.
  * </p>
  *
@@ -50,7 +51,8 @@ public class EmbeddedContextConfig extends ContextConfig {
     }
 
     /**
-     * Process the META-INF/context.xml descriptor in the web application root. This descriptor is not processed when a webapp
+     * Process the META-INF/context.xml descriptor in the web application root. This descriptor is not processed when a
+     * webapp
      * is added programmatically through a StandardContext
      */
     protected void applicationContextConfig() {
@@ -66,7 +68,8 @@ public class EmbeddedContextConfig extends ContextConfig {
             try {
                 url = servletContext.getResource("/" + Constants.ApplicationContextXml);
             } catch (final MalformedURLException e) {
-                throw new AssertionError("/" + Constants.ApplicationContextXml + " should not be considered a malformed URL");
+                throw new AssertionError(
+                    "/" + Constants.ApplicationContextXml + " should not be considered a malformed URL");
             }
             final InputSource is = new InputSource(url.toExternalForm());
             is.setByteStream(stream);

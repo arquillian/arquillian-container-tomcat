@@ -66,8 +66,9 @@ public class TomcatConfiguration implements ContainerConfiguration {
 
         Validate.notNullOrEmpty(bindAddress, "Bind address must not be null or empty");
 
-        Validate.isInRange(jmxPort, 0, MAX_PORT, "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT + "[, but was "
-            + jmxPort);
+        Validate.isInRange(jmxPort, 0, MAX_PORT,
+            "JMX port must be in interval ]" + MIN_PORT + "," + MAX_PORT + "[, but was "
+                + jmxPort);
 
         Validate.isInRange(jmxServerPort, 0, MAX_PORT, "JMX server port must be in interval ]" + MIN_PORT + "," + MAX_PORT
             + "[, but was " + jmxServerPort);
@@ -94,7 +95,8 @@ public class TomcatConfiguration implements ContainerConfiguration {
     /**
      * Set the HTTP bind port.
      *
-     * @param bindHttpPort HTTP bind port
+     * @param bindHttpPort
+     *     HTTP bind port
      */
     public void setBindHttpPort(final int bindHttpPort) {
 
@@ -147,7 +149,8 @@ public class TomcatConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
+     * @param appBase
+     *     the directory where the deployed webapps are stored within the Tomcat installation
      */
     public void setAppBase(final String appBase) {
 
@@ -163,10 +166,12 @@ public class TomcatConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
+     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to
+     * provide
      * CDI support in a servlet environment.
      *
-     * @param unpackArchive a switch indicating whether the WAR should be unpacked
+     * @param unpackArchive
+     *     a switch indicating whether the WAR should be unpacked
      */
     public void setUnpackArchive(final boolean unpackArchive) {
 
@@ -174,7 +179,8 @@ public class TomcatConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param urlCharset the urlCharset to set
+     * @param urlCharset
+     *     the urlCharset to set
      */
     public void setUrlCharset(final String urlCharset) {
 
@@ -190,7 +196,8 @@ public class TomcatConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param jmxVirtualHost the jmxVirtualHost to set
+     * @param jmxVirtualHost
+     *     the jmxVirtualHost to set
      */
     public void setJmxVirtualHost(final String jmxVirtualHost) {
 
@@ -253,5 +260,4 @@ public class TomcatConfiguration implements ContainerConfiguration {
             throw new ConfigurationException("Manager URL is not valid, please provide ", e);
         }
     }
-
 }

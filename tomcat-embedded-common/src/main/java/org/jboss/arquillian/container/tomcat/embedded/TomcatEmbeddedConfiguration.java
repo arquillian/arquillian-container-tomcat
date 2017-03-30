@@ -65,7 +65,8 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
     /**
      * Set the HTTP bind port.
      *
-     * @param httpBindPort HTTP bind port
+     * @param httpBindPort
+     *     HTTP bind port
      */
     public void setBindHttpPort(final int bindHttpPort) {
 
@@ -83,7 +84,8 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param appBase the directory where the deployed webapps are stored within the Tomcat installation
+     * @param appBase
+     *     the directory where the deployed webapps are stored within the Tomcat installation
      */
     public void setAppBase(final String tomcatAppBase) {
 
@@ -96,7 +98,8 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param workDir the directory where the compiled JSP files and session serialization data is stored
+     * @param workDir
+     *     the directory where the compiled JSP files and session serialization data is stored
      */
     public void setWorkDir(final String tomcatWorkDir) {
 
@@ -109,7 +112,8 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * @param serverName the serverName to set
+     * @param serverName
+     *     the serverName to set
      */
     public void setServerName(final String serverName) {
 
@@ -133,10 +137,12 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
     }
 
     /**
-     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to provide
+     * Sets the WAR to be unpacked into the java.io.tmpdir when deployed. Unpacking is required if you are using Weld to
+     * provide
      * CDI support in a servlet environment.
      *
-     * @param a switch indicating whether the WAR should be unpacked
+     * @param a
+     *     switch indicating whether the WAR should be unpacked
      */
     public void setUnpackArchive(final boolean unpack) {
 

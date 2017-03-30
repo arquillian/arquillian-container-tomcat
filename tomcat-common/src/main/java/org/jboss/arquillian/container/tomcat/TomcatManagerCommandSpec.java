@@ -29,7 +29,7 @@ public interface TomcatManagerCommandSpec {
      * @return the server info command.
      */
     String getServerInfoCommand();
-	
+
     /**
      * The list command.
      *

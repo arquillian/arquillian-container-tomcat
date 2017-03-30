@@ -112,5 +112,4 @@ public class CommonTomcatConfigurationTest {
 
         commonTomcatConfiguration.createManagerUrl();
     }
-
 }
