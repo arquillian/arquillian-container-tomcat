@@ -34,8 +34,8 @@
     <weld.version>1.1.33.Final</weld.version>
 
     <!-- override from parent -->
-    <maven.compiler.target>1.5</maven.compiler.target>
-    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
