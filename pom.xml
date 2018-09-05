@@ -262,6 +262,7 @@
     <module>tomcat-embedded-6</module>
     <module>tomcat-embedded-7</module>
     <module>tomcat-embedded-8</module>
+    <module>tomcat-embedded-9</module>
     <module>tomcat-managed-common</module>
     <module>tomcat-managed-parent</module>
     <module>tomcat-managed-5.5</module>
