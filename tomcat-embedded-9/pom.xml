@@ -11,15 +11,21 @@
         <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>arquillian-tomcat-embedded-8</artifactId>
-    <name>Arquillian Tomcat Embedded 8.x Container</name>
+    <artifactId>arquillian-tomcat-embedded-9</artifactId>
+    <name>Arquillian Tomcat Embedded 9.x Container</name>
 
     <properties>
-        <tomcat.version>8.0.39</tomcat.version>
+        <tomcat.version>9.0.11</tomcat.version>
         <ecj.version>4.6.1</ecj.version>
     </properties>
 
     <dependencies>
+        <!--Depend on version 8 as it is exactly the same-->
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-embedded-8</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
@@ -32,17 +38,17 @@
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt.core.compiler</groupId>
-            <artifactId>ecj</artifactId>
-            <version>${ecj.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-logging-juli</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
+
+    <build>
+        <!--Use sources and tests sources from embedded 8-->
+        <testResources>
+            <testResource>
+                <directory>../tomcat-embedded-8/src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+        <sourceDirectory>../tomcat-embedded-8/src/main</sourceDirectory>
+        <testSourceDirectory>../tomcat-embedded-8/src/test</testSourceDirectory>
+    </build>
 </project>
