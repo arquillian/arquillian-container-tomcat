@@ -31,7 +31,7 @@
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
     <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
-    <weld.version>1.1.33.Final</weld.version>
+    <weld.version>1.1.34.Final</weld.version>
 
     <!-- override from parent -->
     <maven.compiler.target>1.6</maven.compiler.target>
