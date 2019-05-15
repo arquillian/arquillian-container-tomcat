@@ -2,7 +2,10 @@ language: java
 jdk:
     - oraclejdk9
     - oraclejdk8
-    - openjdk7
+
+before_install:
+  - sed -i.bak -e 's|http://repo.maven.apache.org/maven2|https://repo.maven.apache.org/maven2|g' $HOME/.m2/settings.xml
+
 script:
-        mvn clean install -P build-server
+    mvn clean install -P build-server
 

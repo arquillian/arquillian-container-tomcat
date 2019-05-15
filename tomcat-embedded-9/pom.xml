@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jboss.arquillian.container</groupId>
+    <artifactId>arquillian-tomcat-embedded-parent</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>arquillian-tomcat-embedded-9</artifactId>
+  <name>Arquillian Tomcat Embedded 9.x Container</name>
+
+  <properties>
+    <tomcat.version>9.0.11</tomcat.version>
+    <ecj.version>4.6.1</ecj.version>
+  </properties>
+
+  <dependencies>
+    <!--Depend on version 8 as it is exactly the same-->
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-embedded-8</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>${tomcat.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <!--Use sources and tests sources from embedded 8-->
+    <testResources>
+      <testResource>
+        <directory>../tomcat-embedded-8/src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+    <sourceDirectory>../tomcat-embedded-8/src/main</sourceDirectory>
+    <testSourceDirectory>../tomcat-embedded-8/src/test</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.javadoc.plugin}</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

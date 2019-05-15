@@ -147,9 +147,9 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
-            File endorsed = new File(absoluteCatalinaHomePath + seperator + "endorsed");
+            final File endorsed = new File(absoluteCatalinaHomePath + seperator + "endorsed");
             if (endorsed.exists()) {
-                cmd.add("-Djava.endorsed.dirs=" + absoluteCatalinaHomePath + seperator + "endorsed");
+                cmd.add("-Djava.endorsed.dirs=" + endorsed.getAbsolutePath());
             }
             cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
             cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);

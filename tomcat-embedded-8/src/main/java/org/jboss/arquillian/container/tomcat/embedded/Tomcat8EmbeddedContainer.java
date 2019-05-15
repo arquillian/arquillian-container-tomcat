@@ -211,6 +211,7 @@ public class Tomcat8EmbeddedContainer implements DeployableContainer<TomcatEmbed
         tomcat.setHostname(hostname);
         tomcat.setPort(configuration.getBindHttpPort());
         tomcat.setBaseDir(tempDir.getAbsolutePath());
+        tomcat.getConnector();
 
         // Enable JNDI - it is disabled by default.
         tomcat.enableNaming();
