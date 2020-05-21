@@ -14,7 +14,7 @@
   <name>Arquillian Tomcat Embedded 9.x Container</name>
 
   <properties>
-    <tomcat.version>9.0.11</tomcat.version>
+    <tomcat.version>9.0.35</tomcat.version>
     <ecj.version>4.6.1</ecj.version>
   </properties>
 
