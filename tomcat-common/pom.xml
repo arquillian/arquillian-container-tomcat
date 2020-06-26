@@ -12,19 +12,6 @@
   <artifactId>arquillian-tomcat-common</artifactId>
   <name>Arquillian Tomcat Container Common</name>
 
-  <dependencies>
-
-    <!-- Test Scope -->
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.0.1</version>
-      <scope>test</scope>
-    </dependency>
-
-  </dependencies>
-
   <build>
     <plugins>
       <plugin>

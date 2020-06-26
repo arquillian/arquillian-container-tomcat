@@ -36,6 +36,20 @@
     </dependency>
 
     <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Consume test jar in order to be able to extend tests -->
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet</artifactId>
       <scope>test</scope>

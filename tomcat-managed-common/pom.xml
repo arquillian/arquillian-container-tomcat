@@ -22,16 +22,6 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Test Scope -->
-
-    <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-common</artifactId>
-      <version>${project.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  <modelVersion>4.0.0</modelVersion>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>org.jboss.arquillian.container</groupId>
     <artifactId>arquillian-tomcat-embedded-parent</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <relativePath>../tomcat-embedded-parent/pom.xml</relativePath>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>arquillian-tomcat-embedded-7</artifactId>
-  <name>Arquillian Tomcat Embedded 7.x Container</name>
+  <artifactId>arquillian-tomcat-embedded-10</artifactId>
+  <name>Arquillian Tomcat Embedded 10.x Container</name>
 
   <properties>
-    <tomcat.version>7.0.73</tomcat.version>
+    <tomcat.version>10.0.0-M6</tomcat.version>
     <ecj.version>4.6.1</ecj.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+      <artifactId>arquillian-tomcat-jakarta-deps</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <!-- Consume test jar in order to be able to extend tests -->
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+      <artifactId>arquillian-tomcat-jakarta-deps</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
     </dependency>
@@ -46,18 +46,18 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <version>${tomcat.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.jdt.core.compiler</groupId>
       <artifactId>ecj</artifactId>
       <version>${ecj.version}</version>
       <scope>provided</scope>
     </dependency>
-
+    <!-- TODO I didn't find Tomcat 10 version of this? -->
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-juli</artifactId>
+      <version>9.0.0.M6</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 </project>

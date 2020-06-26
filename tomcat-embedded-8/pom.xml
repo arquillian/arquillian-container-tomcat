@@ -19,16 +19,30 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>${tomcat.version}</version>
+      <dependency>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- Consume test jar in order to be able to extend tests -->
+      <dependency>
+        <groupId>org.jboss.arquillian.container</groupId>
+        <artifactId>arquillian-tomcat-ee8-deps</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>${tomcat.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+        <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
