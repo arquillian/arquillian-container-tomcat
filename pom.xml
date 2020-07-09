@@ -27,11 +27,13 @@
 
   <properties>
 
-    <arquillian.core.version>1.4.1.Final</arquillian.core.version>
+    <arquillian.core.version>1.7.0.Alpha2</arquillian.core.version>
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
     <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
     <weld.version>1.1.33.Final</weld.version>
+    <!-- TODO update to a release containing servlet core, should be 4.0.0.Alpha4 -->
+    <weld4.version>3.1.4.Final</weld4.version>
 
     <!-- override from parent -->
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -82,8 +84,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
-      <!-- Test Scope -->
+      <!-- Some tests use  Weld for EE 8 or older, some for EE 9; dual version because of javax -> jakarta change -->
+      <dependency>
+        <groupId>org.jboss.weld.servlet</groupId>
+        <artifactId>weld-servlet-core</artifactId>
+        <version>${weld4.version}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.jboss.weld.servlet</groupId>
         <artifactId>weld-servlet</artifactId>
@@ -127,21 +134,7 @@
 
     <!-- Runtime Scope -->
 
-    <dependency>
-      <groupId>org.jboss.arquillian.protocol</groupId>
-      <artifactId>arquillian-protocol-servlet</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian.testenricher</groupId>
-      <artifactId>arquillian-testenricher-cdi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.arquillian.testenricher</groupId>
-      <artifactId>arquillian-testenricher-resource</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+    <!-- servlet and CDI enrichers deps are in separate module to be able to have common parent for EE 8 and 9+ -->
     <dependency>
       <groupId>org.jboss.arquillian.testenricher</groupId>
       <artifactId>arquillian-testenricher-initialcontext</artifactId>
@@ -263,6 +256,7 @@
     <module>tomcat-embedded-7</module>
     <module>tomcat-embedded-8</module>
     <module>tomcat-embedded-9</module>
+    <module>tomcat-embedded-10</module>
     <module>tomcat-managed-common</module>
     <module>tomcat-managed-parent</module>
     <module>tomcat-managed-5.5</module>
@@ -273,5 +267,7 @@
     <module>tomcat-remote-parent</module>
     <module>tomcat-remote-6</module>
     <module>tomcat-remote-7</module>
+    <module>tomcat-ee8</module>
+    <module>tomcat-jakarta</module>
   </modules>
 </project>
