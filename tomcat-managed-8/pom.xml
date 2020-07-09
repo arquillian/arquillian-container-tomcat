@@ -29,12 +29,6 @@
       <version>3.1.0</version>
       <scope>test</scope>
     </dependency>
-    
-    <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-ee8-deps</artifactId>
-      <version>${project.version}</version>
-    </dependency>
 
     <!-- Consume test jar in order to be able to extend tests -->
     <dependency>
