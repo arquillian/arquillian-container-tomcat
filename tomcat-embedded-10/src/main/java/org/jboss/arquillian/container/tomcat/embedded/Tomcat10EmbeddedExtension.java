@@ -30,7 +30,6 @@ public class Tomcat10EmbeddedExtension implements LoadableExtension {
 
     @Override
     public void register(final ExtensionBuilder builder) {
-
         builder.service(DeployableContainer.class, Tomcat10EmbeddedContainer.class);
     }
 }

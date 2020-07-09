@@ -96,13 +96,11 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public ProtocolDescription getDefaultProtocol() {
-
         return new ProtocolDescription("Servlet 5.0");
     }
 
     @Override
     public void setup(final TomcatEmbeddedConfiguration configuration) {
-
         final String serverName = configuration.getServerName();
 
         if (serverName == null || "".equals(serverName)) {
@@ -114,7 +112,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public void start() throws LifecycleException {
-
         try {
             startTomcatEmbedded();
         } catch (final Exception e) {
@@ -124,7 +121,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public void stop() throws LifecycleException {
-
         if (wasStarted) {
             try {
                 stopTomcatEmbedded();
@@ -136,7 +132,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
-
         try {
             // Ensure we don't create a corrupted archive by exporting to a file that already exists.
             deleteWar(archive);
@@ -165,7 +160,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public void undeploy(final Archive<?> archive) throws DeploymentException {
-
         try {
             embeddedHostConfig.undeployWAR(archive.getName());
 
@@ -177,18 +171,15 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
 
     @Override
     public void deploy(final Descriptor descriptor) throws DeploymentException {
-
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void undeploy(final Descriptor descriptor) throws DeploymentException {
-
         throw new UnsupportedOperationException("Not implemented");
     }
 
     protected void startTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException {
-
         /*
          * Derived from setUp() in
          * http://svn.apache.org/repos/asf/tomcat/tc7.0.x/tags/TOMCAT_7_0_16/test/org/apache/catalina/startup
@@ -242,7 +233,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
     }
 
     protected void stopTomcatEmbedded() throws org.apache.catalina.LifecycleException {
-
         tomcat.stop();
         tomcat.destroy();
     }
@@ -253,7 +243,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
      * @see {@link TomcatEmbeddedConfiguration#isUnpackArchive()}
      */
     private void deleteWar(final Archive<?> archive) {
-
         if (configuration.isUnpackArchive()) {
             final ContextName contextName = getContextName(archive);
             final File unpackDir = new File(host.getAppBase(), contextName.getBaseName());
@@ -276,12 +265,9 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
      * {@link File#deleteOnExit()}.
      *
      * @return the Tomcat home directory path.
-     *
-     * @throws LifecycleException
-     *     if the underlying directory could not be created.
+     * @throws LifecycleException if the underlying directory could not be created.
      */
     private File getTomcatHomeFile() throws LifecycleException {
-
         // TODO this needs to be a lot more robust
         final String tomcatHome = configuration.getTomcatHome();
         File tomcatHomeFile;
@@ -313,13 +299,10 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
     /**
      * Get the Tomcat <code>ContextName</code> helper for the given Arquillian <code>Archive</code>.
      *
-     * @param archive
-     *     the Arquillian archive.
-     *
+     * @param archive the Arquillian archive.
      * @return the Tomcat context name helper.
      */
     private ContextName getContextName(final Archive<?> archive) {
-
         return new ContextName(archive.getName(), true);
     }
 }

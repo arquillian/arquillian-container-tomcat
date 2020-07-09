@@ -55,14 +55,12 @@ public class EmbeddedHostConfig extends HostConfig {
     /**
      * Deploy a WAR with the given file name to be found in the configured app base.
      *
-     * @param warFileName
-     *     the WAR file name, e.g. "ROOT.war".
+     * @param warFileName the WAR file name, e.g. "ROOT.war".
      */
     public void deployWAR(final String warFileName) {
-
         final String contextName = getContextName(warFileName);
 
-        deployWARs(host.getAppBaseFile(), new String[] {warFileName});
+        deployWARs(host.getAppBaseFile(), new String[]{warFileName});
 
         addServiced(contextName);
     }
@@ -70,11 +68,9 @@ public class EmbeddedHostConfig extends HostConfig {
     /**
      * Undeploy a WAR with the given file name.
      *
-     * @param warFileName
-     *     the WAR file name, e.g. "ROOT.war".
+     * @param warFileName the WAR file name, e.g. "ROOT.war".
      */
     public void undeployWAR(final String warFileName) {
-
         final String contextName = getContextName(warFileName);
 
         unmanageApp(contextName);
@@ -83,7 +79,6 @@ public class EmbeddedHostConfig extends HostConfig {
     }
 
     private String getContextName(final String warFileName) {
-
         final ContextName contextName = new ContextName(warFileName, true);
         return contextName.getName();
     }

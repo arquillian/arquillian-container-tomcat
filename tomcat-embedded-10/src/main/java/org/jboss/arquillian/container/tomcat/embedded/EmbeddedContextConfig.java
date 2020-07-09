@@ -50,9 +50,7 @@ public class EmbeddedContextConfig extends ContextConfig {
      * the stock config file compliment.
      */
     public EmbeddedContextConfig() {
-
         super();
-
         setDefaultWebXml(Constants.NoDefaultWebXml);
     }
 
@@ -61,21 +59,16 @@ public class EmbeddedContextConfig extends ContextConfig {
      */
     @Override
     protected synchronized void beforeStart() {
-
         super.beforeStart();
-
         ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
         Tomcat.initWebappDefaults(context);
     }
-
-    ;
 
     /**
      * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.
      */
     @Override
     protected void fixDocBase() throws IOException {
-
         super.fixDocBase();
         // If this field is not null, the unpacked WAR is removed when
         // the context is closed. This is normally used by the antiLocking
