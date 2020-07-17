@@ -30,7 +30,7 @@
     <arquillian.core.version>1.7.0.Alpha2</arquillian.core.version>
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
-    <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
+    <shrinkwrap.resolver.version>3.1.4</shrinkwrap.resolver.version>
     <weld.version>1.1.33.Final</weld.version>
     <!-- TODO update to a release containing servlet core, should be 4.0.0.Alpha4 -->
     <weld4.version>3.1.4.Final</weld4.version>
