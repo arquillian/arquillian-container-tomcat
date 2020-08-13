@@ -33,7 +33,7 @@
     <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
     <weld.version>1.1.33.Final</weld.version>
     <!-- TODO update to a release containing servlet core, should be 4.0.0.Alpha4 -->
-    <weld4.version>3.1.4.Final</weld4.version>
+    <weld4.version>3.1.5.Final</weld4.version>
 
     <!-- override from parent -->
     <maven.compiler.target>1.6</maven.compiler.target>
