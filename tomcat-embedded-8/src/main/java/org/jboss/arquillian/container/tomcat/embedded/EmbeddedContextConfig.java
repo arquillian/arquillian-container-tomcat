@@ -68,8 +68,6 @@ public class EmbeddedContextConfig extends ContextConfig {
         Tomcat.initWebappDefaults(context);
     }
 
-    ;
-
     /**
      * Override to assign an internal field that will trigger the removal of the unpacked WAR when the context is closed.
      */

@@ -150,8 +150,8 @@ public class Tomcat8EmbeddedContainer implements DeployableContainer<TomcatEmbed
             final StandardContext standardContext = (StandardContext) host.findChild(contextName.getName());
             standardContextProducer.set(standardContext);
 
-            final HTTPContext httpContext =
-                new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
+            // CHANGED: Use tomcat values instead of configured once, to support automatic port selection
+            final HTTPContext httpContext = new HTTPContext(tomcat.getHost().getName(), tomcat.getConnector().getLocalPort());
 
             for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextName.getPath()));
@@ -230,8 +230,11 @@ public class Tomcat8EmbeddedContainer implements DeployableContainer<TomcatEmbed
         host.setAutoDeploy(false);
         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
 
+        // CHANGED: call embeddedHostConfig.setUnpackWARs again instead of ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive()), without this change org.apache.wicket.protocol.http.WebApplication.getServletContext().getRealPath("/") return null
+        // with embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive()); it returns the valid path somewhere in [userdir]]\AppData\Local\Temp\ so i expect ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive()) is not working propably in an
+        // arquillian tomcat8 setup
         embeddedHostConfig = new EmbeddedHostConfig();
-        ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive());
+        embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
 
         host.addLifecycleListener(embeddedHostConfig);
 
