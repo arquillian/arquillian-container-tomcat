@@ -32,8 +32,8 @@
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
     <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
     <weld.version>1.1.33.Final</weld.version>
-    <!-- TODO update to a release containing servlet core, should be 4.0.0.Alpha4 -->
-    <weld4.version>3.1.4.Final</weld4.version>
+    <!-- Latest Weld version for Jakarta artifacts -->
+    <weld.jakarta.version>5.0.0.SP2</weld.jakarta.version>
 
     <!-- override from parent -->
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -88,7 +88,7 @@
       <dependency>
         <groupId>org.jboss.weld.servlet</groupId>
         <artifactId>weld-servlet-core</artifactId>
-        <version>${weld4.version}</version>
+        <version>${weld.jakarta.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -164,27 +164,6 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <pushChanges>false</pushChanges>
           <localCheckout>true</localCheckout>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.17</version>
-        <executions>
-          <execution>
-            <id>signature-check</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <signature>
-            <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java15</artifactId>
-            <version>1.0</version>
-          </signature>
         </configuration>
       </plugin>
     </plugins>

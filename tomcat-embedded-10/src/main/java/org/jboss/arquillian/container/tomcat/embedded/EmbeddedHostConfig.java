@@ -62,7 +62,7 @@ public class EmbeddedHostConfig extends HostConfig {
 
         deployWARs(host.getAppBaseFile(), new String[]{warFileName});
 
-        addServiced(contextName);
+        tryAddServiced(contextName);
     }
 
     /**
