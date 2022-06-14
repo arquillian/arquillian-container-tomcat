@@ -30,13 +30,13 @@ public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
 
     private String bindAddress = "localhost";
 
-    private int bindHttpPort = 8080;
+    private int bindHttpPort; // CHANGED: Use 0 as default to auto select next free port (this change is not strictly necessary, it is also possible to set 0 by configuration)
 
-    private String tomcatHome = null;
+    private String tomcatHome;
 
     private String appBase = "webapps";
 
-    private String workDir = null;
+    private String workDir;
 
     private String serverName = "arquillian-tomcat-embedded";
 
