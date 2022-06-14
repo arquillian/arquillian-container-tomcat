@@ -14,7 +14,7 @@
   <name>Arquillian Tomcat Embedded 10.x Container</name>
 
   <properties>
-    <tomcat.version>10.0.0-M6</tomcat.version>
+    <tomcat.version>10.1.0-M16</tomcat.version>
     <ecj.version>4.6.1</ecj.version>
   </properties>
 
@@ -49,13 +49,6 @@
       <groupId>org.eclipse.jdt.core.compiler</groupId>
       <artifactId>ecj</artifactId>
       <version>${ecj.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- TODO I didn't find Tomcat 10 version of this? -->
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <version>9.0.0.M6</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
