@@ -17,10 +17,12 @@
 package org.jboss.arquillian.container.tomcat.test;
 
 import jakarta.annotation.Resource;
+import jakarta.enterprise.context.Dependent;
 
 /**
  * @author Dan Allen
  */
+@Dependent
 public class TestBean {
 
     @Resource(name = "resourceInjectionTestName")
