@@ -14,7 +14,7 @@
   <name>Arquillian Tomcat Embedded 7.x Container</name>
 
   <properties>
-    <tomcat.version>7.0.73</tomcat.version>
+    <tomcat.version>7.0.107</tomcat.version>
     <ecj.version>4.6.1</ecj.version>
   </properties>
 
