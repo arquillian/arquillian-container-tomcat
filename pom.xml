@@ -27,7 +27,7 @@
 
   <properties>
 
-    <arquillian.core.version>1.7.0.Alpha10</arquillian.core.version>
+    <arquillian.core.version>1.8.0.Final</arquillian.core.version>
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
     <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
