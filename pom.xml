@@ -12,7 +12,7 @@
 
   <groupId>org.jboss.arquillian.container</groupId>
   <artifactId>arquillian-parent-tomcat</artifactId>
-  <version>1.2.0.Final</version>
+  <version>1.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Arquillian Tomcat Container Parent</name>
@@ -22,7 +22,7 @@
     <connection>scm:git:git://git@github.com:arquillian/arquillian-container-tomcat.git</connection>
     <developerConnection>scm:git:ssh://github.com/arquillian/arquillian-container-tomcat.git</developerConnection>
     <url>git://github.com/arquillian/arquillian-container-tomcat.git</url>
-    <tag>1.2.0.Final</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
