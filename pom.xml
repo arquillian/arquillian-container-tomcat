@@ -30,7 +30,7 @@
     <arquillian.core.version>1.8.0.Final</arquillian.core.version>
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
-    <shrinkwrap.resolver.version>2.2.6</shrinkwrap.resolver.version>
+    <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
     <!-- Latest Weld version for Jakarta artifacts -->
     <weld.jakarta.version>5.0.0.SP2</weld.jakarta.version>
 
