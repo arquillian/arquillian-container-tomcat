@@ -12,7 +12,7 @@
   <name>Arquillian Tomcat Embedded 10.x Container</name>
 
   <properties>
-    <tomcat.version>10.1.0-M16</tomcat.version>
+    <tomcat.version>11.0.0-M17</tomcat.version>
     <!-- Needs newer version because of deprecated method removal in CDI 4 and subsequent adjustments in Arq. -->
     <arquillian.core.version>1.7.0.Alpha10</arquillian.core.version>
     <ecj.version>4.6.1</ecj.version>
