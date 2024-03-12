@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jboss.arquillian.container</groupId>
+    <artifactId>arquillian-tomcat-container-parent</artifactId>
+    <version>1.2.1-SNAPSHOT</version>
+    <relativePath>../tomcat-container-parent/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>arquillian-tomcat-managed-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>Arquillian Tomcat Managed Container Parent</name>
+
+  <dependencies>
+
+    <!-- Compile Scope -->
+
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-managed-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Test Scope -->
+
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-managed-common</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.cargo</groupId>
+          <artifactId>cargo-maven2-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>install-container</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>configure</goal>
+              </goals>
+              <configuration>
+                <configuration>
+                  <properties>
+                    <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                    <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                    <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
+                  </properties>
+                  <configfiles>
+                    <configfile>
+                      <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                      <toDir>conf</toDir>
+                    </configfile>
+                  </configfiles>
+                </configuration>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
