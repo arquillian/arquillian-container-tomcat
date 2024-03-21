@@ -59,6 +59,10 @@
     <plugins>
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <!-- Workaround for https://issues.redhat.com/browse/SHRINKDESC-97 on Windows -->
+        <configuration>
+          <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
+        </configuration>
         <executions>
           <execution>
             <goals>
