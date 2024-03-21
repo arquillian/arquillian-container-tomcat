@@ -45,7 +45,7 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
 
     private String javaHome = System.getProperty(JAVA_HOME_ENV_PROPERTY);
 
-    private String javaVmArguments = "-Xmx512m -XX:MaxPermSize=128m";
+    private String javaVmArguments = "-Xmx512m";
 
     private int startupTimeoutInSeconds = 120;
 
@@ -135,7 +135,7 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
     }
 
     /**
-     * This will override the default ("-Xmx512m -XX:MaxPermSize=128m") startup JVM arguments.
+     * This will override the default ("-Xmx512m") startup JVM arguments.
      *
      * @param javaVmArguments
      *     use as start up arguments
