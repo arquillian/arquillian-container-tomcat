@@ -262,5 +262,8 @@
     <module>tomcat-embedded-common</module>
     <module>tomcat-embedded-parent</module>
     <module>tomcat-embedded-10</module>
+    <module>tomcat-managed-parent</module>
+    <module>tomcat-managed-common</module>
+    <module>tomcat-managed-10</module>
   </modules>
 </project>
