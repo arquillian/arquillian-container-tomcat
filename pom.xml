@@ -265,5 +265,8 @@
     <module>tomcat-managed-parent</module>
     <module>tomcat-managed-common</module>
     <module>tomcat-managed-10</module>
+    <module>tomcat-remote-parent</module>
+    <module>tomcat-remote-common</module>
+    <module>tomcat-remote-10</module>
   </modules>
 </project>
