@@ -29,20 +29,17 @@ import org.junit.runner.RunWith;
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class Tomcat10RemoteClientIT extends TomcatClientITBase {
 
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
-
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_5_0);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
-
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5_0);
     }
 }

@@ -27,7 +27,7 @@ public final class TestDeploymentFactory {
 
     public static final String TEST_WELCOME_FILE = "index.jsp";
 
-    public static final String SERVLET_5 = "5.0";
+    public static final String SERVLET_5_0 = "5.0";
 
     public static final String ROOT_CONTEXT = "ROOT";
 

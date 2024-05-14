@@ -24,54 +24,12 @@ import org.jboss.arquillian.container.tomcat.TomcatConfiguration;
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
- * @version $Revision: $
  */
 public class TomcatRemoteConfiguration extends TomcatConfiguration {
 
     @Override
     public void validate() throws ConfigurationException {
-
         super.validate();
     }
 
-    /**
-     * Use {@link TomcatRemoteConfiguration#getBindAddress()} instead
-     */
-    @Deprecated
-    public String getHost() {
-
-        return getBindAddress();
-    }
-
-    /**
-     * Use {@link TomcatRemoteConfiguration#setBindHttpPort(int)} instead
-     */
-    @Deprecated
-    public void setHttpPort(final int httpPort) {
-
-        setBindHttpPort(httpPort);
-    }
-
-    /**
-     * Use {@link TomcatRemoteConfiguration#getBindPort()} instead
-     *
-     * @return httpPort
-     */
-    @Deprecated
-    public int getHttpPort() {
-
-        return getBindHttpPort();
-    }
-
-    /**
-     * Use {@link TomcatRemoteConfiguration#setBindAddress(String)} instead
-     *
-     * @param host
-     *     the http host
-     */
-    @Deprecated
-    public void setHost(final String host) {
-
-        setBindAddress(host);
-    }
 }

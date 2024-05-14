@@ -28,20 +28,17 @@ import org.junit.runner.RunWith;
  * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author Dan Allen
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class Tomcat10RemoteInContainerIT extends TomcatInContainerITBase {
 
     @Deployment(name = ROOT_CONTEXT)
     public static WebArchive createRootDeployment() {
-
-        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_5_0);
     }
 
     @Deployment(name = TEST_CONTEXT)
     public static WebArchive createTestDeployment() {
-
-        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(TEST_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(TEST_CONTEXT, SERVLET_5_0);
     }
 }

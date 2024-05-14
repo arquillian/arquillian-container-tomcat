@@ -33,14 +33,11 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
- * <p>
- * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment
+ * Arquillian {@link DeployableContainer} implementation for a remote Tomcat server; responsible for both deployment
  * operations.
- * </p>
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
- * @version $Revision: $
  */
 abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration> {
 
@@ -48,23 +45,17 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
 
     private final TomcatManagerCommandSpec tomcatManagerCommandSpec;
 
-    /**
-     * Tomcat container configuration
-     */
     private TomcatRemoteConfiguration configuration;
 
     private TomcatManager<TomcatRemoteConfiguration> manager;
 
-    TomcatRemoteContainer(final ProtocolDescription protocolDescription,
-        final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
-
+    TomcatRemoteContainer(final ProtocolDescription protocolDescription, final TomcatManagerCommandSpec tomcatManagerCommandSpec) {
         this.protocolDescription = protocolDescription;
         this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
     }
 
     @Override
     public Class<TomcatRemoteConfiguration> getConfigurationClass() {
-
         return TomcatRemoteConfiguration.class;
     }
 
@@ -76,43 +67,37 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
 
     @Override
     public void setup(final TomcatRemoteConfiguration configuration) {
-
         this.configuration = configuration;
-        this.manager = new TomcatManager<TomcatRemoteConfiguration>(configuration, tomcatManagerCommandSpec);
+        this.manager = new TomcatManager<>(configuration, tomcatManagerCommandSpec);
     }
 
     @Override
     public void start() throws LifecycleException {
-
         // no-op
     }
 
     @Override
     public void stop() throws LifecycleException {
-
         // no-op
     }
 
     @Override
     public void deploy(final Descriptor descriptor) throws DeploymentException {
-
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void undeploy(final Descriptor descriptor) throws DeploymentException {
-
         throw new UnsupportedOperationException("Not implemented");
     }
 
     /**
-     * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
+     * Deploys to remote Tomcat using its /manager web-app's org.apache.catalina.manager.ManagerServlet.
      *
-     * @throws DeploymentException
+     * @throws DeploymentException if unable to deploy an archive.
      */
     @Override
     public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
-
         Validate.notNull(archive, "Archive must not be null");
 
         final String archiveName = manager.normalizeArchiveName(archive.getName());
@@ -123,14 +108,13 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
             throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
         }
 
-        final ProtocolMetadataParser<TomcatRemoteConfiguration> parser =
-            new ProtocolMetadataParser<TomcatRemoteConfiguration>(configuration);
+        final ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<>(configuration);
+
         return parser.retrieveContextServletInfo(archiveName);
     }
 
     @Override
     public void undeploy(final Archive<?> archive) throws DeploymentException {
-
         Validate.notNull(archive, "Archive must not be null");
 
         final String archiveName = manager.normalizeArchiveName(archive.getName());

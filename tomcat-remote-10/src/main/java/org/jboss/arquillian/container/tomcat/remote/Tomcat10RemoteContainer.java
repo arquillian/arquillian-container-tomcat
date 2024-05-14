@@ -21,19 +21,15 @@ import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
 
 /**
- * <p>
- * Arquillian {@link DeployableContainer} implementation for an Remote Tomcat server; responsible for both deployment
+ * Arquillian {@link DeployableContainer} implementation for a remote Tomcat server; responsible for both deployment
  * operations.
- * </p>
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
- * @version $Revision: $
  */
 public class Tomcat10RemoteContainer extends TomcatRemoteContainer {
 
     public Tomcat10RemoteContainer() {
-
         super(new ProtocolDescription("Servlet 5.0"), new Tomcat7ManagerCommandSpec());
     }
 }

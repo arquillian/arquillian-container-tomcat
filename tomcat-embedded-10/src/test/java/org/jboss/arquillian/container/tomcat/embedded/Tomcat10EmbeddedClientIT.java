@@ -17,7 +17,7 @@
 package org.jboss.arquillian.container.tomcat.embedded;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5_0;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -39,12 +39,12 @@ public class Tomcat10EmbeddedClientIT extends TomcatClientITBase {
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_5_0);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5_0);
     }
 }
