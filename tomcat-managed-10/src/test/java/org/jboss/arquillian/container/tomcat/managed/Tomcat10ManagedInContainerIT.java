@@ -17,7 +17,7 @@
 package org.jboss.arquillian.container.tomcat.managed;
 
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5_0;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -38,12 +38,12 @@ public class Tomcat10ManagedInContainerIT extends TomcatInContainerITBase {
     @Deployment(name = ROOT_CONTEXT)
     public static WebArchive createRootDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(ROOT_CONTEXT, SERVLET_5_0);
     }
 
     @Deployment(name = TEST_CONTEXT)
     public static WebArchive createTestDeployment() {
 
-        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(TEST_CONTEXT, SERVLET_5);
+        return TEST_DEPLOYMENT_FACTORY.createWebAppInContainerDeployment(TEST_CONTEXT, SERVLET_5_0);
     }
 }

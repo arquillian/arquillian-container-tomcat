@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2014, Red Hat Middleware LLC, and individual contributors
+ * Copyright 2010, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.container.tomcat.embedded;
+package org.jboss.arquillian.container.tomcat.remote;
 
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5_0;
-import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.*;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
@@ -31,20 +29,17 @@ import org.junit.runner.RunWith;
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
-public class Tomcat10EmbeddedClientIT extends TomcatClientITBase {
+public class Tomcat10RemoteClientIT extends TomcatClientITBase {
 
     @Deployment(name = ROOT_CONTEXT, testable = false)
     public static WebArchive createRootDeployment() {
-
         return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(ROOT_CONTEXT, SERVLET_5_0);
     }
 
     @Deployment(name = TEST_CONTEXT, testable = false)
     public static WebArchive createTestDeployment() {
-
         return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5_0);
     }
 }
