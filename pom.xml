@@ -31,12 +31,10 @@
     <shrinkwrap.version>1.2.6</shrinkwrap.version>
     <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
     <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
-    <!-- Latest Weld version for Jakarta artifacts -->
     <weld.jakarta.version>5.1.2.Final</weld.jakarta.version>
 
-    <!-- override from parent -->
-    <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source>
+    <!-- Tomcat versions -->
+    <tomcat10.version>10.1.24</tomcat10.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -192,8 +190,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <pushChanges>false</pushChanges>
-          <localCheckout>true</localCheckout>
+          <tagNameFormat>@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
     </plugins>

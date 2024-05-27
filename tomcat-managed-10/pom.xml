@@ -12,10 +12,8 @@
   <name>Arquillian Container Tomcat Managed 10.x</name>
 
   <properties>
-    <tomcat.major.version>10</tomcat.major.version>
-    <tomcat.version>${tomcat.major.version}.1.19</tomcat.version>
-    <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat.version}/apache-tomcat-${tomcat.version}</test.catalina.home>
-    <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat${tomcat.major.version}x</test.catalina.base>
+    <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat10.version}/apache-tomcat-${tomcat10.version}</test.catalina.home>
+    <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat10x</test.catalina.base>
   </properties>
 
   <build>
@@ -28,9 +26,9 @@
             <id>install-container</id>
             <configuration>
               <container>
-                <containerId>tomcat${tomcat.major.version}x</containerId>
+                <containerId>tomcat10x</containerId>
                 <zipUrlInstaller>
-                  <url>https://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                  <url>https://archive.apache.org/dist/tomcat/tomcat-10/v${tomcat10.version}/bin/apache-tomcat-${tomcat10.version}.zip</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
