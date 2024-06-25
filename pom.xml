@@ -34,7 +34,7 @@
     <weld.jakarta.version>5.1.2.Final</weld.jakarta.version>
 
     <!-- Tomcat versions -->
-    <tomcat10.version>10.1.24</tomcat10.version>
+    <tomcat10.version>10.1.25</tomcat10.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
