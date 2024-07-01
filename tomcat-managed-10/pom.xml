@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>arquillian-tomcat-managed-10</artifactId>
-  <name>Arquillian Container Tomcat Managed 10.x</name>
+  <name>Arquillian Tomcat Managed Container 10.1</name>
 
   <properties>
     <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${version.tomcat10}/apache-tomcat-${version.tomcat10}</test.catalina.home>

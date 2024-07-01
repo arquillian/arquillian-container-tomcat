@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>arquillian-tomcat-remote-10</artifactId>
-  <name>Arquillian Tomcat Remote 10.x Container</name>
+  <name>Arquillian Tomcat Remote Container 10.1</name>
 
   <build>
     <plugins>
