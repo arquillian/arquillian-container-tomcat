@@ -15,7 +15,7 @@
   <version>1.2.2.Final-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Arquillian Tomcat Container Parent</name>
+  <name>Arquillian Tomcat Container Project Parent</name>
   <description>Tomcat Container integrations for the Arquillian Project</description>
 
   <scm>
@@ -27,14 +27,15 @@
 
   <properties>
 
-    <arquillian.core.version>1.8.0.Final</arquillian.core.version>
-    <shrinkwrap.version>1.2.6</shrinkwrap.version>
-    <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
-    <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
-    <weld.jakarta.version>5.1.2.Final</weld.jakarta.version>
+    <version.arquillian.core>1.9.0.Final</version.arquillian.core>
+    <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
+    <version.shrinkwrap>1.2.6</version.shrinkwrap>
+    <version.shrinkwrap.descriptors>2.0.0</version.shrinkwrap.descriptors>
+    <version.shrinkwrap.resolver>3.3.0</version.shrinkwrap.resolver>
+    <version.weld.jakarta>5.1.2.Final</version.weld.jakarta>
 
     <!-- Tomcat versions -->
-    <tomcat10.version>10.1.25</tomcat10.version>
+    <version.tomcat10>10.1.25</version.tomcat10>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -49,42 +50,51 @@
       <dependency>
         <groupId>org.jboss.shrinkwrap</groupId>
         <artifactId>shrinkwrap-bom</artifactId>
-        <version>${shrinkwrap.version}</version>
+        <version>${version.shrinkwrap}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.shrinkwrap.descriptors</groupId>
         <artifactId>shrinkwrap-descriptors-bom</artifactId>
-        <version>${shrinkwrap.descriptors.version}</version>
+        <version>${version.shrinkwrap.descriptors}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.shrinkwrap.resolver</groupId>
         <artifactId>shrinkwrap-resolver-bom</artifactId>
-        <version>${shrinkwrap.resolver.version}</version>
+        <version>${version.shrinkwrap.resolver}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-bom</artifactId>
-        <version>${arquillian.core.version}</version>
+        <version>${version.arquillian.core}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.jboss.arquillian</groupId>
         <artifactId>arquillian-build</artifactId>
-        <version>${arquillian.core.version}</version>
+        <version>${version.arquillian.core}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>org.jboss.arquillian.jakarta</groupId>
+        <artifactId>arquillian-jakarta-bom</artifactId>
+        <version>${version.arquillian.jakarta}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <!-- Dependencies -->
+      <dependency>
         <groupId>org.jboss.weld.servlet</groupId>
         <artifactId>weld-servlet-core</artifactId>
-        <version>${weld.jakarta.version}</version>
+        <version>${version.weld.jakarta}</version>
         <scope>test</scope>
       </dependency>
 

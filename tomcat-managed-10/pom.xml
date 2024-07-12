@@ -9,10 +9,10 @@
   </parent>
 
   <artifactId>arquillian-tomcat-managed-10</artifactId>
-  <name>Arquillian Container Tomcat Managed 10.x</name>
+  <name>Arquillian Tomcat Managed Container 10.1</name>
 
   <properties>
-    <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${tomcat10.version}/apache-tomcat-${tomcat10.version}</test.catalina.home>
+    <test.catalina.home>${project.build.directory}/cargo/installs/apache-tomcat-${version.tomcat10}/apache-tomcat-${version.tomcat10}</test.catalina.home>
     <test.catalina.base>${project.build.directory}/cargo/configurations/tomcat10x</test.catalina.base>
   </properties>
 
@@ -28,7 +28,7 @@
               <container>
                 <containerId>tomcat10x</containerId>
                 <zipUrlInstaller>
-                  <url>https://archive.apache.org/dist/tomcat/tomcat-10/v${tomcat10.version}/bin/apache-tomcat-${tomcat10.version}.zip</url>
+                  <url>https://archive.apache.org/dist/tomcat/tomcat-10/v${version.tomcat10}/bin/apache-tomcat-${version.tomcat10}.zip</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
