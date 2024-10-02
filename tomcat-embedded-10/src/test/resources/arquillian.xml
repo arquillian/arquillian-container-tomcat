@@ -6,7 +6,9 @@
     <configuration>
       <property name="tomcatHome">target/tomcat-embedded-10</property>
       <property name="workDir">work</property>
-      <property name="bindHttpPort">8888</property>
+      <!-- Test with a typical value of 0 which assigns a random port (since 1.2.2.Final). -->
+      <!-- When undefined, TomcatEmbeddedConfiguration#bindHttpPort defaults to 8080. -->
+      <property name="bindHttpPort">0</property>
       <property name="unpackArchive">true</property>
     </configuration>
   </container>
