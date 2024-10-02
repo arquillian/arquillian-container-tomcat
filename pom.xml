@@ -212,34 +212,6 @@
           <artifactId>cargo-maven2-plugin</artifactId>
           <version>1.8.5</version>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
-            build itself. -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.cargo</groupId>
-                    <artifactId>cargo-maven2-plugin</artifactId>
-                    <versionRange>[1.4.9,)</versionRange>
-                    <goals>
-                      <goal>configure</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <execute>
-                      <runOnIncremental>false</runOnIncremental>
-                    </execute>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -263,6 +235,7 @@
       </build>
     </profile>
   </profiles>
+
   <modules>
     <module>tomcat-common</module>
     <module>tomcat-container-parent</module>
