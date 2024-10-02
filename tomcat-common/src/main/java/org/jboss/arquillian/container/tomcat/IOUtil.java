@@ -29,7 +29,6 @@ import java.util.logging.Logger;
  * Generic input/output utilities
  *
  * @author <a href="mailto:andrew.rubinger@jboss.org">ALR</a>
- * @version $Revision: $
  */
 final class IOUtil {
 

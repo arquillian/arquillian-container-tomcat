@@ -30,7 +30,6 @@ import org.junit.runner.RunWith;
  * Tests that Tomcat deployments into the Tomcat 8 server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:dadrus@gmx.de">Dimitrij Drus</a>
- * @version $Revision: $
  */
 @RunWith(Arquillian.class)
 public class Tomcat10ManagedInContainerIT extends TomcatInContainerITBase {

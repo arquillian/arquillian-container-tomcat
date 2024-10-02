@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * Package private class that helps get byte array from {@link InputStream}. Needed by the common assets in api.
  *
  * @author <a href="mailto:ken@glxn.net">Ken Gullaksen</a>
- * @version $Revision: $
  */
 class ByteArrayIOUtil {
 

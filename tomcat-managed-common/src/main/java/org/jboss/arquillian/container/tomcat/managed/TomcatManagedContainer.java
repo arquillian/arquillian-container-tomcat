@@ -52,7 +52,6 @@ import org.jboss.shrinkwrap.descriptor.api.Descriptor;
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
- * @version $Revision: $
  */
 abstract class TomcatManagedContainer implements DeployableContainer<TomcatManagedConfiguration> {
 
