@@ -4,7 +4,7 @@ public class SystemPropertiesUtil {
 
     private static final String ENV_VAR = "${env.";
 
-    public String substituteEvironmentVariable(final String original) {
+    public String substituteEnvironmentVariable(final String original) {
 
         if (original.startsWith(ENV_VAR)) {
             final String systemPropertyKey = original.substring(ENV_VAR.length(), original.length() - 1);

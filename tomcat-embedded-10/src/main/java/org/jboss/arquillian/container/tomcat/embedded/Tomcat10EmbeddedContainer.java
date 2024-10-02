@@ -274,7 +274,7 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
         File tomcatHomeFile;
 
         if (tomcatHome != null) {
-            tomcatHomeFile = new File(systemPropertiesUtil.substituteEvironmentVariable(tomcatHome));
+            tomcatHomeFile = new File(systemPropertiesUtil.substituteEnvironmentVariable(tomcatHome));
 
             if (!tomcatHomeFile.exists() && !tomcatHomeFile.mkdirs()) {
                 throw new LifecycleException("Unable to create home directory for Tomcat");
