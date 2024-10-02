@@ -145,8 +145,9 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
             final StandardContext standardContext = (StandardContext) host.findChild(contextName.getName());
             standardContextProducer.set(standardContext);
 
+            // Use tomcat values instead of configuration ones to support automatic/random port selection
             final HTTPContext httpContext =
-                new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
+                new HTTPContext(tomcat.getHost().getName(), tomcat.getConnector().getLocalPort());
 
             for (final String mapping : standardContext.findServletMappings()) {
                 httpContext.add(new Servlet(standardContext.findServletMapping(mapping), contextName.getPath()));
@@ -222,7 +223,7 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
         host.setConfigClass(EmbeddedContextConfig.class.getCanonicalName());
 
         embeddedHostConfig = new EmbeddedHostConfig();
-        ((StandardHost) host).setUnpackWARs(configuration.isUnpackArchive());
+        embeddedHostConfig.setUnpackWARs(configuration.isUnpackArchive());
 
         host.addLifecycleListener(embeddedHostConfig);
 
