@@ -24,7 +24,6 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
  * Tomcat8EmbeddedExtension
  *
  * @author <a href="mailto:aslak@redhat.com">Aslak Knutsen</a>
- * @version $Revision: $
  */
 public class Tomcat10EmbeddedExtension implements LoadableExtension {
 

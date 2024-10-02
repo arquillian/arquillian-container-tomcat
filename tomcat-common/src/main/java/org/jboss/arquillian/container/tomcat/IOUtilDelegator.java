@@ -24,7 +24,6 @@ import java.io.InputStream;
  * Class that helps expose package private {@link ByteArrayIOUtil}
  *
  * @author <a href="mailto:ken@glxn.net">Ken Gullaksen</a>
- * @version $Revision: $
  */
 class IOUtilDelegator {
 
