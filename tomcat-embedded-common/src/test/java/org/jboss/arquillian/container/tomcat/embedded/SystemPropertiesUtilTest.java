@@ -28,20 +28,20 @@ public class SystemPropertiesUtilTest {
     }
 
     @Test
-    public void testSubstituteEvironmentVariableForNoVariable() {
+    public void testSubstituteEnvironmentVariableForNoVariable() {
 
         testSubstituteEnvironmentVariable(TEST_NO_ENV_ORIGINAL, TEST_NO_ENV_EXPECTED);
     }
 
     @Test
-    public void testSubstituteEvironmentVariableForOnlyVariable() {
+    public void testSubstituteEnvironmentVariableForOnlyVariable() {
 
         testSubstituteEnvironmentVariable(TEST_ENV_ORIGINAL, TEST_ENV_EXPECTED);
     }
 
     private void testSubstituteEnvironmentVariable(final String original, final String expected) {
 
-        final String actual = systemPropertiesUtil.substituteEvironmentVariable(original);
+        final String actual = systemPropertiesUtil.substituteEnvironmentVariable(original);
 
         assertEquals(expected, actual);
     }
