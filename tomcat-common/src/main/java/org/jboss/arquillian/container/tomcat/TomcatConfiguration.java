@@ -30,7 +30,6 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
- * @version $Revision: $
  */
 public class TomcatConfiguration implements ContainerConfiguration {
 

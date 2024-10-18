@@ -30,7 +30,6 @@ import org.jboss.arquillian.container.tomcat.Tomcat7ManagerCommandSpec;
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @author <a href="mailto:dadrus@gmx.de">Dimitrij Drus</a>
- * @version $Revision: #1 $
  */
 public class Tomcat10ManagedContainer extends TomcatManagedContainer {
 

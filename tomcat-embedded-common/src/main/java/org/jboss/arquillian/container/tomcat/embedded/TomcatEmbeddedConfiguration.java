@@ -24,7 +24,6 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
- * @version $Revision: $
  */
 public class TomcatEmbeddedConfiguration implements ContainerConfiguration {
 

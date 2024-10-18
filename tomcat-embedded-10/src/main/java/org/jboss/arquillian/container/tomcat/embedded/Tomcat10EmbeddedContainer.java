@@ -58,7 +58,6 @@ import java.io.IOException;
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @author <a href="mailto:ian@ianbrandt.com">Ian Brandt</a>
- * @version $Revision: $
  * @see <a href='http://svn.apache.org/repos/asf/tomcat/trunk/test/org/apache/catalina/startup/TomcatBaseTest.java'>
  * org.apache.catalina.startup.TomcatBaseTest</a>
  */
@@ -274,7 +273,7 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
         File tomcatHomeFile;
 
         if (tomcatHome != null) {
-            tomcatHomeFile = new File(systemPropertiesUtil.substituteEvironmentVariable(tomcatHome));
+            tomcatHomeFile = new File(systemPropertiesUtil.substituteEnvironmentVariable(tomcatHome));
 
             if (!tomcatHomeFile.exists() && !tomcatHomeFile.mkdirs()) {
                 throw new LifecycleException("Unable to create home directory for Tomcat");

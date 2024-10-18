@@ -27,7 +27,6 @@ import org.jboss.arquillian.container.spi.ConfigurationException;
  * Validation utility
  *
  * @author <a href="mailto:aslak@conduct.no">Aslak Knutsen</a>
- * @version $Revision: $
  */
 public final class Validate {
 

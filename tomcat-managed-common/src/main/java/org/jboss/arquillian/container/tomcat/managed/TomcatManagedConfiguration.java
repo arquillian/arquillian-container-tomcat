@@ -29,7 +29,6 @@ import org.jboss.arquillian.container.tomcat.Validate;
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
- * @version $Revision: $
  */
 public class TomcatManagedConfiguration extends TomcatConfiguration {
 
