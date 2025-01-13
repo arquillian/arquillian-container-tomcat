@@ -27,7 +27,7 @@
 
   <properties>
 
-    <version.arquillian.core>1.9.1.Final</version.arquillian.core>
+    <version.arquillian.core>1.9.3.Final</version.arquillian.core>
     <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
     <version.shrinkwrap>1.2.6</version.shrinkwrap>
     <version.shrinkwrap.descriptors>2.0.0</version.shrinkwrap.descriptors>
