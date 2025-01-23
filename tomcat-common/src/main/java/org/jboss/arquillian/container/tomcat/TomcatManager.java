@@ -29,6 +29,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -259,15 +261,14 @@ public class TomcatManager<C extends TomcatConfiguration> {
     }
 
     protected String constructHttpBasicAuthHeader() {
-
         // Set up an authorization header with our credentials
         final String credentials = configuration.getUser() + ":" + configuration.getPass();
+
         // Encodes the user:password pair as a sequence of ISO-8859-1 bytes.
         // We'll return the Base64 encoded form of this ISO-8859-1 byte sequence.
-        try {
-            return "Basic " + Base64Coder.encodeString_IOS_8859_1(credentials);
-        } catch (final UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        byte[] credentialsBytes = credentials.getBytes(StandardCharsets.ISO_8859_1);
+
+        return "Basic " + Base64.getEncoder().encodeToString(credentialsBytes);
     }
+
 }
