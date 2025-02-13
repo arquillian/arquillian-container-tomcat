@@ -11,10 +11,6 @@
   <artifactId>arquillian-tomcat-embedded-10</artifactId>
   <name>Arquillian Tomcat Embedded Container 10.1</name>
 
-  <properties>
-    <ecj.version>4.6.1</ecj.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
@@ -26,12 +22,6 @@
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
       <version>${version.tomcat10}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jdt.core.compiler</groupId>
-      <artifactId>ecj</artifactId>
-      <version>${ecj.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
