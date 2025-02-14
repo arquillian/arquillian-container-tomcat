@@ -59,7 +59,9 @@
                   </systemProperties>
                 </container>
                 <configuration>
+                  <!-- Reference: https://codehaus-cargo.github.io/cargo/Tomcat+10.x.html -->
                   <properties>
+                    <cargo.jvmargs>${modular.jdk.args}</cargo.jvmargs>
                     <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
                     <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
                     <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
