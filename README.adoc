@@ -1,0 +1,244 @@
+= Arquillian - Tomcat Containers image:https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/ci.yml/badge.svg[GH Actions Build Status]
+:toc:
+:toclevels: 1
+
+// Editor notes:
+// Keep each sentence on a separate line for best experience with SCM.
+// TODO review the order of the sections, should perhaps be ordered by frequency of usage: managed, remote, embedded
+// TODO the versions are now expressions, perhaps we can do something smarter to keep it up to date with pom.xml?
+// TODO lets add a better example so that people can just copy and paste the sections, e.g. one where the tomcat is downloaded from URL
+
+Arquillian Container Tomcat project provides `DeployableContainer` implementations for managing the lifecycle of Tomcat
+instances within Arquillian tests.
+It supports Jakarta EE features like JNDI and Servlet,
+enabling seamless deployment and testing of web applications.
+There three distinct operation modes:
+
+* Embedded: Runs within the same JVM as the test cases.
+* Managed: Operates in a separate JVM, with Arquillian managing its lifecycle.
+* Remote: Connects to an already running Tomcat instance.
+
+Each configuration has its specific setup and considerations and
+are outlined below to help users integrate Tomcat into their testing workflows.
+
+== Tomcat Embedded
+
+A `DeployableContainer` implementation that manages the complete lifecycle of an embedded (same JVM) Tomcat Servlet Container.
+Keep in mind that only select Jakarta EE APIs are available in Tomcat, such as JNDI and Servlet 3.0.
+Test archives are adapted to Tomcat's `StandardContext` API by ShrinkWrap and deployed programmatically.
+
+=== Container Injection Support Matrix
+
+|===
+|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext / @PersistenceUnit
+|✓         |     |                    |✓             |             |
+|===
+
+____
+
+WARNING: CDI support requires use of Weld Servlet and associated configuration.
+The WAR will have to be unpacked as well in order for Weld to locate the classes. See the following configuration example.
+
+____
+
+=== Configuration Example
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <container qualifier="tomcat" default="true">
+        <configuration>
+            <property name="unpackArchive">true</property>
+        </configuration>
+    </container>
+</arquillian>
+----
+
+=== Configuration
+
+*Default Protocol:* Servlet 6.0
+
+==== Container Configuration Options
+
+|===
+|Name |Type |Default |Description 
+
+|`bindHttpPort` |`int` |`8080` |The HTTP port the server should bind to.
+|`bindAddress` |`String` |`localhost` |The host the server should be run on.
+|`tomcatHome` |`String` | |Optional location of a Tomcat installation to link against.
+|`serverName` |`String` |`arquillian-tomcat-embedded-10` |Optional name of the server.
+|`appBase` |`String` |`webapps` |Optional relative or absolute path to the directory where applications are deployed (e.g., webapps).
+|`workDir` |`String` | |Optional relative or absolute path to the directory where applications are expanded and session serialization data is stored (e.g., work).
+|`unpackArchive` |`boolean` |`false` |Specify if the deployment should be deployed exploded or compressed.
+|===
+
+=== Example of Maven Profile Setup
+
+// TODO review the dependency set below
+
+[source,xml]
+----
+<profile>
+   <id>tomcat-embedded</id>
+   <dependencies>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-tomcat-embedded-10</artifactId>
+         <version>${version.arquillian.container.tomcat}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-core</artifactId>
+         <version>${version.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-jasper</artifactId>
+         <version>${version.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-logging-juli</artifactId>
+         <version>${version.tomcat}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.eclipse.jdt.core.compiler</groupId>
+         <artifactId>ecj</artifactId>
+         <version>3.7</version>
+         <scope>test</scope>
+      </dependency>
+      <!-- Weld servlet for testing CDI injections -->
+      <dependency>
+         <groupId>org.jboss.weld.servlet</groupId>
+         <artifactId>weld-servlet</artifactId>
+         <version>5.1.5.Final</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</profile>
+----
+
+== Tomcat Managed
+
+A `DeployableContainer` implementation that can run and connect to remote (different JVM, but same machine) Tomcat instances.
+This implementation has lifecycle support, so the container will be started and stopped as part of the test run.
+
+=== Container Injection Support Matrix
+
+|===
+|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext @PersistenceUnit
+|✓         |     |                    |              |             |
+|===
+
+=== Configuration
+
+*Default Protocol:* Servlet 6.0
+
+=== Container Configuration Options
+
+|===
+|Name |Type |Default |Description
+
+|`bindHttpPort` |`int` |`8080` |The HTTP port the server will run on, has to be the same as in `$CATALINA_HOME/conf/server.xml`.
+|`bindAddress` |`String` |`localhost` |The host the server will run on, has to be the same as in `$CATALINA_HOME/conf/server.xml`.
+|`catalinaHome` |`String` |`$CATALINA_HOME` |The Tomcat configuration to start.
+|`javaHome` |`String` |`$JAVA_HOME` |The Java runtime to use to start the server.
+|`javaVmArguments` |`String` |`-Xmx512m` |JVM arguments used to start the server.
+|`user` |`String` | |Username of the user who has `manager-script` role. It is set in `$CATALINA_HOME/conf/tomcat-users.xml`.
+|`pass` |`String` | |Password of the user who has `manager-script` role. It is set in `$CATALINA_HOME/conf/tomcat-users.xml`.
+|`jmxPort` |`int` |`8089` |The JMX port used to connect to the running instance, needed for deployment introspection.
+|`urlCharset` |`String` |`ISO-8859-1` |Charset of URL used for deploy/undeploy operations.
+|`outputToConsole` |`boolean` |`true` |Should the server startup console log be piped to the console.
+|`startupTimeoutInSeconds` |`int` |`120` |Time to wait before throwing an exception on server startup.
+|`serverConfig` |`String` |`server.xml` |Which server configuration file to startup with.
+|===
+
+=== Example of Maven profile setup
+
+[source,xml]
+----
+<profile>
+  <id>tomcat-managed</id>
+  <dependencies>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-managed-10</artifactId>
+      <version>${version.arquillian.container.tomcat}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</profile>
+----
+
+== Tomcat Remote
+
+A `DeployableContainer` implementation that can connect to a remote Tomcat Servlet Container instance.
+
+=== Container Injection Support Matrix
+
+|===
+|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext @PersistenceUnit 
+|✓         |     |                    |✓             |             |
+|===
+
+WARNING: CDI support requires the use of Weld Servlet and associated configuration.
+
+=== Configuration
+
+*Default Protocol:* Servlet 6.0
+
+=== Container Configuration Options
+
+|===
+|Name |Type |Default |Description 
+
+|`httpPort` |`int` |`8080` |The HTTP port the server is bound to.
+|`host` |`String` |`localhost` |The host the server is running on.
+|`user` |`String` | |The user to authenticate as when using the Management console.
+|`pass` |`String` | |The password to authenticate with when using the Management console.
+|`jmxPort` |`int` |`8089` |The JMX port used to connect to the running instance, needed for deployment introspection.
+|===
+
+=== Example of Maven Profile Setup
+
+[source,xml]
+----
+<profile>
+  <id>tomcat-remote</id>
+  <dependencies>
+    <dependency>
+      <groupId>org.jboss.arquillian.container</groupId>
+      <artifactId>arquillian-tomcat-remote-10</artifactId>
+      <version>${version.arquillian.container.tomcat}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</profile>
+----
+
+WARNING: The remote Tomcat instance has to expose a remote JMX `MBeanConnection`.
+This can be done by adding the following to the startup script.
+
+==== Linux example - `startup.sh`
+
+[source,shell]
+----
+JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=8089"
+JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
+JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
+----
+
+NOTE: This makes your Tomcat insecure!
+Use only for testing and development purposes.
+
+// These were rewritten but originally available at these URLs:
+// https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Embedded.html
+// https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Managed.html
+// https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Remote.html
