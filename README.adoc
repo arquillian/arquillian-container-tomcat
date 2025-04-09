@@ -30,8 +30,8 @@ Test archives are adapted to Tomcat's `StandardContext` API by ShrinkWrap and de
 === Container Injection Support Matrix
 
 |===
-|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext / @PersistenceUnit
-|✓         |     |                    |✓             |             |
+|@Resource |@EJB |@Inject |@PersistenceContext / @PersistenceUnit
+|✓         |     |✓       |
 |===
 
 ____
@@ -133,8 +133,8 @@ This implementation has lifecycle support, so the container will be started and 
 === Container Injection Support Matrix
 
 |===
-|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext @PersistenceUnit
-|✓         |     |                    |              |             |
+|@Resource |@EJB |@Inject |@PersistenceContext @PersistenceUnit
+|✓         |     |✓       |
 |===
 
 === Configuration
@@ -184,8 +184,8 @@ A `DeployableContainer` implementation that can connect to a remote Tomcat Servl
 === Container Injection Support Matrix
 
 |===
-|@Resource |@EJB |@EJB (no-interface) |@Inject (CDI) |@Inject (MC) |@PersistenceContext @PersistenceUnit 
-|✓         |     |                    |✓             |             |
+|@Resource |@EJB |@Inject |@PersistenceContext @PersistenceUnit
+|✓         |     |✓       |
 |===
 
 WARNING: CDI support requires the use of Weld Servlet and associated configuration.
