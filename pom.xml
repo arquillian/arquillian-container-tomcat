@@ -37,7 +37,7 @@
     <version.shrinkwrap>1.2.6</version.shrinkwrap>
     <version.shrinkwrap.descriptors>2.0.0</version.shrinkwrap.descriptors>
     <version.shrinkwrap.resolver>3.3.4</version.shrinkwrap.resolver>
-    <version.weld.jakarta>5.1.5.Final</version.weld.jakarta>
+    <version.weld.jakarta>5.1.6.Final</version.weld.jakarta>
 
     <!-- Tomcat versions -->
     <version.tomcat10>10.1.41</version.tomcat10>
