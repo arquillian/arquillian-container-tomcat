@@ -4,8 +4,7 @@ Thanks for interest in Arquillian Project. What kind of issue would like you to 
 Question
 
 Please ask questions about how to use something, or to understand why something isn't
-working as you expect it to, on Stack Overflow using the arquillian tag. Alternatively you
-can go to our forum under jboss.org domain https://developer.jboss.org/en/arquillian
+working as you expect it to, on Stack Overflow using the arquillian tag.
 
 Bug report / Enhancement
 
@@ -28,17 +27,17 @@ Tell us briefly what the problem is about.
 
 ##### Additional Information
 
-Anything relevant to help us resolving the problem. For example if you are using `mvn` you can share output for `mvn --version` as well as dependencies in use `mvn dependency:tree`. OS as well as JDK version would be helpful too.
+Anything relevant to help us to resolve the problem. For example if you are using `mvn` you can share output for `mvn --version` as well as dependencies in use `mvn dependency:tree`. OS as well as JDK version would be helpful too.
 
-For long outputs such as stacktraces please use HTML5 `<details>`
+For long outputs such as a stacktrace please use HTML5 `<details>`
 
 ```
 <details>
- <summary>$mvn --version</summary>
- Maven home: /usr/share/maven/latest
- Java version: 1.7.0_79, vendor: Oracle Corporation
- Java home: /usr/java/jdk1.7.0_79/jre
+ <summary>mvn --version</summary>
+ Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
+ Maven home: /opt/homebrew/Cellar/maven/3.9.11/libexec
+ Java version: 17.0.16, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
  Default locale: en_US, platform encoding: UTF-8
- OS name: "linux", version: "4.7.7-200.fc24.x86_64", arch: "amd64", family: "unix"
+ OS name: "mac os x", version: "26.0.1", arch: "aarch64", family: "mac"
 </details>
 ```
