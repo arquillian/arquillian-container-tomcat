@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         os:
+          - macos-latest
           - ubuntu-latest
           - windows-latest
-          - macos-latest
         # Keep this list as: all supported LTS JDKs, the latest GA JDK, and optionally the latest EA JDK (if available).
         # Reference: https://adoptium.net/support/
         java:
@@ -31,11 +31,13 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
           cache: maven
-      - name: Build with Maven using JDK ${{ matrix.java }}
+      - name: Build with Maven
         run: ./mvnw --batch-mode --no-transfer-progress verify
-      - name: Upload Failsafe Reports
-        if: failure()
+      - name: Upload Test Reports
         uses: actions/upload-artifact@v4
+        if: failure()
         with:
-          name: ${{ runner.os }}-${{ matrix.java }}-failsafe-reports
-          path: '**/target/failsafe-reports/*.xml'
+          name: test-reports-${{ matrix.os }}-${{ matrix.java }}
+          path: |
+            **/surefire-reports/*
+            **/failsafe-reports/*

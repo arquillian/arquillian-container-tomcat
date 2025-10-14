@@ -9,10 +9,10 @@ If you are still working on the change please prefix this pull request title wit
 YOU CAN DELETE THIS COMMENT :)
 -->
 
-#### Short description of what this resolves:
+#### Short description of what this resolves
 
 
-#### Changes proposed in this pull request:
+#### Changes proposed in this pull request
 
 -
 -
