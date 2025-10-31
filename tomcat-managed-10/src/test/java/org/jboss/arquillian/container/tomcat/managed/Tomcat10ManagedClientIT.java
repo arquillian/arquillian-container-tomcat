@@ -27,7 +27,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
 /**
- * Tests that Tomcat deployments into the Tomcat 8 server work through the Arquillian lifecycle
+ * Tests that Tomcat deployments into the Tomcat server work through the Arquillian lifecycle
  *
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
