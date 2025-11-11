@@ -40,7 +40,7 @@
     <version.weld.jakarta>5.1.6.Final</version.weld.jakarta>
 
     <!-- Tomcat versions -->
-    <version.tomcat10>10.1.48</version.tomcat10>
+    <version.tomcat10>10.1.49</version.tomcat10>
 
     <!-- Test configuration -->
     <modular.jdk.args />
