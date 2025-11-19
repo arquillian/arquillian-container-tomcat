@@ -13,6 +13,7 @@
   <artifactId>arquillian-tomcat-remote-parent</artifactId>
   <packaging>pom</packaging>
   <name>Arquillian Tomcat Remote Container Parent</name>
+  <description>Parent POM for Arquillian Tomcat Remote Container modules</description>
 
   <dependencies>
 

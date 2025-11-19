@@ -17,6 +17,32 @@
 
   <name>Arquillian Tomcat Container Project Parent</name>
   <description>Tomcat Container integrations for the Arquillian Project</description>
+  <url>https://github.com/arquillian/arquillian-container-tomcat</url>
+
+  <inceptionYear>2009</inceptionYear>
+  <organization>
+    <name>Arquillian Community</name>
+    <url>https://arquillian.org</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>Apache License Version 2.0</name>
+      <url>https://repository.jboss.org/licenses/apache-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Radoslav Husar</name>
+      <email>rhusar@redhat.com</email>
+      <roles>
+        <role>developer</role>
+        <role>maintainer</role>
+      </roles>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:https://github.com/arquillian/arquillian-container-tomcat.git</connection>
@@ -24,6 +50,16 @@
     <url>https://github.com/arquillian/arquillian-container-tomcat</url>
     <tag>HEAD</tag>
   </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/arquillian/arquillian-container-tomcat/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/arquillian/arquillian-container-tomcat/actions</url>
+  </ciManagement>
 
   <properties>
     <!-- Project/configuration properties -->
@@ -42,8 +78,28 @@
     <!-- Tomcat versions -->
     <version.tomcat10>10.1.49</version.tomcat10>
 
+    <!-- Plugin versions -->
+    <version.central.publishing.maven.plugin>0.9.0</version.central.publishing.maven.plugin>
+
     <!-- Test configuration -->
     <modular.jdk.args />
+
+    <!-- maven-release-plugin configuration -->
+    <autoVersionSubmodules>true</autoVersionSubmodules>
+    <releaseProfiles>release,gpg-sign</releaseProfiles>
+    <signTag>true</signTag>
+    <tagNameFormat>@{project.version}</tagNameFormat>
+    <arguments>-DskipTests</arguments>
+    <!-- Push changes by default when using the maven-release-plugin:prepare -->
+    <pushChanges>true</pushChanges>
+    <!-- Use the local directory when using perform -->
+    <localCheckout>true</localCheckout>
+    <!-- Maven Central properties -->
+    <repo.sonatype.url>https://central.sonatype.com</repo.sonatype.url>
+    <sonatype.server.id>central</sonatype.server.id>
+    <autoPublish>true</autoPublish>
+    <waitUntil>validated</waitUntil>
+    <deploymentName>arquillian-container-tomcat-${project.version}</deploymentName>
   </properties>
 
   <dependencyManagement>
@@ -192,16 +248,6 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <tagNameFormat>@{project.version}</tagNameFormat>
-        </configuration>
-      </plugin>
-    </plugins>
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -245,6 +291,68 @@
               <systemProperties>
                 <maven.repo.local>${maven.repo.local}</maven.repo.local>
               </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!-- release profile for maven central -->
+    <profile>
+      <id>release</id>
+      <activation>
+        <property>
+          <name>release</name>
+        </property>
+      </activation>
+
+      <distributionManagement>
+        <snapshotRepository>
+          <id>${sonatype.server.id}</id>
+          <url>${repo.sonatype.url}</url>
+        </snapshotRepository>
+        <repository>
+          <id>${sonatype.server.id}</id>
+          <url>${repo.sonatype.url}</url>
+        </repository>
+      </distributionManagement>
+
+      <build>
+        <plugins>
+          <!-- Semantically ordered -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${version.central.publishing.maven.plugin}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>${sonatype.server.id}</publishingServerId>
+              <autoPublish>${autoPublish}</autoPublish>
+              <waitUntil>${waitUntil}</waitUntil>
+              <deploymentName>${deploymentName}</deploymentName>
             </configuration>
           </plugin>
         </plugins>

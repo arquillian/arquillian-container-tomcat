@@ -11,6 +11,7 @@
 
   <artifactId>arquillian-tomcat-embedded-common</artifactId>
   <name>Arquillian Tomcat Embedded Container Common</name>
+  <description>Common classes and utilities for Arquillian Tomcat Embedded Container integrations</description>
 
   <dependencies>
 

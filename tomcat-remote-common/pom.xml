@@ -11,6 +11,7 @@
 
   <artifactId>arquillian-tomcat-remote-common</artifactId>
   <name>Arquillian Tomcat Remote Container Common</name>
+  <description>Common classes and utilities for Arquillian Tomcat Remote Container integrations</description>
 
   <dependencies>
 

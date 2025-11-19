@@ -12,6 +12,7 @@
 
   <artifactId>arquillian-tomcat-remote-10</artifactId>
   <name>Arquillian Tomcat Remote Container 10.1</name>
+  <description>Arquillian Container implementation for Remote Tomcat 10.1</description>
 
   <build>
     <plugins>

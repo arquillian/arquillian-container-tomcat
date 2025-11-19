@@ -13,6 +13,7 @@
   <artifactId>arquillian-tomcat-managed-parent</artifactId>
   <packaging>pom</packaging>
   <name>Arquillian Tomcat Managed Container Parent</name>
+  <description>Parent POM for Arquillian Tomcat Managed Container modules</description>
 
   <dependencies>
 

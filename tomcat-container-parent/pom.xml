@@ -12,6 +12,7 @@
   <artifactId>arquillian-tomcat-container-parent</artifactId>
   <packaging>pom</packaging>
   <name>Arquillian Tomcat Container Parent</name>
+  <description>Parent POM for Arquillian Tomcat Container modules</description>
 
   <properties>
 

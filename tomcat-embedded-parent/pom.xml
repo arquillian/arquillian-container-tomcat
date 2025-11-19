@@ -13,6 +13,7 @@
   <artifactId>arquillian-tomcat-embedded-parent</artifactId>
   <packaging>pom</packaging>
   <name>Arquillian Tomcat Embedded Container Parent</name>
+  <description>Parent POM for Arquillian Tomcat Embedded Container modules</description>
 
   <dependencies>
 
