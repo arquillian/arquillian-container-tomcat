@@ -10,6 +10,7 @@
 
   <artifactId>arquillian-tomcat-embedded-10</artifactId>
   <name>Arquillian Tomcat Embedded Container 10.1</name>
+  <description>Arquillian Container implementation for Embedded Tomcat 10.1</description>
 
   <dependencies>
     <dependency>

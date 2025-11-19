@@ -11,6 +11,7 @@
 
   <artifactId>arquillian-tomcat-managed-common</artifactId>
   <name>Arquillian Tomcat Managed Container Common</name>
+  <description>Common classes and utilities for Arquillian Tomcat Managed Container integrations</description>
 
   <dependencies>
 
