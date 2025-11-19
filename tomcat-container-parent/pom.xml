@@ -17,7 +17,7 @@
   <properties>
 
     <!-- ARQ-630: We'll use credentials with ISO-8859-1 characters for testing. This also tests for US-ASCII support as
-         the G0 subset overlaps with US-ASCII. -->
+      the G0 subset overlaps with US-ASCII. -->
     <test.manager.username>Schröder</test.manager.username>
     <test.manager.password>Contraseña</test.manager.password>
 
