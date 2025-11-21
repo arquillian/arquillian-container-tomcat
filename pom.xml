@@ -284,7 +284,7 @@
       <build>
         <plugins>
           <!-- Surefire by default forks the JVM for testing, so we need to pass on the maven.repo.local variable so
-               the MavenResolver used in the test cases can read from the same local repo. -->
+            the MavenResolver used in the test cases can read from the same local repo. -->
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
