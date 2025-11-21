@@ -120,7 +120,7 @@ fi
 
 printf "Performing release for version %s with the next version of %s\n" "${RELEASE_VERSION}" "${DEVEL_VERSION}"
 
-TAG_NAME="v${RELEASE_VERSION}"
+TAG_NAME="${RELEASE_VERSION}"
 
 if ${DRY_RUN}; then
     echo -e "${YELLOW}This will be a dry run and nothing will be updated or pushed.${CLEAR}"
