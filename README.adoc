@@ -82,46 +82,46 @@ ____
 [source,xml]
 ----
 <profile>
-   <id>tomcat-embedded</id>
-   <dependencies>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-tomcat-embedded-10</artifactId>
-         <version>${version.arquillian.container.tomcat}</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.apache.tomcat.embed</groupId>
-         <artifactId>tomcat-embed-core</artifactId>
-         <version>${version.tomcat}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.apache.tomcat.embed</groupId>
-         <artifactId>tomcat-embed-jasper</artifactId>
-         <version>${version.tomcat}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.apache.tomcat.embed</groupId>
-         <artifactId>tomcat-embed-logging-juli</artifactId>
-         <version>${version.tomcat}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.eclipse.jdt.core.compiler</groupId>
-         <artifactId>ecj</artifactId>
-         <version>3.7</version>
-         <scope>test</scope>
-      </dependency>
-      <!-- Weld servlet for testing CDI injections -->
-      <dependency>
-         <groupId>org.jboss.weld.servlet</groupId>
-         <artifactId>weld-servlet</artifactId>
-         <version>5.1.5.Final</version>
-         <scope>test</scope>
-      </dependency>
-   </dependencies>
+    <id>tomcat-embedded</id>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-embedded-10</artifactId>
+            <version>${version.arquillian.container.tomcat}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${version.tomcat}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${version.tomcat}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${version.tomcat}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jdt.core.compiler</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.7</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Weld servlet for testing CDI injections -->
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+            <version>5.1.5.Final</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </profile>
 ----
 
@@ -165,15 +165,15 @@ This implementation has lifecycle support, so the container will be started and 
 [source,xml]
 ----
 <profile>
-  <id>tomcat-managed</id>
-  <dependencies>
-    <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-managed-10</artifactId>
-      <version>${version.arquillian.container.tomcat}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <id>tomcat-managed</id>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-managed-10</artifactId>
+            <version>${version.arquillian.container.tomcat}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </profile>
 ----
 
@@ -211,15 +211,15 @@ WARNING: CDI support requires the use of Weld Servlet and associated configurati
 [source,xml]
 ----
 <profile>
-  <id>tomcat-remote</id>
-  <dependencies>
-    <dependency>
-      <groupId>org.jboss.arquillian.container</groupId>
-      <artifactId>arquillian-tomcat-remote-10</artifactId>
-      <version>${version.arquillian.container.tomcat}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <id>tomcat-remote</id>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-remote-10</artifactId>
+            <version>${version.arquillian.container.tomcat}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </profile>
 ----
 
