@@ -1,4 +1,4 @@
-= Arquillian - Tomcat Containers image:https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/ci.yml/badge.svg[GH Actions Build Status,link=https://github.com/arquillian/arquillian-container-tomcat/actions?query=branch%3Amain]
+= Arquillian - Tomcat Containers image:https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml/badge.svg[GH Actions Build Status,link=https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml?query=branch%3Amain]
 :toc:
 :toclevels: 1
 
