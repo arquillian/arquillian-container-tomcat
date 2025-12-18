@@ -31,7 +31,7 @@ printHelp() {
     printArgHelp "" "--dry-run" "Executes the release as a dry-run. Nothing will be updated or pushed."
     printArgHelp "-v" "--verbose" "Prints verbose output."
     echo ""
-    echo "Usage: ${0##*/} --release 1.0.0 --development 1.0.1-SNAPSHOT"
+    echo "Usage: ${0##*/} --release 1.0.0.Final --development 1.0.1.Final-SNAPSHOT [additional maven arguments]"
 }
 
 CLEAR=""
