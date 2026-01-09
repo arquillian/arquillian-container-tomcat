@@ -33,11 +33,11 @@ For long outputs such as a stacktrace please use HTML5 `<details>`
 
 ```
 <details>
- <summary>mvn --version</summary>
- Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
- Maven home: /opt/homebrew/Cellar/maven/3.9.11/libexec
- Java version: 17.0.16, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
- Default locale: en_US, platform encoding: UTF-8
- OS name: "mac os x", version: "26.0.1", arch: "aarch64", family: "mac"
+    <summary>mvn --version</summary>
+    Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)
+    Maven home: /opt/homebrew/Cellar/maven/3.9.11/libexec
+    Java version: 17.0.16, vendor: Eclipse Adoptium, runtime: /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
+    Default locale: en_US, platform encoding: UTF-8
+    OS name: "mac os x", version: "26.0.1", arch: "aarch64", family: "mac"
 </details>
 ```

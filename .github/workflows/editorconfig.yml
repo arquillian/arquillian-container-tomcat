@@ -1,0 +1,18 @@
+name: EditorConfig Checker
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+jobs:
+  editorconfig-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup EditorConfig Checker
+        uses: editorconfig-checker/action-editorconfig-checker@v2
+      - name: Run EditorConfig Checker
+        run: editorconfig-checker

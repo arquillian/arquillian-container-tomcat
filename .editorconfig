@@ -5,13 +5,7 @@ insert_final_newline=true
 indent_style=space
 indent_size=4
 
-[{*.mod,*.dtd,*.ent,*.elt}]
-indent_size=2
-
-[{*.jhm,*.xjb,*.rng,*.wsdl,*.fxml,*.plan,*.pom,*.xslt,*.jrxml,*.ant,*.svg,*.xul,*.xsl,*.xsd,*.tld,*.jnlp,*.wsdd,*.wadl,*.xml}]
-indent_size=2
-
-[{.babelrc,.stylelintrc,.eslintrc,*.bowerrc,*.jsb3,*.jsb2,*.json}]
+[*.xml]
 indent_size=2
 
 [{*.yml,*.yaml}]
