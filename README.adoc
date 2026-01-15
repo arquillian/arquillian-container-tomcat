@@ -1,6 +1,7 @@
-= Arquillian - Tomcat Containers image:https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml/badge.svg[GH Actions Build Status,link=https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml?query=branch%3Amain]
 :toc:
 :toclevels: 1
+
+= Arquillian - Tomcat Containers image:https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml/badge.svg[GH Actions Build Status,link=https://github.com/arquillian/arquillian-container-tomcat/actions/workflows/maven.yml?query=branch%3Amain]
 
 // Editor notes:
 // Keep each sentence on a separate line for best experience with SCM.
@@ -228,7 +229,7 @@ This can be done by adding the following to the startup script.
 
 ==== Linux example - `startup.sh`
 
-[source,shell]
+[source,bash]
 ----
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=8089"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
@@ -242,3 +243,63 @@ Use only for testing and development purposes.
 // https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Embedded.html
 // https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Managed.html
 // https://docs.jboss.org/author/display/ARQ/Tomcat%207.0%20-%20Remote.html
+
+== Contributing
+
+See the link:CONTRIBUTING.adoc[contributing guide].
+
+== Releasing
+
+Releasing the project requires permission to deploy to Maven Central see https://central.sonatype.org/publish/requirements/[Maven Central Release Requirements].
+Once everything is set up, you simply need to run the `./release.sh` script with at least the two required parameters:
+
+1. `-r` or `--release` which is the version you want to release
+2. `-d` or `--development` which is the next development version.
+
+By default, the release version cannot contain `SNAPSHOT` and the development version, must contain `SNAPSHOT`.
+
+[source]
+----
+./release.sh -r 1.0.0.Final -d 1.0.1.Final-SNAPSHOT
+----
+
+=== Supported Arguments
+
+|===
+|Argument | Requires Value | Description
+
+| `-d`, `--development`
+| Yes
+| The next version for the development cycle.
+
+| `-f`, `--force`
+| No
+| Forces to allow a SNAPSHOT suffix in release version and not require one for the development version.
+
+| `-h`, `--help`
+| N/A
+| Displays this help
+
+| `--notes-start-tag`
+| Unused
+| Passes the `--notes-from-tag` and the argument to the `gh create release` command.
+
+| `-p`, `--prerelease`
+| Unused
+| Passes the `--prerelease` to the `gh create release` command.
+
+| `-r`, `--release`
+| Yes
+| The version to be released. Also used for the tag.
+
+| `--dry-run`
+| No
+| Executes the release in as a dry-run. Nothing will be updated or pushed.
+
+| `-v`, `--verbose`
+| No
+| Prints verbose output.
+
+|===
+
+Any additional arguments are considered arguments for the Maven command.
