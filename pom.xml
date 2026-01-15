@@ -63,6 +63,7 @@
 
   <properties>
     <!-- Project/configuration properties -->
+    <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <javadoc.additional.params>-Xdoclint:none</javadoc.additional.params>
