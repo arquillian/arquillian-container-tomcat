@@ -39,7 +39,6 @@ import org.jboss.arquillian.container.tomcat.TomcatManager;
 import org.jboss.arquillian.container.tomcat.TomcatManagerCommandSpec;
 import org.jboss.arquillian.container.tomcat.Validate;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * <p>
@@ -256,18 +255,6 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
         } catch (final IOException e) {
             throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
         }
-    }
-
-    @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException {
-
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException {
-
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     /**
