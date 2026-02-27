@@ -60,7 +60,7 @@ public class EmbeddedContextConfig extends ContextConfig {
     @Override
     protected synchronized void beforeStart() {
         super.beforeStart();
-        ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID().toString());
+        ((StandardContext) context).setJ2EEServer("Arquillian-" + UUID.randomUUID());
         Tomcat.initWebappDefaults(context);
     }
 

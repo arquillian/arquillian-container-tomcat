@@ -128,9 +128,9 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             final List<String> cmd = new ArrayList<String>();
 
             cmd.add(javaCommand);
-            String seperator = File.separator;
+            String separator = File.separator;
 
-            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + seperator + "conf" + seperator
+            cmd.add("-Djava.util.logging.config.file=" + absoluteCatalinaBasePath + separator + "conf" + separator
                 + configuration.getLoggingProperties());
             cmd.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 
@@ -141,28 +141,28 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             cmd.addAll(AdditionalJavaOptionsParser.parse(ADDITIONAL_JAVA_OPTS));
 
             String CLASS_PATH =
-                absoluteCatalinaHomePath + seperator + "bin" + seperator + "bootstrap.jar" + File.pathSeparator;
-            CLASS_PATH += absoluteCatalinaHomePath + seperator + "bin" + seperator + "tomcat-juli.jar";
+                absoluteCatalinaHomePath + separator + "bin" + separator + "bootstrap.jar" + File.pathSeparator;
+            CLASS_PATH += absoluteCatalinaHomePath + separator + "bin" + separator + "tomcat-juli.jar";
 
             cmd.add("-classpath");
             cmd.add(CLASS_PATH);
-            final File endorsed = new File(absoluteCatalinaHomePath + seperator + "endorsed");
+            final File endorsed = new File(absoluteCatalinaHomePath + separator + "endorsed");
             if (endorsed.exists()) {
                 cmd.add("-Djava.endorsed.dirs=" + endorsed.getAbsolutePath());
             }
             cmd.add("-Dcatalina.base=" + absoluteCatalinaBasePath);
             cmd.add("-Dcatalina.home=" + absoluteCatalinaHomePath);
-            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + seperator + "temp");
+            cmd.add("-Djava.io.tmpdir=" + absoluteCatalinaBasePath + separator + "temp");
             cmd.add("org.apache.catalina.startup.Bootstrap");
             cmd.add("-config");
-            cmd.add(absoluteCatalinaBasePath + seperator + "conf" + seperator + configuration.getServerConfig());
+            cmd.add(absoluteCatalinaBasePath + separator + "conf" + separator + configuration.getServerConfig());
             cmd.add("start");
 
             // execute command
             final ProcessBuilder startupProcessBuilder = new ProcessBuilder(cmd);
             startupProcessBuilder.redirectErrorStream(true);
             startupProcessBuilder.directory(new File(configuration.getCatalinaHome() + "/bin"));
-            log.info("Starting Tomcat with: " + cmd.toString());
+            log.info("Starting Tomcat with: " + cmd);
             startupProcess = startupProcessBuilder.start();
             new Thread(new ConsoleConsumer(configuration.isOutputToConsole())).start();
             final Process proc = startupProcess;
@@ -187,7 +187,7 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
             final long startupTimeout = configuration.getStartupTimeoutInSeconds();
             long timeout = startupTimeout * 1000;
             boolean serverAvailable = false;
-            while (timeout > 0 && serverAvailable == false) {
+            while (timeout > 0 && !serverAvailable) {
                 serverAvailable = manager.isRunning();
                 if (!serverAvailable) {
                     Thread.sleep(100);
@@ -223,7 +223,7 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
     }
 
     /**
-     * Deploys to remote Tomcat using it's /manager web-app's org.apache.catalina.manager.ManagerServlet.
+     * Deploys to remote Tomcat using its /manager web-app's org.apache.catalina.manager.ManagerServlet.
      *
      * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
      */

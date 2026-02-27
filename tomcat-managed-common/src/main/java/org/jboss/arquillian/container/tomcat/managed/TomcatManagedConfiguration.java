@@ -58,7 +58,7 @@ public class TomcatManagedConfiguration extends TomcatConfiguration {
 
     public TomcatManagedConfiguration() {
         // if no javaHome set, reuse this Java JVM
-        if (javaHome == null || "".equals(javaHome)) {
+        if (javaHome == null || javaHome.isEmpty()) {
             javaHome = System.getProperty(JAVA_HOME_SYSTEM_PROPERTY);
         }
     }

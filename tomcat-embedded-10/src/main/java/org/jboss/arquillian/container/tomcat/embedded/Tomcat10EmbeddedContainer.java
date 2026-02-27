@@ -102,7 +102,7 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
     public void setup(final TomcatEmbeddedConfiguration configuration) {
         final String serverName = configuration.getServerName();
 
-        if (serverName == null || "".equals(serverName)) {
+        if (serverName == null || serverName.isEmpty()) {
             configuration.setServerName("arquillian-tomcat-embedded-10");
         }
 
