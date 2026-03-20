@@ -21,7 +21,6 @@ import java.net.URL;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
-import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.deployment.Validate;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
@@ -30,7 +29,6 @@ import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
 import org.jboss.arquillian.container.tomcat.TomcatManager;
 import org.jboss.arquillian.container.tomcat.TomcatManagerCommandSpec;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
  * Arquillian {@link DeployableContainer} implementation for a remote Tomcat server; responsible for both deployment
@@ -69,26 +67,6 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
     public void setup(final TomcatRemoteConfiguration configuration) {
         this.configuration = configuration;
         this.manager = new TomcatManager<>(configuration, tomcatManagerCommandSpec);
-    }
-
-    @Override
-    public void start() throws LifecycleException {
-        // no-op
-    }
-
-    @Override
-    public void stop() throws LifecycleException {
-        // no-op
-    }
-
-    @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException {
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     /**

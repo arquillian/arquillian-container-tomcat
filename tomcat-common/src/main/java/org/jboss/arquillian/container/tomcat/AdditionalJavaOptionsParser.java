@@ -49,7 +49,7 @@ public class AdditionalJavaOptionsParser {
             final Pattern p = Pattern.compile(OPTION, Pattern.DOTALL);
             final Matcher m = p.matcher(additionalOptions);
             while (m.find()) {
-                if (!m.group().trim().equals("")) {
+                if (!m.group().trim().isEmpty()) {
                     options.add(
                         Pattern.compile(QUOTED_CONTENT, Pattern.DOTALL).matcher(m.group().trim()).replaceAll("$1"));
                 }

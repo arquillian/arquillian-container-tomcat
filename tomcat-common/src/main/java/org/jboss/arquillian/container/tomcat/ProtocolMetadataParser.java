@@ -94,7 +94,7 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration> {
             final String servletName = oi.getObjectName().getKeyProperty("name");
             httpContext.add(new Servlet(servletName, context));
             if (log.isLoggable(Level.FINE)) {
-                log.fine("Added servlet " + oi.toString() + " to HttpContext for archive" + context);
+                log.fine("Added servlet " + oi + " to HttpContext for archive" + context);
             }
         }
 

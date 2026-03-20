@@ -35,7 +35,6 @@ import org.jboss.arquillian.core.api.InstanceProducer;
 import org.jboss.arquillian.core.api.annotation.Inject;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.exporter.ZipExporter;
-import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,7 +101,7 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
     public void setup(final TomcatEmbeddedConfiguration configuration) {
         final String serverName = configuration.getServerName();
 
-        if (serverName == null || "".equals(serverName)) {
+        if (serverName == null || serverName.isEmpty()) {
             configuration.setServerName("arquillian-tomcat-embedded-10");
         }
 
@@ -167,16 +166,6 @@ public class Tomcat10EmbeddedContainer implements DeployableContainer<TomcatEmbe
         } catch (final Exception e) {
             throw new DeploymentException("Failed to undeploy " + archive.getName(), e);
         }
-    }
-
-    @Override
-    public void deploy(final Descriptor descriptor) throws DeploymentException {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    public void undeploy(final Descriptor descriptor) throws DeploymentException {
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     protected void startTomcatEmbedded() throws LifecycleException, org.apache.catalina.LifecycleException {
