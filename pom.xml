@@ -78,7 +78,7 @@
     <version.weld.jakarta>5.1.7.Final</version.weld.jakarta>
 
     <!-- Tomcat versions -->
-    <version.tomcat10>10.1.52</version.tomcat10>
+    <version.tomcat10>10.1.54</version.tomcat10>
 
     <!-- Plugin versions -->
     <version.central.publishing.maven.plugin>0.10.0</version.central.publishing.maven.plugin>
