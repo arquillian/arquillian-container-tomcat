@@ -11,7 +11,7 @@
   </parent>
 
   <groupId>org.jboss.arquillian.container</groupId>
-  <artifactId>arquillian-parent-tomcat</artifactId>
+  <artifactId>arquillian-tomcat-parent</artifactId>
   <version>1.2.5.Final-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -80,28 +80,16 @@
     <!-- Tomcat versions -->
     <version.tomcat10>10.1.55</version.tomcat10>
 
-    <!-- Plugin versions -->
-    <version.central.publishing.maven.plugin>0.10.0</version.central.publishing.maven.plugin>
-
     <!-- Test configuration -->
     <modular.jdk.args />
 
     <!-- maven-release-plugin configuration -->
-    <autoVersionSubmodules>true</autoVersionSubmodules>
-    <releaseProfiles>release,gpg-sign</releaseProfiles>
-    <signTag>true</signTag>
-    <tagNameFormat>@{project.version}</tagNameFormat>
+    <releaseProfiles>central-release</releaseProfiles>
     <arguments>-DskipTests</arguments>
-    <!-- Push changes by default when using the maven-release-plugin:prepare -->
-    <pushChanges>true</pushChanges>
-    <!-- Use the local directory when using perform -->
+
+    <!-- TODO temporarily disabled to test release configuration and thus use the local directory when using perform -->
+    <pushChanges>false</pushChanges>
     <localCheckout>true</localCheckout>
-    <!-- Maven Central properties -->
-    <repo.sonatype.url>https://central.sonatype.com</repo.sonatype.url>
-    <sonatype.server.id>central</sonatype.server.id>
-    <autoPublish>true</autoPublish>
-    <waitUntil>validated</waitUntil>
-    <deploymentName>arquillian-container-tomcat-${project.version}</deploymentName>
   </properties>
 
   <dependencyManagement>
@@ -281,68 +269,6 @@
               <systemProperties>
                 <maven.repo.local>${maven.repo.local}</maven.repo.local>
               </systemProperties>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <!-- release profile for maven central -->
-    <profile>
-      <id>release</id>
-      <activation>
-        <property>
-          <name>release</name>
-        </property>
-      </activation>
-
-      <distributionManagement>
-        <snapshotRepository>
-          <id>${sonatype.server.id}</id>
-          <url>${repo.sonatype.url}</url>
-        </snapshotRepository>
-        <repository>
-          <id>${sonatype.server.id}</id>
-          <url>${repo.sonatype.url}</url>
-        </repository>
-      </distributionManagement>
-
-      <build>
-        <plugins>
-          <!-- Semantically ordered -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.central</groupId>
-            <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>${version.central.publishing.maven.plugin}</version>
-            <extensions>true</extensions>
-            <configuration>
-              <publishingServerId>${sonatype.server.id}</publishingServerId>
-              <autoPublish>${autoPublish}</autoPublish>
-              <waitUntil>${waitUntil}</waitUntil>
-              <deploymentName>${deploymentName}</deploymentName>
             </configuration>
           </plugin>
         </plugins>
