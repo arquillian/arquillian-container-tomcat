@@ -75,7 +75,7 @@
     <version.arquillian.jakarta>10.0.0.Final</version.arquillian.jakarta>
     <version.shrinkwrap>1.2.6</version.shrinkwrap>
     <version.shrinkwrap.resolver>3.3.7</version.shrinkwrap.resolver>
-    <version.weld.jakarta>5.1.7.Final</version.weld.jakarta>
+    <version.weld.jakarta>7.0.0.Final</version.weld.jakarta>
 
     <!-- Tomcat versions -->
     <version.tomcat10>10.1.60</version.tomcat10>
