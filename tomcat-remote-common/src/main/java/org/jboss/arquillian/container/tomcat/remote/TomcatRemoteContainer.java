@@ -24,6 +24,7 @@ import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.deployment.Validate;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
+import org.jboss.arquillian.container.tomcat.ContextName;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
 import org.jboss.arquillian.container.tomcat.TomcatManager;
@@ -36,6 +37,7 @@ import org.jboss.shrinkwrap.api.Archive;
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
+ * @author Radoslav Husar
  */
 abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemoteConfiguration> {
 
@@ -78,26 +80,25 @@ abstract class TomcatRemoteContainer implements DeployableContainer<TomcatRemote
     public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
         Validate.notNull(archive, "Archive must not be null");
 
-        final String archiveName = manager.normalizeArchiveName(archive.getName());
+        final ContextName contextName = new ContextName(archive.getName());
         final URL archiveURL = ShrinkWrapUtil.toURL(archive);
         try {
-            manager.deploy("/" + archiveName, archiveURL);
+            manager.deploy(contextName, archiveURL);
         } catch (final IOException e) {
             throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
         }
 
         final ProtocolMetadataParser<TomcatRemoteConfiguration> parser = new ProtocolMetadataParser<>(configuration);
 
-        return parser.retrieveContextServletInfo(archiveName);
+        return parser.retrieveContextServletInfo(contextName);
     }
 
     @Override
     public void undeploy(final Archive<?> archive) throws DeploymentException {
         Validate.notNull(archive, "Archive must not be null");
 
-        final String archiveName = manager.normalizeArchiveName(archive.getName());
         try {
-            manager.undeploy("/" + archiveName);
+            manager.undeploy(new ContextName(archive.getName()));
         } catch (final IOException e) {
             throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
         }

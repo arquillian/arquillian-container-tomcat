@@ -44,6 +44,7 @@ import org.jboss.arquillian.container.spi.client.container.DeploymentException;
  *
  * @author <a href="mailto:kpiwko@redhat.com">Karel Piwko</a>
  * @author Craig R. McClanahan
+ * @author Radoslav Husar
  */
 public class TomcatManager<C extends TomcatConfiguration> {
 
@@ -68,40 +69,53 @@ public class TomcatManager<C extends TomcatConfiguration> {
         this.tomcatManagerCommandSpec = tomcatManagerCommandSpec;
     }
 
-    public void deploy(final String name, final URL content) throws IOException, DeploymentException {
+    public void deploy(final ContextName contextName, final URL content) throws IOException, DeploymentException {
 
         final String contentType = "application/octet-stream";
-        Validate.notNullOrEmpty(name, "Name must not be null or empty");
+        Validate.notNull(contextName, "Context name must not be null");
         Validate.notNull(content, "Content to be deployed must not be null");
 
         final URLConnection conn = content.openConnection();
         final int contentLength = conn.getContentLength();
         final InputStream stream = new BufferedInputStream(conn.getInputStream());
 
-        // Building URL
-        final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getDeployCommand());
-        try {
-            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
-        } catch (final UnsupportedEncodingException e) {
-            throw new DeploymentException("Unable to construct path for Tomcat manager", e);
-        }
+        final String command = buildCommand(tomcatManagerCommandSpec.getDeployCommand(), contextName);
 
-        execute(command.toString(), stream, contentType, contentLength);
+        execute(command, stream, contentType, contentLength);
     }
 
-    public void undeploy(final String name) throws IOException, DeploymentException {
+    public void undeploy(final ContextName contextName) throws IOException, DeploymentException {
 
-        Validate.notNullOrEmpty(name, "Undeployed name must not be null or empty");
+        Validate.notNull(contextName, "Context name must not be null");
 
-        // Building URL
-        final StringBuilder command = new StringBuilder(tomcatManagerCommandSpec.getUndeployCommand());
+        final String command = buildCommand(tomcatManagerCommandSpec.getUndeployCommand(), contextName);
+
+        execute(command, null, null, -1);
+    }
+
+    /**
+     * Appends the "path" request parameter, and for a parallel deployment the "version" parameter, that the manager
+     * uses to determine the context the archive is deployed to.
+     */
+    private String buildCommand(final String managerCommand, final ContextName contextName) throws DeploymentException {
+
+        final StringBuilder command = new StringBuilder(managerCommand);
+
+        // The root context has an empty path, which the manager addresses as "/".
+        final String path = contextName.getPath().isEmpty() ? "/" : contextName.getPath();
+        final String version = contextName.getVersion();
+
         try {
-            command.append(URLEncoder.encode(name, configuration.getUrlCharset()));
+            command.append(URLEncoder.encode(path, configuration.getUrlCharset()));
+
+            if (!version.isEmpty()) {
+                command.append("&version=").append(URLEncoder.encode(version, configuration.getUrlCharset()));
+            }
         } catch (final UnsupportedEncodingException e) {
             throw new DeploymentException("Unable to construct path for Tomcat manager", e);
         }
 
-        execute(command.toString(), null, null, -1);
+        return command.toString();
     }
 
     public void serverInfo() throws IOException {
@@ -126,21 +140,6 @@ public class TomcatManager<C extends TomcatConfiguration> {
         } catch (final IOException e) {
             return false;
         }
-    }
-
-    public String normalizeArchiveName(final String name) {
-
-        Validate.notNull(name, "Archive name must not be empty");
-
-        if ("ROOT.war".equals(name)) {
-            return "";
-        }
-
-        if (name.indexOf('.') != -1) {
-            return name.substring(0, name.lastIndexOf("."));
-        }
-
-        return name;
     }
 
     /**
