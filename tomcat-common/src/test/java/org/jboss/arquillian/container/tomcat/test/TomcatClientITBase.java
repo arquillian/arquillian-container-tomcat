@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * @author Radoslav Husar
+ */
 public abstract class TomcatClientITBase {
 
     protected static final TestDeploymentFactory TEST_DEPLOYMENT_FACTORY = new TestDeploymentFactory();
@@ -55,6 +58,32 @@ public abstract class TomcatClientITBase {
     }
 
     @Test
+    @OperateOnDeployment(TestDeploymentFactory.MULTI_SEGMENT_CONTEXT)
+    public void shouldBeAbleToInvokeServletInDeployedWebAppWithMultiSegmentContextPath(
+        @ArquillianResource final URL contextRoot) throws Exception {
+
+        assertEquals("Deployment was not resolved to the expected context path",
+            TestDeploymentFactory.MULTI_SEGMENT_CONTEXT_PATH, stripTrailingSlash(contextRoot.getPath()));
+
+        final URL servletUrl = getServletUrl(contextRoot);
+
+        testDeployment(servletUrl, TEST_SERVLET_RESPONSE);
+    }
+
+    @Test
+    @OperateOnDeployment(TestDeploymentFactory.VERSIONED_CONTEXT)
+    public void shouldBeAbleToInvokeServletInDeployedVersionedWebApp(@ArquillianResource final URL contextRoot)
+        throws Exception {
+
+        assertEquals("Deployment was not resolved to the expected context path",
+            TestDeploymentFactory.VERSIONED_CONTEXT_PATH, stripTrailingSlash(contextRoot.getPath()));
+
+        final URL servletUrl = getServletUrl(contextRoot);
+
+        testDeployment(servletUrl, TEST_SERVLET_RESPONSE);
+    }
+
+    @Test
     @OperateOnDeployment(TestDeploymentFactory.ROOT_CONTEXT)
     public void shouldBeAbleToInvokeJspInDeployedRootWebApp(@ArquillianResource final URL contextRoot) throws Exception {
 
@@ -70,7 +99,13 @@ public abstract class TomcatClientITBase {
 
     private URL getServletUrl(final URL contextRoot) throws MalformedURLException {
 
-        return new URL(contextRoot, TestDeploymentFactory.TEST_SERVLET_PATH);
+        // Resolve relative to the context root; a leading "/" would resolve against the host and drop the context path.
+        return new URL(contextRoot, TestDeploymentFactory.TEST_SERVLET_PATH.substring(1));
+    }
+
+    private String stripTrailingSlash(final String path) {
+
+        return path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
     }
 
     private void testDeployment(final URL url, final String expected) throws MalformedURLException, IOException {

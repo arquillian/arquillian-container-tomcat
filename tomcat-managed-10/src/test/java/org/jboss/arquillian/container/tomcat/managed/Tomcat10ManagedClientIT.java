@@ -16,9 +16,11 @@
  */
 package org.jboss.arquillian.container.tomcat.managed;
 
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.MULTI_SEGMENT_CONTEXT;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.ROOT_CONTEXT;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.SERVLET_5_0;
 import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.TEST_CONTEXT;
+import static org.jboss.arquillian.container.tomcat.test.TestDeploymentFactory.VERSIONED_CONTEXT;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.tomcat.test.TomcatClientITBase;
@@ -32,6 +34,7 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:jean.deruelle@gmail.com">Jean Deruelle</a>
  * @author Dan Allen
  * @author <a href="mailto:dadrus@gmx.de">Dimitrij Drus</a>
+ * @author Radoslav Husar
  */
 @RunWith(Arquillian.class)
 public class Tomcat10ManagedClientIT extends TomcatClientITBase {
@@ -46,5 +49,17 @@ public class Tomcat10ManagedClientIT extends TomcatClientITBase {
     public static WebArchive createTestDeployment() {
 
         return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(TEST_CONTEXT, SERVLET_5_0);
+    }
+
+    @Deployment(name = MULTI_SEGMENT_CONTEXT, testable = false)
+    public static WebArchive createMultiSegmentDeployment() {
+
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(MULTI_SEGMENT_CONTEXT, SERVLET_5_0);
+    }
+
+    @Deployment(name = VERSIONED_CONTEXT, testable = false)
+    public static WebArchive createVersionedDeployment() {
+
+        return TEST_DEPLOYMENT_FACTORY.createWebAppClientDeployment(VERSIONED_CONTEXT, SERVLET_5_0);
     }
 }

@@ -37,6 +37,7 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 
 /**
  * @author <a href="kpiwko@redhat.com>Karel Piwko</a>
+ * @author Radoslav Husar
  */
 public class ProtocolMetadataParser<C extends TomcatConfiguration> {
 
@@ -65,7 +66,7 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration> {
      *
      * @throws DeploymentException
      */
-    public ProtocolMetaData retrieveContextServletInfo(final String context) throws DeploymentException {
+    public ProtocolMetaData retrieveContextServletInfo(final ContextName contextName) throws DeploymentException {
 
         final ProtocolMetaData protocolMetaData = new ProtocolMetaData();
         final HTTPContext httpContext = new HTTPContext(configuration.getBindAddress(), configuration.getBindHttpPort());
@@ -84,22 +85,35 @@ public class ProtocolMetadataParser<C extends TomcatConfiguration> {
 
         Set<ObjectInstance> servletMBeans;
         try {
-            servletMBeans = getServletMBeans(jmxc, context);
+            servletMBeans = getServletMBeans(jmxc, toWebModuleName(contextName));
         } catch (final IOException e) {
             throw new DeploymentException("Unable to construct metadata for archive deployment", e);
         }
 
-        // For each servlet MBean of the given context add the servlet info to the HTTPContext.
+        // For each servlet MBean of the given context add the servlet info to the HTTPContext. A versioned deployment
+        // is served from its context path, so the path rather than the name is the servlet's context root.
         for (final ObjectInstance oi : servletMBeans) {
             final String servletName = oi.getObjectName().getKeyProperty("name");
-            httpContext.add(new Servlet(servletName, context));
+            httpContext.add(new Servlet(servletName, contextName.getPath()));
             if (log.isLoggable(Level.FINE)) {
-                log.fine("Added servlet " + oi + " to HttpContext for archive" + context);
+                log.fine("Added servlet " + oi + " to HttpContext for archive" + contextName);
             }
         }
 
         protocolMetaData.addContext(httpContext);
         return protocolMetaData;
+    }
+
+    /**
+     * Tomcat builds the "WebModule" key property of a servlet's object name from the host name followed by the
+     * context name, inserting a "/" when the context name does not already start with one. The leading "/" is
+     * stripped here because {@link #catalinaServletTemplate} supplies it.
+     */
+    private String toWebModuleName(final ContextName contextName) {
+
+        final String name = contextName.getName();
+
+        return name.startsWith("/") ? name.substring(1) : name;
     }
 
     protected JMXConnector connect(final URI jmxUri) throws IOException {
