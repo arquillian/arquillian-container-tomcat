@@ -33,6 +33,7 @@ import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 import org.jboss.arquillian.container.spi.client.protocol.ProtocolDescription;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.tomcat.AdditionalJavaOptionsParser;
+import org.jboss.arquillian.container.tomcat.ContextName;
 import org.jboss.arquillian.container.tomcat.ProtocolMetadataParser;
 import org.jboss.arquillian.container.tomcat.ShrinkWrapUtil;
 import org.jboss.arquillian.container.tomcat.TomcatManager;
@@ -51,6 +52,7 @@ import org.jboss.shrinkwrap.api.Archive;
  * @author <a href="mailto:jhuska@redhat.com">Juraj Huska</a>
  * @author <a href="mailto:ozizka@redhat.com">Ondrej Zizka</a>
  * @author <a href="mailto:steve.coy@me.com">Stephen Coy</a>
+ * @author Radoslav Husar
  */
 abstract class TomcatManagedContainer implements DeployableContainer<TomcatManagedConfiguration> {
 
@@ -224,24 +226,24 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
     /**
      * Deploys to remote Tomcat using its /manager web-app's org.apache.catalina.manager.ManagerServlet.
      *
-     * @throws org.jboss.arquillian.container.spi.client.container.DeploymentException
+     * @throws DeploymentException when deployment fails
      */
     @Override
     public ProtocolMetaData deploy(final Archive<?> archive) throws DeploymentException {
 
         Validate.notNull(archive, "Archive must not be null");
 
-        final String archiveName = manager.normalizeArchiveName(archive.getName());
+        final ContextName contextName = new ContextName(archive.getName());
         final URL archiveURL = ShrinkWrapUtil.toURL(archive);
         try {
-            manager.deploy("/" + archiveName, archiveURL);
+            manager.deploy(contextName, archiveURL);
         } catch (final IOException e) {
             throw new DeploymentException("Unable to deploy an archive " + archive.getName(), e);
         }
 
         final ProtocolMetadataParser<TomcatManagedConfiguration> parser =
             new ProtocolMetadataParser<TomcatManagedConfiguration>(configuration);
-        return parser.retrieveContextServletInfo(archiveName);
+        return parser.retrieveContextServletInfo(contextName);
     }
 
     @Override
@@ -249,9 +251,8 @@ abstract class TomcatManagedContainer implements DeployableContainer<TomcatManag
 
         Validate.notNull(archive, "Archive must not be null");
 
-        final String archiveName = manager.normalizeArchiveName(archive.getName());
         try {
-            manager.undeploy("/" + archiveName);
+            manager.undeploy(new ContextName(archive.getName()));
         } catch (final IOException e) {
             throw new DeploymentException("Unable to undeploy an archive " + archive.getName(), e);
         }
